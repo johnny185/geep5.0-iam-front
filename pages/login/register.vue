@@ -341,7 +341,7 @@ export default {
           const params = {
             ak: this.form.ak,
             appId: this.form.appId,
-            code: this.form.appId,
+            code: this.form.code,
             registerType: 1,
             sk: this.$md5(this.form.sk),
             uuid: this.form.uuid

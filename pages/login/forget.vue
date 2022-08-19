@@ -28,7 +28,7 @@
             <el-form-item prop="emailPicCode" label="邮箱验证码">
               <div class="smsContent">
                 <el-input v-model="form.emailPicCode" placeholder="请输入邮箱验证码" clearable></el-input>
-                <el-button type="primary" style="margin-left:20px" :disabled="isTrueEmail" @click="sendOutEmail">发送</el-button>
+                <el-button type="primary" style="margin-left:20px" @click="sendOutEmail">发送邮箱验证码</el-button>
               </div>
             </el-form-item>
             <el-form-item label="设置新密码" prop="newPassword">
@@ -130,7 +130,6 @@ export default {
       } else if (!emailReg(value)) {
         callback(new Error('请输入正确邮箱地址'));
       } else {
-        this.isTrueEmail = false
         callback();
       }
     };
@@ -177,12 +176,11 @@ export default {
       currentIndex: 0, //切换短信验证码登录 账号登录
       slideLeft: '', // 下划线位置
       tabLen: '', // tab数组长度
-      isTrueEmail: true, // 邮箱是否正确
       rules: {
         // 邮箱校验
-        emailNumber: [{ required: true, trigger: 'change', validator: validateEmailNumber }],
+        emailNumber: [{ required: true, trigger: 'blur', validator: validateEmailNumber }],
         // 手机号校验
-        phoneNumber: [{ required: true, trigger: 'change', validator: validatePhoneNumber }],
+        phoneNumber: [{ required: true, trigger: 'blur', validator: validatePhoneNumber }],
         // 邮箱验证码校验
         emailPicCode: [{ required: true, message: '邮箱验证码不能为空' , trigger: 'change' }],
         // 图形验证码校验
@@ -213,6 +211,7 @@ export default {
   methods: {
     // 切换tab
     changeName(index) {
+      this.$refs['form'].resetFields();
       this.$refs['form'].clearValidate()
       this.currentIndex = index;
       const left = 100 / this.tabLen / 2;
@@ -257,28 +256,27 @@ export default {
     },
     // 获取邮箱验证码
     sendOutEmail() {
-      if (emailReg(this.form.emailNumber)) {
+      const { emailNumber, picCode } = this.form;
+      if (emailNumber && picCode) {
         let params = {
           target: this.form.emailNumber,
+          uuid: this.uuid,
+          code: this.form.picCode,
           verifyType: 6 //verifyType 验证类型 6:邮箱验证码类型
         };
         this.$axios.post('/api/message/openapi/common/sms/verificationCode/send', params).then((res) => {
           if (res.status === 200) {
             this.form.uuid = res.body.uuid;
-            this.getPhoneCode();
+            // this.getIdentifyCode();
             this.$notify({
               title: '提示',
-              message: '发送短信验证码操作成功',
+              message: '发送邮箱验证码操作成功',
               type: 'success'
             });
           }
         });
       } else {
-        this.$notify({
-          title: '提示',
-          message: '请输入正确邮箱地址',
-          type: 'error'
-        });
+        this.$refs['form'].validateField(['emailNumber', 'picCode']);
       }
     },
     // 获取短信验证码
@@ -322,26 +320,44 @@ export default {
           if (this.currentIndex === 0) { // 当currentIndex为0时为邮箱找回
             let params = {
               code: this.form.emailPicCode, // 邮箱验证码
-              passWord: this.form.newPassword,
+              passWord: this.$md5(this.form.newPassword),
               target: this.form.emailNumber, // 邮箱
               type: 2, // 1-手机号，2-邮箱
               uuid: this.form.uuid,
               appId: 8134005370347520
             }
             this.$axios.post('/api/iam/v1/auth/common/user/updatePassWord', params).then((res) =>{
-              console.log(res, '邮箱找回')
+              if (res.status === 200) {
+                this.$notify({
+                  title: '提示',
+                  message: '找回密码操作成功',
+                  type: 'success'
+                });
+                this.$router.push({
+                  path: '/login'
+                });
+              }
             })
           } else if (this.currentIndex === 1) { // 当currentIndex为1时为手机号找回
             let params = {
               code: this.form.phoneCode, // 短信验证码
-              passWord: this.form.newPassword,
+              passWord: this.$md5(this.form.newPassword),
               target: this.form.phoneNumber, // 手机号
               type: 1, // 1-手机号，2-邮箱
               uuid: this.form.uuid,
               appId: 8134005370347520
             }
             this.$axios.post('/api/iam/v1/auth/common/user/updatePassWord', params).then((res) =>{
-              console.log(res, '手机号找回')
+              if (res.status === 200) {
+                this.$notify({
+                  title: '提示',
+                  message: '找回密码操作成功',
+                  type: 'success'
+                });
+                this.$router.push({
+                  path: '/login'
+                });
+              }
             })
           }
           let params = Object.assign(this.form, {
@@ -349,16 +365,16 @@ export default {
             code: this.form.phoneCode
           });
 
-          this.$axios.post('/api/auth/user/openapi/common/token/password/reset/phone', params).then((res) => {
-            this.$notify({
-              title: '提示',
-              message: '找回密码操作成功',
-              type: 'success'
-            });
-            this.$router.push({
-              path: '/login'
-            });
-          });
+          // this.$axios.post('/api/auth/user/openapi/common/token/password/reset/phone', params).then((res) => {
+          //   this.$notify({
+          //     title: '提示',
+          //     message: '找回密码操作成功',
+          //     type: 'success'
+          //   });
+          //   this.$router.push({
+          //     path: '/login'
+          //   });
+          // });
         } else {
           return false;
         }
