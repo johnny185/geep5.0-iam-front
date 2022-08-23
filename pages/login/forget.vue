@@ -1,7 +1,8 @@
 <template>
   <div>
     <!-- 导航 -->
-    <navContent></navContent>
+    <controlNav></controlNav>
+    <!-- <navContent></navContent> -->
     <!-- 找回密码 -->
     <div class="forgetWrap">
       <div class="forgetContent mainCenter">
@@ -28,7 +29,9 @@
             <el-form-item prop="emailPicCode" label="邮箱验证码">
               <div class="smsContent">
                 <el-input v-model="form.emailPicCode" placeholder="请输入邮箱验证码" clearable></el-input>
-                <el-button type="primary" style="margin-left:20px" @click="sendOutEmail">发送邮箱验证码</el-button>
+                <!-- <el-button type="primary" style="margin-left:20px" @click="sendOutEmail">发送邮箱验证码</el-button> -->
+                <div v-if="isShowGeteEmailCode" class="sendSms hoverStyle fontCenter" @click="sendOutEmail">发送邮箱验证码</div>
+                <div v-else class="smsBtn fontCenter">{{ countdown }}s后可重试</div>
               </div>
             </el-form-item>
             <el-form-item label="设置新密码" prop="newPassword">
@@ -157,6 +160,7 @@ export default {
     };
     return {
       isShowGetCode: true, //区别 获取短信验证码/倒计时 默认true 获取短信验证码
+      isShowGeteEmailCode: true, // 区别 获取邮箱验证码/倒计时 默认true 获取邮箱验证码
       countdown: 60, //倒计时60
       passwordType: 'password', //区别 显示隐藏密码
       passwordType2: 'password', //区别 显示隐藏密码
@@ -223,18 +227,26 @@ export default {
       this.slideLeft = left * (this.currentIndex * 2 + 1) + '%';
     },
     // 短信倒计时
-    getIdentifyCode() {
-      this.countDown();
-      this.isShowGetCode = false;
+    getIdentifyCode(type) {
+      this.countDown(type);
+      if (type === 'email') {
+        this.isShowGeteEmailCode = false;
+      } else if (type === 'phone') {
+        this.isShowGetCode = false;
+      }
     },
     // 倒计时
-    countDown() {
+    countDown(type) {
       this.timer = setInterval(() => {
         this.countdown--;
         if (this.countdown === 0) {
           clearInterval(this.timer);
           this.countdown = 60;
-          this.isShowGetCode = true;
+          if (type === 'email') {
+            this.isShowGeteEmailCode = false;
+          } else if (type === 'phone') {
+            this.isShowGetCode = false;
+          }
         }
       }, 1000);
     },
@@ -267,7 +279,7 @@ export default {
         this.$axios.post('/api/message/openapi/common/sms/verificationCode/send', params).then((res) => {
           if (res.status === 200) {
             this.form.uuid = res.body.uuid;
-            // this.getIdentifyCode();
+            this.getIdentifyCode('email');
             this.$notify({
               title: '提示',
               message: '发送邮箱验证码操作成功',
@@ -293,7 +305,7 @@ export default {
         this.$axios.post('/api/message/openapi/common/sms/verificationCode/send', params).then((res) => {
           if (res.status === 200) {
             this.form.uuid = res.body.uuid;
-            this.getIdentifyCode();
+            this.getIdentifyCode('phone');
             this.$notify({
               title: '提示',
               message: '发送短信验证码操作成功',
@@ -314,7 +326,6 @@ export default {
     },
     // 提交
     submitBtn() {
-      console.log(this.currentIndex, 'currentIndex')
       this.$refs['form'].validate((valid) => {
         if (valid) {
           if (this.currentIndex === 0) { // 当currentIndex为0时为邮箱找回
@@ -326,7 +337,7 @@ export default {
               uuid: this.form.uuid,
               appId: 8134005370347520
             }
-            this.$axios.post('/api/iam/v1/auth/common/user/updatePassWord', params).then((res) =>{
+            this.$axios.post('/api/iam/v1/open/user/resetPassWord', params).then((res) =>{
               if (res.status === 200) {
                 this.$notify({
                   title: '提示',
@@ -347,7 +358,7 @@ export default {
               uuid: this.form.uuid,
               appId: 8134005370347520
             }
-            this.$axios.post('/api/iam/v1/auth/common/user/updatePassWord', params).then((res) =>{
+            this.$axios.post('/api/iam/v1/open/user/resetPassWord', params).then((res) =>{
               if (res.status === 200) {
                 this.$notify({
                   title: '提示',
@@ -360,21 +371,6 @@ export default {
               }
             })
           }
-          let params = Object.assign(this.form, {
-            userType: '1',
-            code: this.form.phoneCode
-          });
-
-          // this.$axios.post('/api/auth/user/openapi/common/token/password/reset/phone', params).then((res) => {
-          //   this.$notify({
-          //     title: '提示',
-          //     message: '找回密码操作成功',
-          //     type: 'success'
-          //   });
-          //   this.$router.push({
-          //     path: '/login'
-          //   });
-          // });
         } else {
           return false;
         }

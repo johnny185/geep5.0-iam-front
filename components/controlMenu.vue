@@ -9,7 +9,7 @@
         <i class="el-icon-message"></i>
         <span slot="title">我的消息</span>
       </el-menu-item>
-      <el-menu-item index="3" @click="toMenu('3')" v-if="!$route.query.hasOwnProperty('userId')">
+      <!-- <el-menu-item index="3" @click="toMenu('3')" v-if="!$route.query.hasOwnProperty('userId')">
         <i class="el-icon-message"></i>
         <span slot="title">我的互动</span>
       </el-menu-item>
@@ -36,7 +36,7 @@
       <el-menu-item index="8" @click="toMenu('8')" v-if="!$route.query.hasOwnProperty('userId')">
         <i class="el-icon-document"></i>
         <span slot="title">我的草稿</span>
-      </el-menu-item>
+      </el-menu-item> -->
     </el-menu>
   </div>
 </template>

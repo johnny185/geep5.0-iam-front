@@ -1,10 +1,9 @@
-import {getToken} from '../utils/auth'
+import { getToken } from '../utils/auth';
 export default({app,store})=>{
-  // console.log('触发123')
-  let token = getToken()
+ 
   app.router.beforeEach((to,from,next)=>{
+    let token = getToken('token')
     // console.log(to, from)
-    //  next()
     if(token){
       next()
       // console.log('跳登录')

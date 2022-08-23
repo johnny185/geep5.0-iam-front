@@ -31,7 +31,7 @@ export default {
   },
   mounted() {
     //  获取 未读消息数
-    this.getUnreadNum();
+    // this.getUnreadNum();
   },
   destroyed() {
     // 离开页面生命周期函数

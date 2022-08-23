@@ -1,7 +1,8 @@
 <template>
   <div>
     <!-- 导航 -->
-    <navContent></navContent>
+    <controlNav></controlNav>
+    <!-- <navContent></navContent> -->
     <!-- 申诉 -->
     <div class="appealWrap">
       <el-button type="text" icon="el-icon-arrow-left" @click="goBack">返回</el-button>

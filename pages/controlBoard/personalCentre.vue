@@ -8,15 +8,15 @@
         <div class="personBox mainCenter">
           <div class="personBoxLeft">
             <!-- 用户 -->
-            <userContent></userContent>
+            <!-- <userContent></userContent> -->
             <!-- 菜单 我的资料 我的消息 我的关注 我的收藏等等 -->
-            <controlMenu @toMenu="toMenu"></controlMenu>
+            <!-- <controlMenu @toMenu="toMenu"></controlMenu> -->
           </div>
           <div class="personBoxRight">
             <!-- 我的资料 -->
-            <personArea v-if="menu === '1'"></personArea>
+            <!-- <personArea v-if="menu === '1'"></personArea> -->
             <!-- 我的消息 -->
-            <myMessage v-if="menu === '2'"></myMessage>
+            <!-- <myMessage v-if="menu === '2'"></myMessage> -->
             <!-- 我的互动 -->
             <!-- <myInteract v-if="menu === '3'"></myInteract> -->
             <!-- 我的关注 -->
@@ -37,10 +37,10 @@
 </template>
 
 <script>
-import userContent from './components/userContent.vue'; //用户
-import controlMenu from './components/controlMenu.vue'; // 导航
-import personArea from './components/personArea.vue'; // 我的资料 --- 个人信息 认证信息 登录信息
-import myMessage from './components/myMessage.vue'; // 我的消息
+// import userContent from './components/userContent.vue'; //用户
+// import controlMenu from '../../components/controlMenu.vue'; // 导航
+// import personArea from '../../components/personArea.vue'; // 我的资料 --- 个人信息 认证信息 登录信息
+// import myMessage from '../../components/myMessage.vue'; // 我的消息
 // import myInteract from './components/myInteract.vue'; // 我的互动
 // import myRelease from './components/myRelease.vue'; // 我的发布
 // import myFollow from './components/myFollow.vue'; // 我的关注
@@ -49,11 +49,11 @@ import myMessage from './components/myMessage.vue'; // 我的消息
 // import myCollection from './components/myCollection.vue'; // 我的粉丝
 export default {
   components: {
-    userContent,
-    controlMenu,
-    personArea,
-    // myInteract,
-    myMessage
+    // userContent,
+    // controlMenu,
+    // personArea,
+    // // myInteract,
+    // myMessage
     // myRelease,
     // myDraft,
     // myFollow,

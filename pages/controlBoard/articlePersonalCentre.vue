@@ -9,7 +9,7 @@
           <!-- 用户-其他关注或粉丝用户 -->
           <articleUserContent></articleUserContent>
           <!-- 菜单 我的资料 我的消息 我的关注 我的收藏等等 -->
-          <controlMenu @toMenu="toMenu"></controlMenu>
+          <!-- <controlMenu @toMenu="toMenu"></controlMenu> -->
         </div>
         <div class="personBoxRight">
           <!-- 用户的资料 -->
@@ -30,9 +30,9 @@
 
 <script>
 import articleUserContent from './components/articleUserContent.vue'; //用户
-import controlMenu from './components/controlMenu.vue'; // 导航
+// import controlMenu from '../../components/controlMenu.vue'; // 导航
 import articlePersonArea from './components/articlePersonArea.vue'; // 我的资料 --- 个人信息 认证信息 登录信息
-import myMessage from './components/myMessage.vue'; // 我的互动
+import myMessage from '../../components/myMessage.vue'; // 我的互动
 import myInteract from './components/myInteract.vue'; // 我的互动
 import myRelease from './components/myRelease.vue'; // 我的发布
 import myFollow from './components/myFollow.vue'; // 我的关注
@@ -42,7 +42,7 @@ import myCollection from './components/myCollection.vue'; // 我的收藏
 export default {
   components: {
     articleUserContent,
-    controlMenu,
+    // controlMenu,
     articlePersonArea,
     myInteract,
     myMessage,
@@ -63,10 +63,10 @@ export default {
       let queryParams = {};
       // 切换路由 地址栏参数发生修改 保证刷新后还停留在当前页面
       queryParams = { menu: data, userId: this.$route.query.userId, userName: this.$route.query.userName };
-      this.$router.push({
-        path: '/controlBoard/articlePersonalCentre',
-        query: queryParams
-      });
+      // this.$router.push({
+      //   path: '/controlBoard/articlePersonalCentre',
+      //   query: queryParams
+      // });
       this.menu = data;
     }
   }

@@ -52,7 +52,7 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           let params = this.form;
-          this.$axios.post('/api/auth/user/authapi/common/user/info/change/nickName', params).then((res) => {
+          this.$axios.post('/api/iam/v1/auth/user/editInfo', params).then((res) => {
             this.$emit('upDataSuccess');
             this.$notify({
               title: '提示',

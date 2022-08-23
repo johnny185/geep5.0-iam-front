@@ -56,18 +56,18 @@
       <!-- 分页 -->
       <pagination :pageData="pageData" @currentPage="currentPage" @sizeChange="sizeChange"></pagination>
     </div>
-    <myMessageDetails :rowData="rowData" v-if="flag === 2" @toBack="toBack" />
-    <myMessageSet v-if="flag === 3" @toBack="toBack" />
+    <!-- <myMessageDetails :rowData="rowData" v-if="flag === 2" @toBack="toBack" /> -->
+    <!-- <myMessageSet v-if="flag === 3" @toBack="toBack" /> -->
   </div>
 </template>
 
 <script>
-import myMessageSet from './myMessageSet.vue';
-import myMessageDetails from './myMessageDetails.vue';
+// import myMessageSet from '../pages/controlBoard/components/myMessageSet.vue';
+// import myMessageDetails from '../pages/controlBoard/components/myMessageDetails.vue';
 export default {
   components: {
-    myMessageSet,
-    myMessageDetails
+    // myMessageSet,
+    // myMessageDetails
   },
   data() {
     return {
@@ -110,7 +110,7 @@ export default {
     }
   },
   created() {
-    this.queryList();
+    // this.queryList();
   },
   methods: {
     // 消息详情

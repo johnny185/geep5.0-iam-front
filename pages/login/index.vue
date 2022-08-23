@@ -1,7 +1,8 @@
 <template>
   <div>
     <!-- 导航 -->
-    <navContent></navContent>
+    <controlNav></controlNav>
+    <!-- <navContent></navContent> -->
     <div class="loginWrap">
       <div class="loginLeft"></div>
       <div class="loginRight">
@@ -104,7 +105,7 @@
 </template>
 
 <script>
-import { setToken } from '../../utils/auth';
+import { setToken, getToken } from '../../utils/auth';
 import { passwordReg, telReg, emailReg } from '../../utils/validate';
 export default {
   data() {
@@ -254,7 +255,6 @@ export default {
     },
     // 登录
     handleLogin() {
-      console.log(this.currentIndex, 'currentIndex')
       this.$refs.form.validate((valid) => {
         if (valid) {
           if (this.currentIndex === 0) { // 当currentIndex为0时为密码登录
@@ -265,8 +265,12 @@ export default {
             }
             this.$axios.post('/api/iam/v1/open/login/account', params).then((res) => {
               if (res.status === 200) {
-
+                setToken(res.body.access_token);
+                
+                this.$store.commit('user/addToken', res.body.access_token);
+                this.getUserInfo();
               }
+              console.log(getToken('token'), 'token')
               console.log(res, '密码登录')
             })
           } else if (this.currentIndex === 1) { // 当currentIndex为0时为验证码登录
@@ -279,9 +283,16 @@ export default {
               }
               this.$axios.post('/api/iam/v1/open/login/phone-code', params).then((res) => {
                 if (res.status === 200) {
-                
+                  setToken(res.body.access_token);
+                  this.$store.commit('user/addToken', res.body.access_token);
+                  this.getUserInfo();
                 }
-                console.log(res, '手机号')
+              }).catch((err) => {
+                // 图形验证码错误 重新获取验证码
+                if (err === '图形验证码错误') {
+                  this.captcha();
+                  this.form.dynamicCode = '';
+                }
               })
             } else if (emailReg(this.form.username)) { // 输入账号为邮箱时
               let params = {
@@ -292,13 +303,18 @@ export default {
               }
                this.$axios.post('/api/iam/v1/open/login/email-code', params).then((res) => {
                 if (res.status === 200) {
-                
+                  setToken(res.body.access_token);
+                  this.$store.commit('user/addToken', res.body.access_token);
+                  this.getUserInfo();
                 }
-                console.log(res, '邮箱')
+              }).catch((err) => {
+                // 图形验证码错误 重新获取验证码
+                if (err === '图形验证码错误') {
+                  this.captcha();
+                  this.form.dynamicCode = '';
+                }
               })
             }
-            // console.log(telReg(this.form.username), emailReg(this.form.username), 'username')
-          }
           // let parmas = Object.assign(
           //   {
           //     loginTarget: '1',
@@ -320,17 +336,22 @@ export default {
           //     this.form.code = '';
           //   }
           // });;
-        } else {
-          return false;
+          } else {
+            return false;
+          }
         }
       });
     },
     // 获取用户信息
     getUserInfo() {
-      this.$axios.get('/api/auth/user/authapi/common/user/info').then((res) => {
+      this.$axios.get('/api/iam/v1/auth/user/get').then((res) => {
         this.$store.commit('user/addUserInfo', res.body);
         this.$router.push({
-          path: '/'
+          path: '/',
+          query: {
+            menu: 1,
+            tab: 1
+          }
         });
       });
     },

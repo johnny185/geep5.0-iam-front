@@ -14,18 +14,27 @@
               >修改昵称</el-button
             >
           </el-form-item>
-          <el-form-item label="认证状态">
-            <!-- registerStatus: '', //用户状态  "0", "只注册还未提交认证"  "1", "已提交认证-待审核" "2", "审核通过" "3", "审核被拒" -->
+          <!-- <el-form-item label="认证状态">
+            registerStatus: '', //用户状态  "0", "只注册还未提交认证"  "1", "已提交认证-待审核" "2", "审核通过" "3", "审核被拒"
             <p v-if="$store.state.user.userInfo.registerStatus === '0'">已注册未认证</p>
             <p v-if="$store.state.user.userInfo.registerStatus === '1'">已认证未审核</p>
             <p v-if="$store.state.user.userInfo.registerStatus === '2'">已认证</p>
             <p v-if="$store.state.user.userInfo.registerStatus === '3'">已认证未通过</p>
+          </el-form-item> -->
+          <el-form-item label="性别">
+            <span>{{ $store.state.user.userInfo.sex === null? '未知': $store.state.user.userInfo.sex === 1? '男': '女' }}</span>
+            <el-button size="small" @click="upDateSex" type="primary" style="display: inline-block; margin-left: 10px"
+              >设置</el-button
+            >
           </el-form-item>
-          <el-form-item label="微信号">
+          <el-form-item label="三方登录">
+            <span>{{ '暂未开通' }}</span>
+          </el-form-item>
+          <!-- <el-form-item label="微信号">
             <p>{{ $store.state.user.userInfo.wechatNum }}</p>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="电子邮箱">
-            <span>{{ $store.state.user.userInfo.email }}</span>
+            <span>{{ $store.state.user.userInfo.email === null ? '未填写': $store.state.user.userInfo.email }}</span>
             <el-button size="small" @click="upDateEmail" type="primary" style="display: inline-block; margin-left: 10px"
               >修改电子邮箱</el-button
             >
@@ -68,19 +77,71 @@
       </el-tab-pane>
       <el-tab-pane label="登录信息" name="3">
         <el-table :data="tableData" style="width: 100%">
-          <el-table-column prop="logType" label="登录方式">
+          <el-table-column prop="eventContent" label="登录方式">
             <template slot-scope="scope">
-              <p>{{ scope.row.logTypeName }}</p>
+              <p>{{ scope.row.eventContent }}</p>
             </template>
           </el-table-column>
           <el-table-column prop="createTime" label="登录时间"></el-table-column>
         </el-table>
       </el-tab-pane>
+      <el-tab-pane label="安全信息"  name="4">
+        <div class="padding20">
+          <p class="title fontSize24">安全信息</p>
+          <div class="padding20">
+            <dl style="width: 46%">
+              <dt class="dtStyle"><div class="">密码重置：</div><div class="btnStyle">重置</div></dt>
+              <dd class="ddStyle">上次重置密码时间：2022-08-08  10：00：00</dd>
+            </dl>
+          </div>
+          <div class="padding20">
+            <dl style="width: 46%">
+              <dt class="dtStyle"><div class="">账户注销：</div><div class="btnStyle" @click="accountNubLogOff">注销</div></dt>
+              <dd class="ddStyle">账号注销后将彻底清楚您的账号和相关数据</dd>
+            </dl>
+          </div>
+          <div class="padding20">
+            <dl style="width: 46%">
+              <dt class="dtStyle"><div class="">账户退出：</div><div class="btnStyle" @click="accountOut">退出</div></dt>
+              <dd class="ddStyle">退出当前帐号在所有浏览器的登录，并清除浏览器的信任状态</dd>
+            </dl>
+          </div>
+          <div class="padding20">
+            <dl style="width: 46%">
+              <dt class="dtStyle"><div class="">隐私政策</div><div class="btnStyle">查看</div></dt>
+              <!-- <dd class="ddStyle">上次重置密码时间：2022-08-08  10：00：00</dd> -->
+            </dl>
+          </div>
+        </div>
+        <!-- <div>安全信息</div> -->
+      </el-tab-pane>
       <!--第三方平台授权登记  认证通过才回显  -->
-      <el-tab-pane label="第三方平台授权登记" name="4" v-if="$store.state.user.userInfo.registerStatus === '2'">
-        <thirdpartyRegister ref="thirdpartyRegister" @defineExceedHeight="defineExceedHeight" />
+      <el-tab-pane label="第三方平台授权登记" name="5" v-if="$store.state.user.userInfo.registerStatus === '2'">
+        <!-- <thirdpartyRegister ref="thirdpartyRegister" @defineExceedHeight="defineExceedHeight" /> -->
       </el-tab-pane>
     </el-tabs>
+    <!-- 设置性别 -->
+    <el-dialog
+     title="设置性别"
+     width="40%"
+     top="15vh"
+     :visible.sync="sexVisible"
+     :before-close="sexhandleClose"
+    >
+      <el-form ref="sexForm" :model="sexForm" :rules="sexRules" label-width="100px">
+        <el-form-item label="性别" prop="sex">
+          <el-radio-group v-model="sexForm.sex">
+            <el-radio :label="1">男</el-radio>
+            <el-radio :label="2">女</el-radio>
+            <!-- <el-radio :label="3">未知</el-radio> -->
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="sexhandleClose">取消</el-button>
+        <el-button size="small" type="primary" @click="sexSubmitBtn">提交</el-button>
+      </span>
+    </el-dialog>
     <!-- 修改手机号 -->
     <el-dialog
       title="修改手机号"
@@ -150,6 +211,16 @@
         <el-button size="small" type="primary" @click="emailSubmitBtn">提交</el-button>
       </span>
     </el-dialog>
+    <!-- 设置性别 -->
+    <el-dialog
+     title="账号注销"
+     width="40%"
+     top="15vh"
+     :visible.sync="accountVisible"
+     :before-close="accounthandleClose"
+    >
+      <span>请联系管理员400-000-000!</span>
+    </el-dialog>
     <!-- 修改昵称 -->
     <upDateNickNameDialog
       ref="upDateNickNameDialog"
@@ -157,22 +228,22 @@
       @upDataSuccess="upDataSuccess"
     ></upDateNickNameDialog>
     <!-- 变更管理员信息 -->
-    <upDateAdminInfoDialog ref="upDateAdminInfoDialog"></upDateAdminInfoDialog>
+    <!-- <upDateAdminInfoDialog ref="upDateAdminInfoDialog"></upDateAdminInfoDialog> -->
   </div>
 </template>
 
 <script>
 import { telReg, emailReg } from '@/utils/validate';
 import { removeToken } from '@/utils/auth';
-import thirdpartyRegister from './thirdpartyRegister';
+// import thirdpartyRegister from './thirdpartyRegister';
 import upDateNickNameDialog from './upDateNickNameDialog'; // 修改 个人昵称
-import upDateAdminInfoDialog from './upDateAdminInfoDialog'; // 修改
+// import upDateAdminInfoDialog from './upDateAdminInfoDialog'; // 修改
 
 export default {
   components: {
-    thirdpartyRegister,
+    // thirdpartyRegister,
     upDateNickNameDialog,
-    upDateAdminInfoDialog
+    // upDateAdminInfoDialog
   },
   data() {
     // 手机号 校验
@@ -240,7 +311,18 @@ export default {
         code: [{ required: true, message: '图形验证码不能为空', trigger: 'change' }],
         // 短信验证码 校验
         emailCode: [{ required: true, message: '邮箱验证码不能为空', trigger: 'change' }]
-      }
+      },
+
+      // 设置性别部分
+      sexVisible: false,
+      sexForm: {
+        sex: '' // 性别
+      },
+      sexRules: {
+        // 性别验证
+        sex: [{ required: true, message: '性别不能为空', trigger: 'blur' }]
+      },
+      accountVisible: false
     };
   },
   watch: {
@@ -275,31 +357,31 @@ export default {
       let params = {};
       // 当为 个人信息、管理员信息
       if (data === '1') {
-        this.$axios.get('/api/auth/user/authapi/common/user/info').then((res) => {
+        this.$axios.get('/api/iam/v1/auth/user/get').then((res) => {
           this.$store.commit('user/addUserInfo', res.body);
         });
         this.isExceedHeight = false;
         return false;
       }
       // 当为 认证信息
-      if (data === '2') {
-        this.$axios.post('api/auth/user/authapi/common/user/log/list/register', params).then((res) => {
-          this.tableData = res.body.list;
-        });
-        this.isExceedHeight = false;
-        return false;
-      }
+      // if (data === '2') {
+      //   this.$axios.post('api/auth/user/authapi/common/user/log/list/register', params).then((res) => {
+      //     this.tableData = res.body.list;
+      //   });
+      //   this.isExceedHeight = false;
+      //   return false;
+      // }
       //当为 登录信息
       if (data === '3') {
-        this.$axios.post('api/auth/user/authapi/common/user/log/list/login', { pageSize: 5 }).then((res) => {
-          this.tableData = res.body.list;
+        this.$axios.get('/api/iam/v1/auth/user/getUserLog').then((res) => {
+          this.tableData = res.body;
         });
-        this.isExceedHeight = false;
+        // this.isExceedHeight = false;
         return false;
       }
       // 当为 第三方平台授权登记
       if (data === '4') {
-        this.$refs.thirdpartyRegister.queryList();
+        // this.$refs.thirdpartyRegister.queryList();
       }
     },
     // 切换标签
@@ -326,7 +408,7 @@ export default {
     },
     // 获取 动态验证
     captcha(n) {
-      this.$axios.get('/api/openapi/common/captcha').then((res) => {
+      this.$axios.get('/api/open/common/captcha/image').then((res) => {
         this.img = 'data:image/png;base64,' + res.img;
         if (n === 1) {
           this.form.uuid = res.uuid;
@@ -366,10 +448,9 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           let params = {
-            phoneNumber: this.form.phoneNumber,
+            ak: this.form.phoneNumber, // 新手机号
             uuid: this.form.uuid,
-            code: this.form.phoneCode,
-            oldPhoneNumber: this.form.oldPhoneNumber
+            code: this.form.phoneCode
           };
           if (oldPhoneNumber !== this.$store.state.user.userInfo.phoneNum) {
             this.$notify({
@@ -387,7 +468,7 @@ export default {
             });
             return;
           }
-          this.$axios.post('/api/auth/user/authapi/common/user/info/change/phoneNum', params).then((res) => {
+          this.$axios.post('/api/iam/v1/auth/user/info/change/phone', params).then((res) => {
             if (res.status === 200) {
               this.$notify({
                 title: '提示',
@@ -424,12 +505,14 @@ export default {
           nickName: '', //昵称
           account: ''
         };
-        // 删除token
-        removeToken();
-        this.$store.commit('user/resetUserd', params);
-        this.$router.push({
-          path: '/login'
-        });
+        this.$axios.delete('/api/iam/v1/open/login/out').then((res) => {
+          // 删除token
+          removeToken();
+          this.$store.commit('user/resetUserd', params);
+          this.$router.push({
+            path: '/login'
+          });
+        })
       });
     },
     //修改邮箱
@@ -474,16 +557,16 @@ export default {
       }
     },
     emailSubmitBtn() {
-      const { email, code, emailCode } = this.form2;
+      // const { email, code, emailCode } = this.form2;
       this.$refs['form2'].validate(async (valid) => {
         if (valid) {
           // if (email && emailCode && code) {
           let params = {
-            email: this.form2.email,
+            ak: this.form2.email,
             uuid: this.form2.uuid,
             code: this.form2.emailCode
           };
-          await this.$axios.post('/api/auth/user/authapi/common/user/info/change/email', params).then((res) => {
+          this.$axios.post('/api/iam/v1/auth/user/info/change/email', params).then((res) => {
             if (res.status === 200) {
               this.$notify({
                 title: '提示',
@@ -495,10 +578,10 @@ export default {
               this.emailhandleClose();
             }
           });
-          // 获取用户信息
-          await this.$axios.get('/api/auth/user/authapi/common/user/info').then((res) => {
-            this.$store.commit('user/addUserInfo', res.body);
-          });
+          // // 获取用户信息
+          // await this.$axios.get('/api/auth/user/authapi/common/user/info').then((res) => {
+          //   this.$store.commit('user/addUserInfo', res.body);
+          // });
         } else {
           return false;
         }
@@ -514,6 +597,52 @@ export default {
       clearInterval(this.timer2);
       this.countdownEmail = 60;
       this.isShowGetCodeEmail = true;
+    },
+    upDateSex() {
+      this.sexVisible = true;
+    },
+    sexhandleClose() {
+      this.sexVisible = false;
+      this.$refs['sexForm'].resetFields();
+    },
+    sexSubmitBtn() {
+      this.$refs['sexForm'].validate((valid) => {
+        if (valid) {
+          let params = this.sexForm;
+          this.$axios.post('/api/iam/v1/auth/user/editInfo', params).then((res) => {
+            this.$emit('upDataSuccess');
+            this.$notify({
+              title: '提示',
+              message: '修改性别操作成功',
+              type: 'success'
+            });
+            this.sexhandleClose();
+            // 保存成功后 刷新个人信息
+            this.queryInfo(this.activeName);
+          });
+        }
+      })
+    },
+    // 账号注销弹框
+    accountNubLogOff() {
+      this.accountVisible = true;
+    },
+    accountOut() {
+      let params = {
+        username: '', //用户名称
+        registerStatus: '', //用户状态  "0", "只注册还未提交认证"  "1", "已提交认证-待审核" "2", "审核通过" "3", "审核被拒"
+        avatarUrl: '', //账户头像
+        nickName: '', //昵称
+        account: ''
+      };
+      this.$axios.delete('/api/iam/v1/open/login/out').then((res) => {
+        // 删除token
+        removeToken();
+        this.$store.commit('user/resetUserd', params);
+        this.$router.push({
+          path: '/login'
+        });
+      });
     }
   }
 };
@@ -579,5 +708,21 @@ export default {
   background: #cccccc;
   border-radius: 4px;
   margin-left: 20px;
+}
+.dtStyle {
+  display:flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.btnStyle {
+  width: 80px;
+  line-height: 22px;
+  text-align: center;
+  border: 1px solid #000000;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.ddStyle {
+  color: #AAAAAA;
 }
 </style>

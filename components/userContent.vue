@@ -5,8 +5,8 @@
       <!-- <div class="mainCenter" @click="imageVisible=true"
     :style="'width: 80px;height: 80px;background:url('+imageUrl+');background-size: 100%;border-radius: 50%;'">
       </div>-->
-      <div class="avatar mainCenter" v-show="imageUrl !== ''" @click="imageVisible = true">
-        <img :src="imageUrl" style="width: 100%; height: 100%; border-radius: 50%" />
+      <div class="avatar mainCenter" @click="imageVisible = true">
+        <img v-show="imageUrl !== ''" :src="imageUrl" style="width: 100%; height: 100%; border-radius: 50%" />
       </div>
     </el-tooltip>
 
@@ -41,27 +41,27 @@
       </div>
     </div>
 
-    <div
+    <!-- <div
       class="notCertified fontCenter mainCenter"
       v-if="$store.state.user.userInfo.registerStatus !== '2' && !$route.query.hasOwnProperty('userName')"
       @click="toCertified()"
     >
       未认证
-    </div>
-    <div
+    </div> -->
+    <!-- <div
       class="notCertified fontCenter mainCenter"
       v-if="$route.query.hasOwnProperty('userId') && !ifFollow"
       @click="followBtn()"
     >
       关注
-    </div>
-    <div
+    </div> -->
+    <!-- <div
       class="notCertified fontCenter mainCenter"
       v-if="$route.query.hasOwnProperty('userId') && ifFollow"
       @click="followBtn()"
     >
       已关注
-    </div>
+    </div> -->
     <!-- 编辑头像输入框 -->
     <el-dialog
       title="编辑头像"
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { nickNameReg } from '../../../utils/validate';
+import { nickNameReg } from '../utils/validate';
 export default {
   data() {
     return {
@@ -89,7 +89,7 @@ export default {
       imageVisible: false,
       isPublic: true, //上传图片时的参数
       isTmp: true, //上传图片时的参数
-      imageUrl: this.$store.state.user.userInfo.avatarUrl,
+      imageUrl: this.$store.state.user.userInfo.avatarUrl ,
       //昵称部分
       isshowEditIcon: false,
       editNickNameInput: false,
@@ -98,15 +98,15 @@ export default {
   },
   created() {
     // 判断当前作者是否被关注
-    if (this.$route.query.hasOwnProperty('userId')) {
-      this.checkiIfFollow();
-    }
+    // if (this.$route.query.hasOwnProperty('userId')) {
+    //   this.checkiIfFollow();
+    // }
   },
   watch: {
     // 监听 当前作者是否被关注
-    $route() {
-      this.checkiIfFollow();
-    },
+    // $route() {
+    //   this.checkiIfFollow();
+    // },
     '$store.state.user.userInfo.avatarUrl': {
       handler: function (newVal, oldVal) {
         this.imageUrl = newVal;
@@ -133,12 +133,12 @@ export default {
       });
     },
     // 判断  第三方作者是否被关注过
-    checkiIfFollow() {
-      let params = { userId: this.$route.query.userId };
-      this.$axios.post('/api/forum/userArticle/ifFollow', params).then((res) => {
-        this.ifFollow = res.body.false;
-      });
-    },
+    // checkiIfFollow() {
+    //   let params = { userId: this.$route.query.userId };
+    //   this.$axios.post('/api/forum/userArticle/ifFollow', params).then((res) => {
+    //     this.ifFollow = res.body.false;
+    //   });
+    // },
     // 未认证 跳转认证页面
     toCertified() {
       this.$axios.get('/api/auth/user/authapi/front/information/submit/init').then((res) => {
@@ -186,9 +186,9 @@ export default {
       if (this.nickNameVal !== '') {
         if (this.nickNameVal !== nickName) {
           let params = { nickName: this.nickNameVal };
-          await this.$axios.post('/api/auth/user/authapi/common/user/info/change/nickName', params).then((res) => {});
+          await this.$axios.post('/api/iam/v1/auth/user/editInfo', params).then((res) => {});
           // 获取用户信息
-          await this.$axios.get('/api/auth/user/authapi/common/user/info').then((res) => {
+          await this.$axios.get('/api/iam/v1/auth/user/get').then((res) => {
             this.$store.commit('user/addUserInfo', res.body);
             this.nickName = this.$store.state.user.userInfo.nickName;
           });
@@ -209,20 +209,23 @@ export default {
     //头像上传
     async uploadImgSuccess(formData) {
       let fileUid = '';
+      let downloadUrl = '';
       await this.$axios
         .post(`/api/file/center/write/upload?isPublic=${this.isPublic}&isTmp=${this.isTmp}`, formData)
         .then((res) => {
           fileUid = res.body.fileUid;
+          downloadUrl = res.body.downloadUrl;
         });
       await this.$axios
-        .post(`/api/auth/user/authapi/common/user/info/change/avatar`, {
-          avatar: fileUid
+        .post(`/api/iam/v1/auth/user/info/change/avatar`, {
+          fileUid: fileUid,
+          fileUrl: downloadUrl
         })
         .then((res) => {
           this.handleClose();
         });
       // 获取用户信息
-      await this.$axios.get('/api/auth/user/authapi/common/user/info').then((res) => {
+      await this.$axios.get('/api/iam/v1/auth/user/get').then((res) => {
         this.$store.commit('user/addUserInfo', res.body);
         this.imageUrl = this.$store.state.user.userInfo.avatarUrl;
       });
@@ -242,7 +245,7 @@ export default {
 .avatar {
   width: 80px;
   height: 80px;
-  background: url('/img/controlBoard/avatar.png');
+  background: url('../static/img/controlBoard/avatar.png');
   background-size: 100%;
   border-radius: 50%;
   margin: 0 auto;

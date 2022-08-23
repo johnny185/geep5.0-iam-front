@@ -1,7 +1,8 @@
 <template>
   <div>
     <!-- 导航 -->
-    <navContent></navContent>
+    <controlNav></controlNav>
+    <!-- <navContent></navContent> -->
     <!--注册住页面 -->
     <!-- 注册 头部  注册、认证开发者、审核通过 -->
     <!-- <registerNav :registerData="registerData"></registerNav> -->
@@ -332,12 +333,6 @@ export default {
       }
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          // let params = Object.assign(
-          //   {
-          //     code: this.form.phoneCode
-          //   },
-          //   this.form
-          // );
           const params = {
             ak: this.form.ak,
             appId: this.form.appId,

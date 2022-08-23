@@ -1,7 +1,8 @@
 <template>
   <div>
     <!-- 导航 -->
-    <navContent></navContent>
+    <controlNav></controlNav>
+    <!-- <navContent></navContent> -->
     <!-- 申诉 -->
     <div class="appealWrap">
       <div class="appealContent mainCenter">

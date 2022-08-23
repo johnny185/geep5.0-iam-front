@@ -3,16 +3,16 @@
     <ul class="navContent">
       <li class="navleft">
         <div class="navLogo"></div>
-        <nuxt-link to="/">
+        <!-- <nuxt-link to="/">
           <div class="navItem fontSize20 fontWhite">平台首页</div>
-        </nuxt-link>
+        </nuxt-link> -->
         <!-- 控制台首页暂时不要 -->
         <!-- <nuxt-link to="/controlBoardHome">
           <div class="navItem fontSize20 fontWhite">控制台首页</div>
         </nuxt-link>-->
-        <nuxt-link to="/controlBoard" v-if="$store.state.user.userInfo.registerStatus === '2'">
+        <!-- <nuxt-link to="/controlBoard" v-if="$store.state.user.userInfo.registerStatus === '2'">
           <div class="navItem fontSize20 fontWhite">控制台</div>
-        </nuxt-link>
+        </nuxt-link> -->
       </li>
       <li class="navRight">
         <!-- 有用户时 -->
@@ -23,40 +23,39 @@
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>
-              <!-- <p>极客开发者</p> -->
-              <!-- v-if="$store.state.user.role == ''" -->
+            <!-- <el-dropdown-item>
               <span
                 class="notCertified fontCenter"
                 v-if="$store.state.user.userInfo.registerStatus !== '2'"
                 @click="toCertified('1', '2')"
               >未认证</span>
-            </el-dropdown-item>
-            <el-dropdown-item @click.native="toPersonalCentre('1', '1')">个人资料</el-dropdown-item>
+            </el-dropdown-item> -->
+            <el-dropdown-item @click.native="toPersonalCentre">个人资料</el-dropdown-item>
             <el-dropdown-item @click.native="logOut">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <!-- <div class="navItem borderLeft navBoderRight hoverStyle fontWhite" @click="toCertified('1', '1')">个人中心</div> -->
-        <!-- <div class="navItem borderLeft hoverStyle fontWhite">消息</div> -->
-        <nuxt-link to="/controlBoard/personalCentre?menu=2">
-          <messages
+        <!-- <div class="navItem borderLeft hoverStyle fontWhite" @click="toMessages">消息</div> -->
+        <!-- <nuxt-link to="/controlBoard/personalCentre?menu=2"> -->
+          <!-- <span>消息</span> -->
+          <!-- <messages
             class="navItem borderLeft hoverStyle fontWhite"
             v-if="$store.state.user.userInfo.username !== '' && $route.path.indexOf('personalCentre') === -1"
-          />
-        </nuxt-link>
+          /> -->
+        <!-- </nuxt-link> -->
       </li>
     </ul>
-    <div class="navNone"></div>
+    <!-- <div class="navNone"></div> -->
   </div>
 </template>
 
 <script>
-import messages from './messages.vue'
+// import messages from './messages.vue'
 import { removeToken } from '../utils/auth';
 export default {
-  components: {
-    messages
-  },
+  // components: {
+  //   messages
+  // },
   data() {
     return {};
   },
@@ -73,16 +72,26 @@ export default {
         });
       }
     },
-    // 跳转页面去 控制台 个人中心
+    // 跳转页面去 个人中心信息页
     toPersonalCentre(menuData, tabData) {
       this.$router.push({
-        path: '/controlBoard/personalCentre',
+        path: '/',
         query: {
-          menu: menuData,
-          tab: tabData
+          menu: 1,
+          tab: 1
         }
       });
     },
+    // 跳转页面到 消息页面
+    // toMessages() {
+    //   this.$router.push({
+    //     path: '/',
+    //     query: {
+    //       menu: 2,
+    //       tab: 2
+    //     }
+    //   });
+    // },
     // 退出登录
     logOut() {
       this.$nextTick(() => {
@@ -93,7 +102,7 @@ export default {
           nickName: '', //昵称
           account: ''
         };
-        this.$axios.delete('/api/auth/user/openapi/common/token/logout').then((res) => {
+        this.$axios.delete('/api/iam/v1/open/login/out').then((res) => {
           // 删除token
           removeToken();
           this.$store.commit('user/resetUserd', params);
@@ -129,6 +138,7 @@ export default {
 .navleft {
   display: flex;
   cursor: pointer;
+  height: 88px;
 }
 .navleft div:hover {
   color: #2f74ff;

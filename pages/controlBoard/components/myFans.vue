@@ -68,22 +68,22 @@ export default {
     //跳转 第三方个人中心
     toPersonCenter(item) {
        if(item.userId===this.$store.state.user.userInfo.id){
-        this.$router.push({
-          path: '/controlBoard/personalCentre',
-          query: {
-            menu: '5',
-            tab: '5'
-          }
-        });
+        // this.$router.push({
+        //   path: '/controlBoard/personalCentre',
+        //   query: {
+        //     menu: '5',
+        //     tab: '5'
+        //   }
+        // });
       }else{
-      this.$router.push({
-        path: '/controlBoard/articlePersonalCentre',
-        query: {
-          menu: '5',
-          userId: item.userId,
-          userName: item.userName
-        }
-      });
+      // this.$router.push({
+      //   path: '/controlBoard/articlePersonalCentre',
+      //   query: {
+      //     menu: '5',
+      //     userId: item.userId,
+      //     userName: item.userName
+      //   }
+      // });
       }
     },
     sizeChange(data) {
