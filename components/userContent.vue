@@ -6,7 +6,7 @@
     :style="'width: 80px;height: 80px;background:url('+imageUrl+');background-size: 100%;border-radius: 50%;'">
       </div>-->
       <div class="avatar mainCenter" @click="imageVisible = true">
-        <img v-show="imageUrl !== ''" :src="imageUrl" style="width: 100%; height: 100%; border-radius: 50%" />
+        <img v-show="imageUrl !== null" :src="imageUrl" style="width: 100%; height: 100%; border-radius: 50%" />
       </div>
     </el-tooltip>
 

@@ -12,16 +12,6 @@
             class="loginMthodItem hoverStyle"
             :class="{ fontBlue: currentIndex === index }"
             @click="changeName(index)">{{item}}</li>
-          <!-- <li
-            class="loginMthodItem hoverStyle"
-            :class="{ fontBlue: currentName === '1' }"
-            @click="changeName('1')"
-          >密码登录</li>
-          <li
-            class="loginMthodItem hoverStyle"
-            :class="{ fontBlue: currentName === '2' }"
-            @click="changeName('2')"
-          >验证码登录</li> -->
         </ul>
         <el-form ref="form" :model="form" :rules="rules" class="login-form">
           <!-- 用户名登录，密码验证 --支持手机号/邮箱/昵称作为用户名-->
@@ -49,13 +39,7 @@
                 <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
               </span>
             </el-form-item>
-            <!-- <el-form-item prop="code"> -->
               <el-link>密码规则说明</el-link>
-              <!-- <div class="codeContent">
-                <el-input v-model="form.code" placeholder="请输入验证码" @keyup.enter.native="handleLogin" clearable></el-input>
-                <img :src="img" class="codeBg" alt @click="captcha" />
-              </div> -->
-            <!-- </el-form-item> -->
           </div>
           <!-- 手机号登录，短信验证 -->
           <div v-if="currentIndex === 1">
@@ -83,14 +67,9 @@
             </el-form-item>
           </div>
           <!-- 密码验证和短信验证登录方式切换 -->
-          <!-- <el-form-item>
-            <div v-if="phoneCodeLogin" @click="changeLogin">密码验证登录</div>
-            <div v-else @click="changeLogin">短信验证登录</div>
-          </el-form-item>-->
           <el-form-item align="right" style="cursor: pointer;">
             <div class="fontSize14 fontBlue" @click="forgetBtn">忘记密码</div>
           </el-form-item>
-
           <!-- 登录按钮 -->
           <el-form-item>
             <div class="submitBtn fontCenter fontSize18" @click="handleLogin" :loading="loading">登录</div>
@@ -105,7 +84,7 @@
 </template>
 
 <script>
-import { setToken, getToken } from '../../utils/auth';
+import { setToken } from '../../utils/auth';
 import { passwordReg, telReg, emailReg } from '../../utils/validate';
 export default {
   data() {
@@ -215,7 +194,7 @@ export default {
     // 获取公共应用配置
     getConfig() {
       this.$axios.get('/api/iam/v1/open/application/config').then((res) => {
-        console.log(res, 'res') 
+        // console.log(res, 'res') 
         // this.$store.commit('user/addUserInfo', res.body);
         // this.$router.push({
         //   path: '/'
@@ -266,12 +245,10 @@ export default {
             this.$axios.post('/api/iam/v1/open/login/account', params).then((res) => {
               if (res.status === 200) {
                 setToken(res.body.access_token);
-                
                 this.$store.commit('user/addToken', res.body.access_token);
                 this.getUserInfo();
+                this.certificationInfo();
               }
-              console.log(getToken('token'), 'token')
-              console.log(res, '密码登录')
             })
           } else if (this.currentIndex === 1) { // 当currentIndex为0时为验证码登录
             if (telReg(this.form.username)) { // 输入账号为手机号时
@@ -354,6 +331,20 @@ export default {
           }
         });
       });
+    },
+    // 认证详情
+    certificationInfo() {
+      let isCertification = null;
+      this.$axios.get('/api/iam/v1/auth/certification/apply/info').then((res) => {
+        if (res.body === null) {
+          isCertification = 0 ;
+        } else {
+          isCertification = 1;
+          console.log(isCertification, 'isCertification')
+        }
+        this.$store.commit('user/addRegisterType', isCertification);
+      })
+
     },
     // 新用户注册
     newUserBtn() {

@@ -8,7 +8,7 @@
           <div class="personBoxLeft">
             <!-- 用户 -->
             <userContent></userContent>
-            <!-- 菜单 我的资料 我的消息 我的关注 我的收藏等等 -->
+            <!-- 菜单 我的资料 我的消息  -->
             <controlMenu @toMenu="toMenu"></controlMenu>
           </div>
           <div class="personBoxRight">
@@ -35,22 +35,22 @@ export default {
   methods: {
    // 切换 我的资料 我的消息 我的关注
     toMenu(data) {
-      // let queryParams = {};
+      let queryParams = {};
       // 切换路由 地址栏参数发生修改 保证刷新后还停留在当前页面
-      // if (data === '1') {
-      //   queryParams = {
-      //     menu: data,
-      //     tab: 1
-      //   };
-      // } else {
-      //   queryParams = {
-      //     menu: data
-      //   };
-      // }
-      // this.$router.push({
-      //   path: '/controlBoard/personalCentre',
-      //   query: queryParams
-      // });
+      if (data === '1') {
+        queryParams = {
+          menu: data,
+          tab: 1
+        };
+      } else {
+        queryParams = {
+          menu: data
+        };
+      }
+      this.$router.push({
+        path: '/',
+        query: queryParams
+      });
       this.menu = data;
     }
   }

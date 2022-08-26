@@ -7,6 +7,35 @@
       <el-form-item label="身份证号" prop="personIdCardNum">
         <el-input v-model="form.personIdCardNum" placeholder="请输入身份证号"></el-input>
       </el-form-item>
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="身份证有效期" prop="personIdCardPeriodStartDate">
+            <el-date-picker
+              v-model="form.personIdCardPeriodStartDate"
+              type="date"
+              placeholder="选择开始日期"
+              value-format="yyyy-MM-dd HH:mm:ss">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8" v-if="form.personIdCardIsLongEffective === false">
+          <el-form-item prop="personIdCardPeriodEndDate">
+            <el-date-picker
+              v-model="form.personIdCardPeriodEndDate"
+              type="date"
+              placeholder="选择结束日期"
+              value-format="yyyy-MM-dd HH:mm:ss">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item style=" margin-left: 10px;">
+            <el-radio-group v-model="form.personIdCardIsLongEffective" style="display: contents;">
+              <el-radio :label="true" @click.native.prevent="radioClisk(false)">长期</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <!-- <el-form-item label="上传证件" prop="personIdCardNum" class="updataImg"> -->
       <el-form-item label="上传身份证">
         <div>
@@ -15,8 +44,8 @@
             <!-- 身份证正面 -->
             <li class="IDImgItem">
               <!-- <div class="IDImgBox"> -->
-              <el-form-item prop="personIdCardPhotoFront">
-                <el-input v-if="false" v-model="form.personIdCardPhotoFront" />
+              <el-form-item prop="personIdCardPhotoFrontId">
+                <el-input v-if="false" v-model="form.personIdCardPhotoFrontId" />
                 <upload
                   :isPublic="isPublic"
                   :isTmp="isTmp"
@@ -38,8 +67,8 @@
             </li>
             <!-- 身份证 反面 -->
             <li class="IDImgItem">
-              <el-form-item prop="personIdCardPhotoNegative">
-                <el-input v-if="false" v-model="form.personIdCardPhotoNegative" />
+              <el-form-item prop="personIdCardPhotoNegativeId">
+                <el-input v-if="false" v-model="form.personIdCardPhotoNegativeId" />
                 <upload
                   :isPublic="isPublic"
                   :isTmp="isTmp"
@@ -64,8 +93,8 @@
               <!-- <div class="IDImgBox">
                 <div class="IDImg hold"></div>
               </div>-->
-              <el-form-item prop="personIdCardPhotoHand">
-                <el-input v-if="false" v-model="form.personIdCardPhotoHand" />
+              <el-form-item prop="personIdCardPhotoHandId">
+                <el-input v-if="false" v-model="form.personIdCardPhotoHandId" />
                 <upload
                   :isPublic="isPublic"
                   :isTmp="isTmp"
@@ -92,12 +121,12 @@
           v-model="form.address"
           maxlength="200"
           show-word-limit
-          :rows="8"
+          :rows="4"
         />
       </el-form-item>
       <el-form-item>
         <div class="personBottom fontCenter">
-          <div class="reset" @click="reset">取消</div>
+          <!-- <div class="reset" @click="reset">取消</div> -->
           <div class="submit" @click="submitBtn">提交</div>
         </div>
       </el-form-item>
@@ -106,39 +135,39 @@
 </template>
 
 <script>
-import { regId } from '../../../utils/validate';
-import bgImg1 from '../../../static/img/login/positiveImg.png';
-import bgImg2 from '../../../static/img/login/backImg.png';
-import bgImg3 from '../../../static/img/login/holdImg.png';
+import { regId } from '../utils/validate';
+import bgImg1 from '../static/img/login/positiveImg.png';
+import bgImg2 from '../static/img/login/backImg.png';
+import bgImg3 from '../static/img/login/holdImg.png';
 export default {
-  props: {
-    // 用户初始化信息
-    initInfo: {
-      type: Object,
-      default: () => {
-        return {
-          personFullName: '', //真实姓名
-          personIdCardNum: '', //身份证号
-          address: '', //地址
-          personIdCardPhotoFront: '', //身份证 正面 图片id
-          personIdCardPhotoFrontUrl: '', //身份证 正面 文件图片回显url
-          personIdCardPhotoNegative: '', //身份证 反面 图片id
-          personIdCardPhotoNegativeUrl: '', //身份证 反面 文件图片回显url
-          personIdCardPhotoHand: '', //手持身份证 图片id
-          personIdCardPhotoHandUrl: '' //手持身份证 文件图片回显url
-        };
-      }
-    }
-  },
-  watch: {
-    initInfo: {
-      handler: function (data) {
-        this.form = data;
-      },
-      deep: true,
-      immediate: true
-    }
-  },
+  // props: {
+  //   // 用户初始化信息
+  //   initInfo: {
+  //     type: Object,
+  //     default: () => {
+  //       return {
+  //         personFullName: '', //真实姓名
+  //         personIdCardNum: '', //身份证号
+  //         address: '', //地址
+  //         personIdCardPhotoFront: '', //身份证 正面 图片id
+  //         personIdCardPhotoFrontUrl: '', //身份证 正面 文件图片回显url
+  //         personIdCardPhotoNegative: '', //身份证 反面 图片id
+  //         personIdCardPhotoNegativeUrl: '', //身份证 反面 文件图片回显url
+  //         personIdCardPhotoHand: '', //手持身份证 图片id
+  //         personIdCardPhotoHandUrl: '' //手持身份证 文件图片回显url
+  //       };
+  //     }
+  //   }
+  // },
+  // watch: {
+  //   initInfo: {
+  //     handler: function (data) {
+  //       this.form = data;
+  //     },
+  //     deep: true,
+  //     immediate: true
+  //   }
+  // },
   data() {
     // 身份证号 校验
     var validatepersonIdCardNum = (rule, value, callback) => {
@@ -165,66 +194,85 @@ export default {
       form: {
         personFullName: '', //真实姓名
         personIdCardNum: '', //身份证号
-        address: '', //地址
-        personIdCardPhotoFront: '', //身份证 正面
-        personIdCardPhotoNegative: '', //身份证 反面
-        personIdCardPhotoHand: '' //手持身份证
+        // personIdCardPeriodDate: [],
+        personIdCardPeriodStartDate: '', // 身份证有效期开始日期
+        personIdCardPeriodEndDate: '', // 身份证有效期截止日期
+        personIdCardIsLongEffective: false, // 身份证是否长期有效
+        personIdCardPhotoFrontId: '', //身份证 正面
+        personIdCardPhotoNegativeId: '', //身份证 反面
+        personIdCardPhotoHandId: '', //手持身份证
+        address: '' //地址
       },
+      // personIdCardPeriodDate: [],
       rules: {
+        // 真实姓名 校验
         personFullName: [{ required: true, message: '真实姓名不能为空', trigger: 'change' }],
+        // 身份证号 校验
         personIdCardNum: [{ validator: validatepersonIdCardNum, required: true, trigger: 'change' }],
+        // 身份证有效开始日期 校验
+        personIdCardPeriodStartDate: [{ required: true, message: '身份证有效开始不能为空', trigger: 'change' }],
+        // 身份证有效截止日期 校验
+        personIdCardPeriodEndDate: [{ required: true, message: '身份证有效截止不能为空', trigger: 'change' }],
+        // 地址 校验
         address: [{ required: true, message: '详细地址不能为空', trigger: 'change' }],
         // 身份证正面  校验
-        personIdCardPhotoFront: [{ required: true, message: '身份证正面不能为空', trigger: 'change' }],
+        personIdCardPhotoFrontId: [{ required: true, message: '身份证正面不能为空', trigger: 'change' }],
         //  身份证反面 校验
-        personIdCardPhotoNegative: [{ required: true, message: '身份证反面不能为空', trigger: 'change' }],
+        personIdCardPhotoNegativeId: [{ required: true, message: '身份证反面不能为空', trigger: 'change' }],
         // 手持身份证 校验
-        personIdCardPhotoHand: [{ required: true, message: '手持身份证不能为空', trigger: 'change' }]
+        personIdCardPhotoHandId: [{ required: true, message: '手持身份证不能为空', trigger: 'change' }]
       }
     };
   },
   methods: {
-    // 取消
-    reset() {
-      this.$router.push({
-        path: '/'
-      });
+    radioClisk(e) {
+      e === this.form.personIdCardIsLongEffective ? (this.form.personIdCardIsLongEffective = true):(this.form.personIdCardIsLongEffective = e)
     },
+    // 取消
+    // reset() {
+      // this.$router.push({
+      //   path: '/'
+      // });
+    // },
     // 图片上传成功
     handleSuccess(data) {
       // 身份证 正面
       if (data[1] === 'positive') {
-        // this.form.personIdCardPhotoFront = data[0].body.fileUid;
-        this.$set(this.form, 'personIdCardPhotoFront', data[0].body.fileUid);
-        this.$refs.form.clearValidate('personIdCardPhotoFront');
+        // this.form.personIdCardPhotoFrontId = data[0].body.fileUid;
+        this.$set(this.form, 'personIdCardPhotoFrontId', data[0].body.fileUid);
+        this.$refs.form.clearValidate('personIdCardPhotoFrontId');
       } else if (data[1] === 'back') {
         // this.form.personIdCardPhotoNegative = data[0].body.fileUid;
-        this.$set(this.form, 'personIdCardPhotoNegative', data[0].body.fileUid);
-        this.$refs.form.clearValidate('personIdCardPhotoNegative');
+        this.$set(this.form, 'personIdCardPhotoNegativeId', data[0].body.fileUid);
+        this.$refs.form.clearValidate('personIdCardPhotoNegativeId');
       } else {
-        // this.form.personIdCardPhotoHand = data[0].body.fileUid;
-        this.$set(this.form, 'personIdCardPhotoHand', data[0].body.fileUid);
-        this.$refs.form.clearValidate('personIdCardPhotoHand');
+        // this.form.personIdCardPhotoHandId = data[0].body.fileUid;
+        this.$set(this.form, 'personIdCardPhotoHandId', data[0].body.fileUid);
+        this.$refs.form.clearValidate('personIdCardPhotoHandId');
       }
     },
     // 提交
     submitBtn() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          let params = Object.assign(this.form, {
-            registerType: '1'
-          });
-          this.$axios.post('api/auth/user/authapi/front/information/submit', params).then((res) => {
-            // this.$notify({
-            //   title: '成功',
-            //   message: '提交认证操作成功',
-            //   type: 'success'
-            // });
-            // console.log(11111111);
-            // 跳转 审核中 页面
-            this.$router.push({
-              path: '/login/inReview'
-            });
+          // let params = Object.assign(this.form, {
+          //   registerType: '1'
+          // });
+          // let params = Object.assign(this.form, {
+          //   personIdCardPeriodStartDate: this.form.personIdCardPeriodDate[0],
+          //   personIdCardPeriodEndDate: this.form.personIdCardPeriodDate[1],
+          // });
+          // delete this.form.personIdCardPeriodDate;
+          this.$axios.post('api/iam/v1/auth/certification/person/apply', this.form).then((res) => {
+            if (res.status === 200 && res.body === true) {
+              this.$notify({
+                title: '成功',
+                message: '提交认证操作成功',
+                type: 'success'
+              });
+              this.$emit('queryInfo', '2');
+              this.$store.commit('user/addRegisterType', 1);
+            }
           });
         } else {
           return false;
@@ -268,6 +316,9 @@ export default {
   height: 104px;
   border: 1px dotted #999990;
 }
+.IDtitle {
+  margin-top: 6px;
+}
 .positive {
   background: url('/img/login/positiveImg.png') no-repeat;
   background-size: 100%;
@@ -282,8 +333,9 @@ export default {
 }
 .personBottom {
   display: flex;
+  justify-content: center;
 }
-.reset {
+/* .reset {
   flex: 1;
   background: #fafdff;
   border-radius: 4px;
@@ -292,9 +344,10 @@ export default {
   border: 1px solid #cccccc;
   margin-right: 50px;
   cursor: pointer;
-}
+} */
 .submit {
-  flex: 1;
+  width: 300px;
+  /* flex: 1; */
   height: 40px;
   line-height: 40px;
   color: #2f74ff;

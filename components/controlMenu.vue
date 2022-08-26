@@ -1,11 +1,11 @@
 <template>
   <div class="marginTop20">
     <el-menu :default-active="active" class="el-menu-vertical-demo">
-      <el-menu-item index="1" @click="toMenu('1')" v-if="!$route.query.hasOwnProperty('userId')">
+      <el-menu-item index="1" @click="toMenu('1')">
         <i class="el-icon-user"></i>
         <span slot="title">我的资料</span>
       </el-menu-item>
-      <el-menu-item index="2" @click="toMenu('2')" v-if="!$route.query.hasOwnProperty('userId')">
+      <el-menu-item index="2" @click="toMenu('2')">
         <i class="el-icon-message"></i>
         <span slot="title">我的消息</span>
       </el-menu-item>

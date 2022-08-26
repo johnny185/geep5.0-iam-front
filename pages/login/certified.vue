@@ -28,12 +28,12 @@
           </div>
         </div>
         <!-- 认证 个人 -->
-        <certifiedPerson v-if="$store.state.user.userInfo.registerType === '1'" :initInfo="initInfo"></certifiedPerson>
+        <!-- <certifiedPerson v-if="$store.state.user.userInfo.registerType === '1'" :initInfo="initInfo"></certifiedPerson> -->
         <!-- 认证 商业伙伴 -->
-        <certifiedCompany
+        <!-- <certifiedCompany
           v-if="$store.state.user.userInfo.registerType === '2'"
           :initInfo="initInfo"
-        ></certifiedCompany>
+        ></certifiedCompany> -->
       </div>
     </div>
   </div>
@@ -43,14 +43,14 @@
 // 头部
 import registerNav from './components/registerNav.vue';
 // 认证个人
-import certifiedPerson from './components/certifiedPerson';
+// import certifiedPerson from './components/certifiedPerson';
 //  认证公司
-import certifiedCompany from './components/certifiedCompany';
+// import certifiedCompany from './components/certifiedCompany';
 export default {
   components: {
     registerNav,
-    certifiedPerson,
-    certifiedCompany
+    // certifiedPerson,
+    // certifiedCompany
   },
   mounted() {
     this.getInit();

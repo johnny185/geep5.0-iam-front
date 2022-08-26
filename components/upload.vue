@@ -74,7 +74,7 @@ export default {
   },
   computed: {
     config() {
-      return { Authorization: this.$store.state.user.userInfo.token };
+      return { Authorization: this.$store.state.user.userInfo.token, AppID : 8134005370347520 };
     }
   },
   watch: {
@@ -121,6 +121,7 @@ export default {
       }
     },
     handleError(err, file, fileList) {
+      console.log(err);
       this.$notify({
         title: '提示',
         type: 'error',

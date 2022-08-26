@@ -3,7 +3,7 @@ export const state = () => {
   return{
     userInfo: {
       username:"",//用户名称
-      registerStatus:"",//用户状态  "0", "只注册还未提交认证"  "1", "已提交认证-待审核" "2", "审核通过" "3", "审核被拒"
+      registerType:"",//认证状态  0是未认证 1是已认证
       avatarUrl:"",//账户头像
       nickName:"",//昵称
       account:"",//
@@ -22,6 +22,10 @@ export const mutations = {
   addUserInfo (state, object) {
     // state = Object.assign(state,object) 
     state.userInfo = Object.assign( state.userInfo,object) 
+  },
+  // 认证状态 0未认证 1认证中
+  addRegisterType(state, registerType) {
+    state.userInfo.registerType = registerType
   },
   // 退出登录 清空信息
   resetUserd(state,object){
