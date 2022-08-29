@@ -15,12 +15,12 @@
         <el-button type="primary" size="small" @click="deleteFn">删除</el-button>
         <el-button type="primary" size="small" @click="readFn">标识为已读</el-button>
         <el-button type="primary" size="small" @click="readAllFn">全部标识为已读</el-button>
-        <!-- <el-radio-group v-model="category" size="small" class="marginLeft20" @change="classifyChange">
+        <el-radio-group v-model="category" size="small" class="marginLeft20" @change="classifyChange">
           <el-radio-button label>全部</el-radio-button>
           <el-radio-button v-for="item in msgTypeDictionary" :key="item.value" :label="item.value">{{
             item.label
           }}</el-radio-button>
-        </el-radio-group> -->
+        </el-radio-group>
       </div>
       <!-- 数据表 -->
       <el-table
@@ -82,10 +82,17 @@ export default {
         total: 0
       },
       readState: '', //阅读状态  0:未读 1:已读
-      category: '1000', // 消息分类 1000:系统消息 1100:个人信息 1200:开发者论坛 1300:控制台 1400:咨询反馈
+      category: '', // 消息分类 1000:系统消息 1100:个人信息 1200:开发者论坛 1300:控制台 1400:咨询反馈
       rowData: null, //消息详情
       unreadNum: 0, //未读消息数
-      multipleSelection: [] // 选中list的集合
+      multipleSelection: [], // 选中list的集合
+      msgTypeDictionary: [
+        { value: 1000, label: '系统消息' },
+        // { value: 1100, label: '个人信息' },
+        // { value: 1200, label: '开发者论坛' },
+        // { value: 1300, label: '控制台' },
+        // { value: 1400, label: '咨询反馈' }
+      ],
     };
   },
   computed: {
@@ -101,13 +108,7 @@ export default {
         return label;
       };
     }
-    // msgTypeDictionary: [
-    //     { value: 1000, label: '系统消息' },
-    //     { value: 1100, label: '个人信息' },
-    //     { value: 1200, label: '开发者论坛' },
-    //     { value: 1300, label: '控制台' },
-    //     { value: 1400, label: '咨询反馈' }
-    //   ],
+    
   },
   created() {
     this.queryList();
@@ -117,6 +118,10 @@ export default {
     toSee(data) {
       this.flag = 2;
       this.rowData = data;
+    },
+    classifyChange() {
+      this.readState = this.buttonFlag ? '' : 0;
+      this.queryList();
     },
     // 消息设置
     // setMessage() {
