@@ -22,7 +22,7 @@
             <p v-if="$store.state.user.userInfo.registerStatus === '3'">已认证未通过</p>
           </el-form-item> -->
           <el-form-item label="性别">
-            <span>{{ $store.state.user.userInfo.sex === 0 ? '未知': $store.state.user.userInfo.sex === 1? '男': '女' }}</span>
+            <span>{{ $store.state.user.userInfo.sex === 0 ? '未知': $store.state.user.userInfo.sex === 1 ? '男': '女' }}</span>
             <el-button size="small" @click="upDateSex" type="primary" style="display: inline-block; margin-left: 10px"
               >设置</el-button
             >
@@ -121,28 +121,6 @@
         <thirdpartyRegister ref="thirdpartyRegister" @defineExceedHeight="defineExceedHeight" />
       </el-tab-pane> -->
     </el-tabs>
-    <!-- 设置性别 -->
-    <el-dialog
-     title="设置性别"
-     width="40%"
-     top="15vh"
-     :visible.sync="sexVisible"
-     :before-close="sexhandleClose"
-    >
-      <el-form ref="sexForm" :model="sexForm" :rules="sexRules" label-width="100px">
-        <el-form-item label="性别" prop="sex">
-          <el-radio-group v-model="sexForm.sex">
-            <el-radio :label="1">男</el-radio>
-            <el-radio :label="2">女</el-radio>
-            <!-- <el-radio :label="3">未知</el-radio> -->
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="sexhandleClose">取消</el-button>
-        <el-button size="small" type="primary" @click="sexSubmitBtn">提交</el-button>
-      </span>
-    </el-dialog>
     <!-- 修改手机号 -->
     <el-dialog
       title="修改手机号"
@@ -212,7 +190,7 @@
         <el-button size="small" type="primary" @click="emailSubmitBtn">提交</el-button>
       </span>
     </el-dialog>
-    <!-- 设置性别 -->
+    <!-- 账户注销 -->
     <el-dialog
      title="账号注销"
      width="40%"
@@ -228,6 +206,12 @@
       :upDataNickNam="upDataNickNam"
       @upDataSuccess="upDataSuccess"
     ></upDateNickNameDialog>
+    <!-- 修改性别 -->
+    <upDateSexDialog
+     ref="upDateSexDialog"
+      :upDateSexs="upDateSexs"
+      @upDataSuccess="upDataSuccess"
+      ></upDateSexDialog>
   </div>
 </template>
 
@@ -268,6 +252,8 @@ export default {
       isExceedHeight: false, //判断高度是否超过 默认高度，
       // 需要修改的昵称名称
       upDataNickNam: '',
+      // 需要修改的性别
+      upDateSexs: null,
       //默认展示
       activeName: this.$route.query.tab,
       tableData: [],
@@ -311,16 +297,6 @@ export default {
         code: [{ required: true, message: '图形验证码不能为空', trigger: 'change' }],
         // 短信验证码 校验
         emailCode: [{ required: true, message: '邮箱验证码不能为空', trigger: 'change' }]
-      },
-
-      // 设置性别部分
-      sexVisible: false,
-      sexForm: {
-        sex: '' // 性别
-      },
-      sexRules: {
-        // 性别验证
-        sex: [{ required: true, message: '性别不能为空', trigger: 'blur' }]
       },
       accountVisible: false,
       // 认证信息
@@ -603,30 +579,10 @@ export default {
       this.countdownEmail = 60;
       this.isShowGetCodeEmail = true;
     },
+    // 修改性别
     upDateSex() {
-      this.sexVisible = true;
-    },
-    sexhandleClose() {
-      this.sexVisible = false;
-      this.$refs['sexForm'].resetFields();
-    },
-    sexSubmitBtn() {
-      this.$refs['sexForm'].validate((valid) => {
-        if (valid) {
-          let params = this.sexForm;
-          this.$axios.post('/api/iam/v1/auth/user/editInfo', params).then((res) => {
-            // 保存成功后 刷新个人信息
-            this.queryInfo(this.activeName);
-            // this.upDataSuccess();
-            this.$notify({
-              title: '提示',
-              message: '修改性别操作成功',
-              type: 'success'
-            });
-            this.sexhandleClose();
-          });
-        }
-      })
+      this.upDateSexs = this.$store.state.user.userInfo.sex;
+      this.$refs.upDateSexDialog.dialogVisible = true;
     },
     // 账号注销弹框
     accountNubLogOff() {
