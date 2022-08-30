@@ -95,7 +95,8 @@ export default {
         maxImgSize: 3000, //限制图片最大宽度和高度
         enlarge: 1, //图片根据截图框输出比例倍数
         mode: '180px 180px' //图片默认渲染方式
-      }
+      },
+      imageSize: 2 // 上传图片最大不超过2M
     };
   },
   methods: {
@@ -119,11 +120,20 @@ export default {
     //选择图片
     selectImg(e) {
       let file = e.target.files[0];
-      if (!/\.(jpg|jpeg|png|JPG|PNG)$/.test(e.target.value)) {
+      const imageSize = this.imageSize * 1024 * 1024; // 转换为 字节
+      // console.log(file, imageSize,  'file')
+      if (!/\.(jif|jpeg|png|BMP|PNG)$/.test(e.target.value)) {
         this.$notify({
           title: '提示',
-          message: '图片类型要求：jpeg、jpg、png',
+          message: '图片类型要求：jpeg、bmp、png、gif',
           type: 'warning'
+        });
+        return false;
+      } else if (file.size > imageSize) {
+        this.$notify({
+          title: '提示',
+          message: `图片大小超过${this.imageSize}M`,
+          type: 'error'
         });
         return false;
       }

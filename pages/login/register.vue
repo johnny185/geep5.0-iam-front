@@ -3,10 +3,6 @@
     <!-- 导航 -->
     <controlNav></controlNav>
     <!-- <navContent></navContent> -->
-    <!--注册住页面 -->
-    <!-- 注册 头部  注册、认证开发者、审核通过 -->
-    <!-- <registerNav :registerData="registerData"></registerNav> -->
-
     <!-- 注册表单 -->
     <div class="registerContentWrap">
       <div class="registerContent mainCenter">
@@ -18,7 +14,7 @@
             <el-radio v-model="form.registerType" label="2" border>商业伙伴</el-radio>
           </el-form-item> -->
           <el-form-item label="手机号码" prop="ak">
-            <el-input v-model.trim="form.ak" placeholder="请输入手机号" clearable>
+            <el-input v-model.trim="form.ak" maxlength="11" placeholder="请输入手机号" clearable>
              <template slot="prepend">+86(中国)</template>
              </el-input>
           </el-form-item>
@@ -30,9 +26,11 @@
           </el-form-item>
           <el-form-item label="短信验证码" prop="code">
             <div class="smsContent">
-              <el-input v-model="form.code" placeholder="请输入短信验证码"></el-input>
-              <div v-if="isShowGetCode" class="sendSms hoverStyle fontCenter" @click="getCode">获取验证码</div>
+              <el-input v-model="form.code" maxlength="6" placeholder="请输入短信验证码"></el-input>
+              <div v-if="isShowGetCode" class="sendSms hoverStyle fontCenter" @click="getCode">发送验证码</div>
               <div v-else class="smsBtn fontCenter">{{ countdown }}s后可重试</div>
+              <!-- <el-button v-if="isShowGetCode" type="primary" @click="getCode" :disabled="isClickable" style="margin-left: 20px;">发送验证码</el-button> -->
+              <!-- <el-button v-else  type="info">{{ countdown }}s后可重试</el-button> -->
             </div>
           </el-form-item>
           <el-form-item label="设置新密码" prop="sk">
@@ -141,7 +139,7 @@ export default {
       } else if (!passwordReg(value)) {
         callback(new Error('密码 6-20位英文字母、数字或者符号（除空格），且字母、数字和标点符号至少包含两种'));
       } else if (value !== this.form.sk) {
-        return callback(new Error('两次输入密码不一致'));
+        return callback(new Error('与设置登录密码一致'));
       } else {
         callback();
       }
@@ -155,27 +153,7 @@ export default {
       skType2: 'password', //区别 显示隐藏密码
       uuid: '', //后台需要验证的
       img: '', //动态验证码
-      // 头部样式
-      registerData: [
-        {
-          bg: '/img/login/register.png',
-          title: '注册',
-          lineBg: '/img/login/line2.png',
-          arrowShow: true
-        },
-        {
-          bg: '/img/login/notCertified.png',
-          title: '认证开发者',
-          lineBg: '/img/login/line2.png',
-          arrowShow: true
-        },
-        {
-          bg: '/img/login/notApproved.png',
-          title: '审核通过',
-          lineBg: '',
-          arrowShow: false
-        }
-      ],
+      // isClickable: true,
       form: {
         // registerType: '', //用户身份
         ak: '', // 用户的用户名或者手机号或者邮箱号
@@ -193,7 +171,7 @@ export default {
         // 用户身份 校验
         // registerType: [{ required: true, message: '用户身份不能为空', trigger: 'change' }],
         // 电话号码 校验
-        ak: [{ required: true, validator: validatephoneNumberber, trigger: 'change' }],
+        ak: [{ required: true, validator: validatephoneNumberber, trigger: 'blur' }],
         // 图形验证码 校验
         picCode: [{ required: true, message: '图形验证码不能为空', trigger: 'change' }],
         // 短信验证码 校验
@@ -222,7 +200,7 @@ export default {
     this.captcha();
   },
   methods: {
-        // 输入手机号校验手机号是否存在
+    // 输入手机号校验手机号是否存在
     phoneNumberBlur() {
       this.$axios.get(`/api/iam/v1/open/user/find?ak=${this.form.ak}&akType=${1}&appId=${this.form.appId}`).then((res) => {
         if (res.body) {
@@ -231,7 +209,10 @@ export default {
             message: '手机号已注册，可以直接登录',
             type: 'error'
           });
-        }
+        } 
+        // else {
+        //   this.isClickable = false;
+        // }
       });
     },
     /***
@@ -312,7 +293,8 @@ export default {
             this.getIdentifyCode();
             this.$notify({
               title: '提示',
-              message: '发送短信验证码操作成功',
+              // message: '发送短信验证码操作成功',
+              message: '验证码已发送到手机，请查收',
               type: 'success'
             });
           }

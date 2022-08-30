@@ -22,7 +22,8 @@
                 style="heigth: 60px"
                 v-model.trim="form.userphone"
                 clearable
-                placeholder="请输入手机号"
+                placeholder="手机号/邮箱"
+                maxlength="40"
               ></el-input>
             </el-form-item>
             <!-- 密码 -->
@@ -32,6 +33,7 @@
                 class="inputStyle"
                 v-model.trim="form.password"
                 placeholder="请输入密码"
+                maxlength="20"
                 clearable
                 @keyup.enter.native="handleLogin"
               ></el-input>
@@ -107,7 +109,7 @@ export default {
       if (!telReg(value)) {
         callback(new Error('请输入正确的手机号'));
       } else {
-        callback();
+        callback(this.phoneNumberBlur());
       }
     };
     return {
@@ -190,6 +192,18 @@ export default {
           this.isShowGetCode = true;
         }
       }, 1000);
+    },
+    // 输入手机号校验手机号是否存在
+    phoneNumberBlur() {
+      this.$axios.get(`/api/iam/v1/open/user/find?ak=${this.form.userphone}&akType=${1}&appId=8134005370347520`).then((res) => {
+        if (!res.body) {
+          this.$notify({
+            title: '提示',
+            message: '手机号未注册',
+            type: 'error'
+          });
+        }
+      });
     },
     // 获取公共应用配置
     getConfig() {
@@ -292,27 +306,6 @@ export default {
                 }
               })
             }
-          // let parmas = Object.assign(
-          //   {
-          //     loginTarget: '1',
-          //     loginMethod: '1',
-          //     uuid: this.uuid
-          //   },
-          //   this.form
-          // );
-          // this.$axios.post('/api/auth/user/openapi/common/token/login', parmas).then((res) => {
-          //   // 设置token
-          //   setToken(res.body.access_token);
-          //   this.$store.commit('user/addToken', res.body.access_token);
-          //   this.getUserInfo();
-          // }).catch((err) => {
-          //   // console.log(err);
-          //   // 图形验证码错误 重新获取验证码
-          //   if (err === '图形验证码错误') {
-          //     this.captcha();
-          //     this.form.code = '';
-          //   }
-          // });;
           } else {
             return false;
           }
@@ -327,7 +320,8 @@ export default {
           path: '/',
           query: {
             menu: 1,
-            tab: 1
+            tab: 1,
+            appId: 8134005370347520
           }
         });
       });
@@ -359,7 +353,10 @@ export default {
     // 忘记密码 注册
     forgetBtn() {
       this.$router.push({
-        path: '/login/forget'
+        path: '/login/forget',
+        query: {
+          appId: 8134005370347520
+        }
       });
     }
   }

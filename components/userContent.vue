@@ -24,7 +24,7 @@
         ></i>
       </div>
       <div v-show="editNickNameInput">
-        <el-input placeholder="请输入新昵称" v-model.trim="nickNameVal" clearable maxlength="20" show-word-limit>
+        <el-input placeholder="请输入新昵称" v-model.trim="nickNameVal" clearable maxlength="40" show-word-limit>
         </el-input>
         <i
           slot="suffix"
@@ -122,16 +122,16 @@ export default {
   },
   methods: {
     // 关注  praise 1关注0取消
-    followBtn() {
-      let params = {
-        userId: this.$route.query.userId,
-        praise: this.ifFollow ? 0 : 1
-      };
-      this.$axios.post('/api/forum/userArticle/toFollow', params).then((res) => {
-        this.ifFollow = !this.ifFollow;
-        //  this.ifFollow
-      });
-    },
+    // followBtn() {
+    //   let params = {
+    //     userId: this.$route.query.userId,
+    //     praise: this.ifFollow ? 0 : 1
+    //   };
+    //   this.$axios.post('/api/forum/userArticle/toFollow', params).then((res) => {
+    //     this.ifFollow = !this.ifFollow;
+    //     //  this.ifFollow
+    //   });
+    // },
     // 判断  第三方作者是否被关注过
     // checkiIfFollow() {
     //   let params = { userId: this.$route.query.userId };
@@ -140,21 +140,21 @@ export default {
     //   });
     // },
     // 未认证 跳转认证页面
-    toCertified() {
-      this.$axios.get('/api/auth/user/authapi/front/information/submit/init').then((res) => {
-        // registerStatus用户状态  "0", "只注册还未提交认证"    "1", "已提交认证-待审核"    "2", "审核通过"    "3", "审核被拒"
-        if (res.body.registerStatus === '1') {
-          // 跳转 审核中 页面
-          this.$router.push({
-            path: '/login/inReview'
-          });
-        } else {
-          this.$router.push({
-            path: '/login/certified'
-          });
-        }
-      });
-    },
+    // toCertified() {
+    //   this.$axios.get('/api/auth/user/authapi/front/information/submit/init').then((res) => {
+    //     // registerStatus用户状态  "0", "只注册还未提交认证"    "1", "已提交认证-待审核"    "2", "审核通过"    "3", "审核被拒"
+    //     if (res.body.registerStatus === '1') {
+    //       // 跳转 审核中 页面
+    //       this.$router.push({
+    //         path: '/login/inReview'
+    //       });
+    //     } else {
+    //       this.$router.push({
+    //         path: '/login/certified'
+    //       });
+    //     }
+    //   });
+    // },
     editNickName() {
       //昵称-鼠标滑过，显示可编辑按钮
       this.isshowEditIcon = true;

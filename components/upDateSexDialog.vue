@@ -12,7 +12,7 @@
           <el-radio-group v-model="form.sex" style="line-height: 50px;">
             <el-radio :label="1">男</el-radio>
             <el-radio :label="2">女</el-radio>
-            <!-- <el-radio :label="3">未知</el-radio> -->
+            <el-radio :label="3">保密</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -46,12 +46,9 @@ export default {
       },
       dialogVisible: false,
       rules: {
-        sex: [{ required: true, message: '性别不能为空', trigger: 'change' }]
+        sex: [{ required: true, message: '请选择其中一项', trigger: 'change' }]
       }
     };
-  },
-  mounted() {
-    console.log(this.form.sex, this.upDateSexs, 'upDateSexs')
   },
   methods: {
     // 提交修改 昵称
@@ -60,7 +57,6 @@ export default {
         if (valid) {
           let params = this.form;
           this.$axios.post('/api/iam/v1/auth/user/editInfo', params).then((res) => {
-            // 保存成功后 刷新个人信息
             this.$emit('upDataSuccess');
             this.$notify({
               title: '提示',

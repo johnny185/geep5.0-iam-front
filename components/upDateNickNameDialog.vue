@@ -9,7 +9,7 @@
     >
       <el-form :model="form" :rules="rules" ref="form" label-width="60px" class="demo-ruleForm">
         <el-form-item label="昵称" prop="nickName">
-          <el-input v-model="form.nickName" placeholder="请输入昵称"></el-input>
+          <el-input v-model="form.nickName" maxlength="40" placeholder="请输入昵称" ></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">

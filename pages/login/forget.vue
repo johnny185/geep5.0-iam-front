@@ -18,7 +18,7 @@
           <!-- 通过邮箱账户找回 -->
           <div v-if="currentIndex === 0">
             <el-form-item label="邮箱" prop="emailNumber">
-              <el-input v-model="form.emailNumber" placeholder="请输入邮箱地址" clearable></el-input>
+              <el-input v-model="form.emailNumber" placeholder="请输入邮箱地址" maxlength="40" clearable></el-input>
             </el-form-item>
             <el-form-item prop="picCode" label="图形验证码">
               <div class="codeContent">
@@ -28,7 +28,7 @@
             </el-form-item>
             <el-form-item prop="emailPicCode" label="邮箱验证码">
               <div class="smsContent">
-                <el-input v-model="form.emailPicCode" placeholder="请输入邮箱验证码" clearable></el-input>
+                <el-input v-model="form.emailPicCode" placeholder="请输入邮箱验证码" maxlength="6" clearable></el-input>
                 <!-- <el-button type="primary" style="margin-left:20px" @click="sendOutEmail">发送邮箱验证码</el-button> -->
                 <div v-if="isShowGeteEmailCode" class="sendSms hoverStyle fontCenter" @click="sendOutEmail">发送邮箱验证码</div>
                 <div v-else class="smsBtn fontCenter">{{ countdown }}s后可重试</div>
@@ -38,6 +38,7 @@
               <el-input
                 :type="passwordType"
                 v-model="form.newPassword"
+                 maxlength="20"
                 clearable
                 placeholder="不少于6位密码，包含数字、大小写字母、特殊字符任两种"
               ></el-input>
@@ -49,6 +50,7 @@
               <el-input
                 :type="passwordType2"
                 v-model="form.newPassword2"
+                 maxlength="20"
                 clearable
                 placeholder="不少于6位密码，包含数字、大小写字母、特殊字符任两种"
               ></el-input>
@@ -60,7 +62,7 @@
           <!-- 通过手机号找回 -->
           <div v-if="currentIndex === 1">
             <el-form-item label="手机号" prop="phoneNumber">
-              <el-input v-model="form.phoneNumber" placeholder="请输入手机号" clearable>
+              <el-input v-model="form.phoneNumber" placeholder="请输入手机号" maxlength="11" clearable>
                 <template slot="prepend">+86(中国)</template>
               </el-input>
             </el-form-item>
@@ -72,7 +74,7 @@
             </el-form-item>
             <el-form-item label="短信验证码" prop="phoneCode">
               <div class="smsContent">
-                <el-input v-model="form.phoneCode" placeholder="请输入短信验证码"></el-input>
+                <el-input v-model="form.phoneCode" placeholder="请输入短信验证码" maxlength="6" clearable></el-input>
                 <div v-if="isShowGetCode" class="sendSms hoverStyle fontCenter" @click="getCode">获取验证码</div>
                 <div v-else class="smsBtn fontCenter">{{ countdown }}s后可重试</div>
               </div>
@@ -82,6 +84,7 @@
                 :type="passwordType"
                 v-model="form.newPassword"
                 clearable
+                maxlength="20"
                 placeholder="不少于6位密码，包含数字、大小写字母、特殊字符任两种"
               ></el-input>
               <span class="showPwd" @click="showPwd">
@@ -93,6 +96,7 @@
                 :type="passwordType2"
                 v-model="form.newPassword2"
                 clearable
+                maxlength="20"
                 placeholder="不少于6位密码，包含数字、大小写字母、特殊字符任两种"
               ></el-input>
               <span class="showPwd" @click="showPwd2">
@@ -103,7 +107,6 @@
           <el-form-item align="center">
             <el-button type="primary" @click="submitBtn">提交</el-button>
             <el-button @click="handleClose">取消</el-button>
-            <!-- <div class="submitBtn fontCenter fontBlue hoverStyle" @click="submitBtn">提交</div> -->
           </el-form-item>
         </el-form>
         <!-- <el-button type="text" @click="goToAppeal">账号申诉</el-button> -->
@@ -123,7 +126,7 @@ export default {
       } else if (!telReg(value)) {
         callback(new Error('请输入正确手机号'));
       } else {
-        callback();
+        callback(this.userNameBlur(1));
       }
     };
     // 邮箱 校验
@@ -133,7 +136,7 @@ export default {
       } else if (!emailReg(value)) {
         callback(new Error('请输入正确邮箱地址'));
       } else {
-        callback();
+        callback(this.userNameBlur(3));
       }
     };
     // 输入密码 校验
@@ -153,7 +156,7 @@ export default {
       } else if (!passwordReg(value)) {
         callback(new Error('密码 6-20位英文字母、数字或者符号（除空格），且字母、数字和标点符号至少包含两种'));
       } else if (value !== this.form.newPassword) {
-        return callback(new Error('两次输入密码不一致'));
+        return callback(new Error('两次输入密码不一致，请重新输入'));
       } else {
         callback();
       }
@@ -174,7 +177,8 @@ export default {
         picCode: '', //图形验证码
         newPassword: '', //设置新密码
         newPassword2: '', //重复新密码
-        uuid: null // 短信验证码返回
+        uuid: null, // 短信验证码返回
+        appId: '', // 应用id(从哪个应用进入到注册)
       },
       tabList: ['通过邮箱找回', '通过手机找回'],
       currentIndex: 0, //切换短信验证码登录 账号登录
@@ -209,6 +213,7 @@ export default {
     };
   },
   mounted() {
+    this.form.appId = this.getQueryVariable('appId');
     this.captcha();
     this.slideLineLeft();
   },
@@ -266,6 +271,30 @@ export default {
         this.passwordType2 = 'password';
       }
     },
+    // 输入手机号或者邮箱校验是否存在
+    userNameBlur(value) {
+      let userName = '';
+      let message = '';
+      if (value === 1) { // 手机号校验
+        userName = this.form.phoneNumber;
+      } else if (value === 3) { // 邮箱校验
+        userName = this.form.emailNumber;
+      }
+      this.$axios.get(`/api/iam/v1/open/user/find?ak=${userName}&akType=${value}&appId=${this.form.appId}`).then((res) => {
+        if (!res.body) {
+          if (value === 1) {
+            message = '手机号不存在';
+          } else if (value === 3) {
+            message = '邮箱不存在';
+          }
+          this.$notify({
+            title: '提示',
+            message: message,
+            type: 'error'
+          });
+        }
+      });
+    },
     // 获取邮箱验证码
     sendOutEmail() {
       const { emailNumber, picCode } = this.form;
@@ -291,7 +320,7 @@ export default {
         this.$refs['form'].validateField(['emailNumber', 'picCode']);
       }
     },
-    // 获取短信验证码
+    // 获取手机短信验证码
     getCode() {
       const { phoneNumber, picCode } = this.form;
       if (phoneNumber && picCode) {
@@ -308,7 +337,7 @@ export default {
             this.getIdentifyCode('phone');
             this.$notify({
               title: '提示',
-              message: '发送短信验证码操作成功',
+              message: '验证码已发送至手机，请查收',
               type: 'success'
             });
           }
@@ -380,12 +409,19 @@ export default {
       this.$router.push({
         path: '/login'
       });
+    },
+    // 获取地址栏中的appId
+    getQueryVariable(variable) {
+      var query = window.location.search.substring(1);
+      var vars = query.split("&");
+      for (var i=0;i<vars.length;i++) {
+        var pair = vars[i].split("=");
+        if(pair[0] == variable){
+          return pair[1];
+          }
+       }
+       return(false);
     }
-    // goToAppeal() {
-    //   this.$router.push({
-    //     path: '/login/appeal'
-    //   });
-    // }
   }
 };
 </script>
