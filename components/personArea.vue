@@ -255,7 +255,6 @@ export default {
     }
   },
   mounted() {
-    // console.log(typeOf(this.appId),  this.activeName,'appId')
     this.queryInfo(this.activeName);
   },
   methods: {
@@ -460,20 +459,12 @@ export default {
     },
     // 账户密码重置
     resetPassword() {
-      let params = {
-        username: '', //用户名称
-        registerType: '', //用户状态  "0", "只注册还未提交认证"  "1", "已提交认证-待审核" "2", "审核通过" "3", "审核被拒"
-        avatarUrl: '', //账户头像
-        nickName: '', //昵称
-        account: ''
-      };
-      this.$axios.delete('/api/iam/v1/open/login/out').then((res) => {
-        // 删除token
-        removeToken();
-        this.$store.commit('user/resetUserd', params);
-        this.$router.push({
-          path: '/login/forget'
-        });
+      this.$router.push({
+        path: '/login/forget',
+        query: {
+          type: 1,
+          appId: this.appId
+        }
       });
     },
     accountOut() {

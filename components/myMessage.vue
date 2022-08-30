@@ -2,12 +2,12 @@
   <div :class="{ wrap: isWrap }">
     <div v-if="flag === 1">
       <div class="title">
-        <p>
+        <p style="margin: 11px 0;">
           {{ buttonFlag ? '消息列表' : '未读消息列表' }}（共{{ pageData.total }}封{{
             unreadNum && buttonFlag ? `，其中${unreadNum}未读消息` : ''
           }}
-          <el-button type="text" @click="queryUnread" v-if="unreadNum && buttonFlag">仅查看未读消息</el-button>）
-          <el-button type="text" @click="queryAll" v-if="!buttonFlag">查看全部消息</el-button>
+          <span class="messagBtn" @click="queryUnread" v-if="unreadNum && buttonFlag">仅查看未读消息</span>）
+          <span class="messagBtn" @click="queryAll" v-if="!buttonFlag">查看全部消息</span>
         </p>
         <!-- <el-button type="primary" size="small" icon="el-icon-s-tools" @click="setMessage">消息设置</el-button> -->
       </div>
@@ -278,5 +278,9 @@ export default {
 .title1 {
   display: flex;
   align-items: top;
+}
+.messagBtn {
+  color: #409eff;
+  cursor: pointer;
 }
 </style>

@@ -116,6 +116,7 @@
 </template>
 
 <script>
+import { removeToken } from '@/utils/auth';
 import { passwordReg, telReg, emailReg } from '../../utils/validate';
 export default {
   data() {
@@ -370,12 +371,10 @@ export default {
               if (res.status === 200) {
                 this.$notify({
                   title: '提示',
-                  message: '找回密码操作成功',
+                  message: '密码重置成功',
                   type: 'success'
                 });
-                this.$router.push({
-                  path: '/login'
-                });
+                this.goBackLogin();
               }
             })
           } else if (this.currentIndex === 1) { // 当currentIndex为1时为手机号找回
@@ -391,12 +390,10 @@ export default {
               if (res.status === 200) {
                 this.$notify({
                   title: '提示',
-                  message: '找回密码操作成功',
+                  message: '密码重置成功',
                   type: 'success'
                 });
-                this.$router.push({
-                  path: '/login'
-                });
+                this.goBackLogin();
               }
             })
           }
@@ -405,10 +402,30 @@ export default {
         }
       });
     },
-    handleClose() {
+    goBackLogin() {
+      let params = {
+        username: '', //用户名称
+        registerStatus: '', //用户状态  "0", "只注册还未提交认证"  "1", "已提交认证-待审核" "2", "审核通过" "3", "审核被拒"
+        avatarUrl: '', //账户头像
+        nickName: '', //昵称
+        account: ''
+      };
+      if (this.getQueryVariable('type') === '1') { // 类型为1 从个人中心安全信息重置密码跳转过来，类型为0从登录页跳转过来
+        removeToken();
+        this.$store.commit('user/resetUserd', params);
+      }
       this.$router.push({
         path: '/login'
       });
+    },
+    handleClose() {
+      if (this.getQueryVariable('type') === '1') {
+        this.$router.back()
+      } else {
+        this.$router.push({
+          path: '/login'
+        });
+      }
     },
     // 获取地址栏中的appId
     getQueryVariable(variable) {

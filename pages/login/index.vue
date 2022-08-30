@@ -355,6 +355,7 @@ export default {
       this.$router.push({
         path: '/login/forget',
         query: {
+          type: 0,
           appId: 8134005370347520
         }
       });
