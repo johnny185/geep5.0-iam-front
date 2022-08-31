@@ -15,7 +15,7 @@
             @click="changeName(index)">{{item}}</li>
         </ul>
         <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-          <!-- 通过邮箱账户找回 -->
+          <!-- 通过邮箱帐户找回 -->
           <div v-if="currentIndex === 0">
             <el-form-item label="邮箱" prop="emailNumber">
               <el-input v-model="form.emailNumber" placeholder="请输入邮箱地址" maxlength="40" clearable></el-input>
@@ -109,7 +109,7 @@
             <el-button @click="handleClose">取消</el-button>
           </el-form-item>
         </el-form>
-        <!-- <el-button type="text" @click="goToAppeal">账号申诉</el-button> -->
+        <!-- <el-button type="text" @click="goToAppeal">帐号申诉</el-button> -->
       </div>
     </div>
   </div>
@@ -182,7 +182,7 @@ export default {
         appId: '', // 应用id(从哪个应用进入到注册)
       },
       tabList: ['通过邮箱找回', '通过手机找回'],
-      currentIndex: 0, //切换短信验证码登录 账号登录
+      currentIndex: 0, //切换短信验证码登录 帐号登录
       slideLeft: '', // 下划线位置
       tabLen: '', // tab数组长度
       rules: {
@@ -406,7 +406,7 @@ export default {
       let params = {
         username: '', //用户名称
         registerStatus: '', //用户状态  "0", "只注册还未提交认证"  "1", "已提交认证-待审核" "2", "审核通过" "3", "审核被拒"
-        avatarUrl: '', //账户头像
+        avatarUrl: '', //帐户头像
         nickName: '', //昵称
         account: ''
       };

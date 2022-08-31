@@ -52,7 +52,7 @@
           <el-input v-model.trim="form.wechatNum" placeholder="请输入微信号" maxlength="20" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="电子邮箱" prop="email">
-          <el-input v-model.trim="form.email" placeholder="请输入邮箱账号" maxlength="40" show-word-limit></el-input>
+          <el-input v-model.trim="form.email" placeholder="请输入邮箱帐号" maxlength="40" show-word-limit></el-input>
         </el-form-item>
         <el-form-item label="真实姓名" prop="personFullName">
           <el-input

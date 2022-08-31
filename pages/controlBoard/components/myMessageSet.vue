@@ -41,8 +41,8 @@
         </div>
         <div class="boxFlex boxStyle">
           <div>
-            <p class="fontSize16">账户变更通知</p>
-            <p class="fontColor">当账户变更被管理员审核后，我会收到消息提醒</p>
+            <p class="fontSize16">帐户变更通知</p>
+            <p class="fontColor">当帐户变更被管理员审核后，我会收到消息提醒</p>
           </div>
           <el-switch
             style="display: block"
@@ -214,7 +214,7 @@ export default {
     // 消息 业务小类 subCategory: [
     //   { value: 1001, label: '系统消息' },
     //   { value: 1101, label: '认证审核通知' },
-    //   { value: 1102, label: '账户变更通知' },
+    //   { value: 1102, label: '帐户变更通知' },
     //   { value: 1201, label: '帖子审核通知' },
     //   { value: 1202, label: '禁言提醒' },
     //   { value: 1203, label: '评论互动提醒' },

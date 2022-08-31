@@ -19,7 +19,7 @@
       <el-table-column prop="phoneNumber" label="手机号"> </el-table-column>
       <el-table-column prop="email" label="邮箱"> </el-table-column>
       <el-table-column prop="personFullName" label="真实姓名"> </el-table-column>
-      <el-table-column prop="state" label="账号状态">
+      <el-table-column prop="state" label="帐号状态">
         <template slot-scope="scope">
           <span>{{ scope.row.state === 0 ? '不可用' : '可用' }}</span>
         </template>

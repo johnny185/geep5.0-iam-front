@@ -4,7 +4,7 @@ export const state = () => {
     userInfo: {
       username:"",//用户名称
       registerType:"",//认证状态  0是未认证 1是已认证
-      avatarUrl:"",//账户头像
+      avatarUrl:"",//帐户头像
       nickName:"",//昵称
       account:"",//
       token:""

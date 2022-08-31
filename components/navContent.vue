@@ -116,7 +116,7 @@ export default {
         let params = {
           username: '', //用户名称
           registerStatus: '', //用户状态  "0", "只注册还未提交认证"  "1", "已提交认证-待审核" "2", "审核通过" "3", "审核被拒"
-          avatarUrl: '', //账户头像
+          avatarUrl: '', //帐户头像
           nickName: '', //昵称
           account: '',
           token: ''

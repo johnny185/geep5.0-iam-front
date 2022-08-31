@@ -35,7 +35,7 @@ export default {
       subCategory: [
         { value: 1001, label: '系统消息' },
         { value: 1101, label: '认证审核通知' },
-        { value: 1102, label: '账户变更通知' },
+        { value: 1102, label: '帐户变更通知' },
         { value: 1201, label: '帖子审核通知' },
         { value: 1202, label: '禁言提醒' },
         { value: 1203, label: '评论互动提醒' },

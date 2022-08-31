@@ -94,13 +94,13 @@
           </div>
           <div class="padding20">
             <dl style="width: 46%">
-              <dt class="dtStyle"><div class="">账户注销：</div><div class="btnStyle" @click="accountNubLogOff">注销</div></dt>
-              <dd class="ddStyle">账号注销后将彻底清除您的账号和相关数据</dd>
+              <dt class="dtStyle"><div class="">帐户注销：</div><div class="btnStyle" @click="accountNubLogOff">注销</div></dt>
+              <dd class="ddStyle">帐号注销后将彻底清除您的帐号和相关数据</dd>
             </dl>
           </div>
           <div class="padding20">
             <dl style="width: 46%">
-              <dt class="dtStyle"><div class="">账户退出：</div><div class="btnStyle" @click="accountOut">退出</div></dt>
+              <dt class="dtStyle"><div class="">帐户退出：</div><div class="btnStyle" @click="accountOut">退出</div></dt>
               <dd class="ddStyle">退出当前帐号在所有浏览器的登录，并清除浏览器的信任状态</dd>
             </dl>
           </div>
@@ -153,9 +153,9 @@
         <el-button size="small" type="primary" @click="submitBtn">提交</el-button>
       </span>
     </el-dialog>
-    <!-- 账户注销 -->
+    <!-- 帐户注销 -->
     <el-dialog
-     title="账号注销"
+     title="帐号注销"
      width="40%"
      top="15vh"
      :visible.sync="accountVisible"
@@ -425,7 +425,7 @@ export default {
         let params = {
           username: '', //用户名称
           registerStatus: '', //用户状态  "0", "只注册还未提交认证"  "1", "已提交认证-待审核" "2", "审核通过" "3", "审核被拒"
-          avatarUrl: '', //账户头像
+          avatarUrl: '', //帐户头像
           nickName: '', //昵称
           account: ''
         };
@@ -450,14 +450,14 @@ export default {
     upDateSex() {
       this.$refs.upDateSexDialog.dialogVisible = true;
     },
-    // 账号注销弹框
+    // 帐号注销弹框
     accountNubLogOff() {
       this.accountVisible = true;
     },
     accounthandleClose() {
       this.accountVisible = false;
     },
-    // 账户密码重置
+    // 帐户密码重置
     resetPassword() {
       this.$router.push({
         path: '/login/forget',
@@ -471,7 +471,7 @@ export default {
       let params = {
         username: '', //用户名称
         registerStatus: '', //用户状态  "0", "只注册还未提交认证"  "1", "已提交认证-待审核" "2", "审核通过" "3", "审核被拒"
-        avatarUrl: '', //账户头像
+        avatarUrl: '', //帐户头像
         nickName: '', //昵称
         account: ''
       };

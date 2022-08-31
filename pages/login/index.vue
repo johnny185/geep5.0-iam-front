@@ -78,7 +78,7 @@
           </el-form-item>
         </el-form>
         <div class="loginBottom">
-          <div class="fontSize14 fontBlue" @click="newUserBtn">注册账户</div>
+          <div class="fontSize14 fontBlue" @click="newUserBtn">注册帐户</div>
         </div>
       </div>
     </div>
@@ -119,12 +119,12 @@ export default {
       form: {
         userphone: '', // 手机号
         password: '', // 密码
-        username: '', // 账号
+        username: '', // 帐号
         imgcode: '', // 图片验证码
         dynamicCode: '' // 动态验证码 
       },
       tabList: ['密码登录', '验证码登录'],
-      currentIndex: 0, // 切换短信验证码登录 账号登录
+      currentIndex: 0, // 切换短信验证码登录 帐号帐登录
       slideLeft: '', // 下划线位置
       tabLen: '', // tab数组长度
       loading: false,
@@ -133,8 +133,8 @@ export default {
         userphone: [{ required: true, validator: validatePhone, trigger: 'change' }],
         // 密码校验
         password: [{ required: true, validator: validatePass, trigger: 'change' }],
-        // 账号校验
-        username: [{ required: true, message: '账号不能为空', trigger: 'blur' }],
+        // 帐号校验
+        username: [{ required: true, message: '帐号不能为空', trigger: 'blur' }],
         // 图片验证码校验
         imgcode: [{ required: true, message: '图片验证码不能为空', trigger: 'change' }],
         // 动态验证码校验
@@ -265,7 +265,7 @@ export default {
               }
             })
           } else if (this.currentIndex === 1) { // 当currentIndex为0时为验证码登录
-            if (telReg(this.form.username)) { // 输入账号为手机号时
+            if (telReg(this.form.username)) { // 输入帐号为手机号时
               let params = {
                 ak: this.form.username,
                 code: this.form.dynamicCode,
@@ -285,7 +285,7 @@ export default {
                   this.form.dynamicCode = '';
                 }
               })
-            } else if (emailReg(this.form.username)) { // 输入账号为邮箱时
+            } else if (emailReg(this.form.username)) { // 输入帐号为邮箱时
               let params = {
                 ak: this.form.username,
                 code: this.form.dynamicCode,

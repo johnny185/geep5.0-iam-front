@@ -13,7 +13,7 @@
         </div>
         <el-row>
           <el-col :span="12" :offset="6" v-if="active==0">
-            <p class="marginTop20">输入登录账号</p>
+            <p class="marginTop20">输入登录帐号</p>
             <el-input v-model="input1" placeholder="请输入手机号/邮箱地址/主体名称" class="marginTop20"></el-input>
           </el-col>
           <el-col :span="12" :offset="6" v-if="active==1">
