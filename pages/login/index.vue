@@ -121,7 +121,8 @@ export default {
         password: '', // 密码
         username: '', // 帐号
         imgcode: '', // 图片验证码
-        dynamicCode: '' // 动态验证码 
+        dynamicCode: '', // 动态验证码 
+        uuid: null 
       },
       tabList: ['密码登录', '验证码登录'],
       currentIndex: 0, // 切换短信验证码登录 帐号帐登录
@@ -265,6 +266,14 @@ export default {
               }
             })
           } else if (this.currentIndex === 1) { // 当currentIndex为0时为验证码登录
+            if (this.form.uuid === null) {
+              this.$notify({
+                title: '提示',
+                message: '请获取短信验证码',
+                type: 'error'
+              });
+              return;
+            }
             if (telReg(this.form.username)) { // 输入帐号为手机号时
               let params = {
                 ak: this.form.username,
