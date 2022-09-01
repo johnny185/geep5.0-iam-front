@@ -89,7 +89,7 @@
           <div class="padding20">
             <dl style="width: 46%">
               <dt class="dtStyle"><div class="">密码重置：</div><div class="btnStyle" @click="resetPassword">重置</div></dt>
-              <dd class="ddStyle">上次重置密码时间：2022-08-08  10:00:00</dd>
+              <dd class="ddStyle">上次重置密码时间{{resetTime}}</dd>
             </dl>
           </div>
           <div class="padding20">
@@ -232,6 +232,7 @@ export default {
         uuid: '', //后台需要验证的
         oldPhoneNumber: '' //旧手机号
       },
+      resetTime: '', // 重置时间
       rules: {
         // 电话号码 校验
         phoneNumber: [{ required: true, validator: validatePhoneNumber, trigger: 'change' }],
@@ -300,15 +301,28 @@ export default {
       }
       //当为 登录信息
       if (data === '3') {
-        this.$axios.get('/api/iam/v1/auth/user/getUserLog').then((res) => {
-          this.tableData = res.body;
+        let params = {
+          eventType: [1,2,3,4,5,6],
+          pageNum: 1,
+          pageSize: 5
+        }
+        this.$axios.post('/api/iam/v1/auth/user/getUserLog', params).then((res) => {
+          console.log(res, 'resq')
+          this.tableData = res.body.list;
         });
         // this.isExceedHeight = false;
         return false;
       }
-      // if (data === '4') {
-      //   // this.$refs.thirdpartyRegister.queryList();
-      // }
+      if (data === '4') {
+        let params = {
+          eventType: [7],
+          pageNum: 1,
+          pageSize: 0
+        }
+        this.$axios.post('/api/iam/v1/auth/user/getUserLog', params).then((res) => {
+          this.resetTime = res.body.list[0].createTime
+        });
+      }
     },
     // 切换标签
     handleClick(tab) {
@@ -468,21 +482,28 @@ export default {
       });
     },
     accountOut() {
-      let params = {
-        username: '', //用户名称
-        registerStatus: '', //用户状态  "0", "只注册还未提交认证"  "1", "已提交认证-待审核" "2", "审核通过" "3", "审核被拒"
-        avatarUrl: '', //帐户头像
-        nickName: '', //昵称
-        account: ''
-      };
-      this.$axios.delete('/api/iam/v1/open/login/out').then((res) => {
-        // 删除token
-        removeToken();
-        this.$store.commit('user/resetUserd', params);
-        this.$router.push({
-          path: '/login'
+      this.$confirm('是否确定退出个人中心', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let params = {
+            username: '', //用户名称
+            registerStatus: '', //用户状态  "0", "只注册还未提交认证"  "1", "已提交认证-待审核" "2", "审核通过" "3", "审核被拒"
+            avatarUrl: '', //帐户头像
+            nickName: '', //昵称
+            account: ''
+          };
+          this.$axios.delete('/api/iam/v1/open/login/out').then((res) => {
+            // 删除token
+            removeToken();
+            this.$store.commit('user/resetUserd', params);
+            this.$router.push({
+              path: '/login'
+            });
+          });
+        }).catch(() => {    
         });
-      });
     }
   }
 };
