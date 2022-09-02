@@ -307,10 +307,9 @@ export default {
           pageSize: 5
         }
         this.$axios.post('/api/iam/v1/auth/user/getUserLog', params).then((res) => {
-          console.log(res, 'resq')
           this.tableData = res.body.list;
         });
-        // this.isExceedHeight = false;
+        this.isExceedHeight = false;
         return false;
       }
       if (data === '4') {
@@ -322,6 +321,8 @@ export default {
         this.$axios.post('/api/iam/v1/auth/user/getUserLog', params).then((res) => {
           this.resetTime = res.body.list[0].createTime
         });
+        this.isExceedHeight = false;
+        return false;
       }
     },
     // 切换标签
@@ -455,7 +456,6 @@ export default {
     },
     // 切换认证类型
     replaceRegisterType(e) {
-      // console.log(e, '123')
     },
     upDateEmail() {
       this.$refs.upDateEmailDialog.dialogVisible = true;
@@ -515,7 +515,7 @@ export default {
 }
 .ExceedHeightWrap {
   width: 1020px;
-  height: 1040px;
+  /* height: 1040px; */
   background: #ffffff;
   box-shadow: 0px 0px 20px 2px rgba(152, 173, 216, 0.3);
   margin-left: 20px;
