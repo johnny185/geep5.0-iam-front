@@ -30,7 +30,7 @@
           <el-form-item label="电子邮箱">
             <span>{{ $store.state.user.userInfo.email === null ? '未填写': $store.state.user.userInfo.email }}</span>
             <el-button size="small" @click="upDateEmail" type="primary" style="display: inline-block; margin-left: 10px"
-              >修改电子邮箱</el-button
+              >{{ $store.state.user.userInfo.email === null ? '绑定' : '修改' }}电子邮箱</el-button
             >
           </el-form-item>
           <el-form-item label="手机号">
@@ -40,7 +40,7 @@
               @click="upDatePhoneNum"
               type="primary"
               style="display: inline-block; margin-left: 10px"
-              >修改手机号</el-button
+              >{{ $store.state.user.userInfo.phoneNum === null ? '绑定' : '修改' }}手机号</el-button
             >
           </el-form-item>
           <el-form-item label="注册时间">
@@ -77,7 +77,7 @@
         <el-table :data="tableData" style="width: 100%">
           <el-table-column prop="eventContent" label="登录方式">
             <template slot-scope="scope">
-              <p>{{ scope.row.eventContent }}</p>
+              <p>{{ loginMode(scope.row.eventType) }}</p>
             </template>
           </el-table-column>
           <el-table-column prop="createTime" label="登录时间"></el-table-column>
@@ -504,6 +504,30 @@ export default {
           });
         }).catch(() => {    
         });
+    },
+    loginMode(type) {
+      console.log(type, 'type1231')
+      // const text = ''
+      switch(type) {
+        case 1:
+          return '登录 用户名密码';
+          // break;
+        case 2:
+          return '登录 手机号密码';
+          // break;
+        case 3:
+          return '登录 手机号验证码';
+          // break;
+        case 4:
+          return '登录 邮箱密码';
+          // break;
+        case 5:
+          return '登录 邮箱验证码';
+          // break;
+        case 6:
+          return '登录 微信扫码';
+          // break; 
+      }
     }
   }
 };
