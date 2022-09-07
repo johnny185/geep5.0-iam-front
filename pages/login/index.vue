@@ -16,11 +16,11 @@
         <el-form ref="form" :model="form" :rules="rules" class="login-form">
           <!-- 用户名登录，密码验证 --支持手机号/邮箱/昵称作为用户名-->
           <div v-if="currentIndex === 0">
-            <el-form-item prop="userphone">
+            <el-form-item prop="username">
               <el-input
                 class="inputStyle"
                 style="heigth: 60px"
-                v-model.trim="form.userphone"
+                v-model.trim="form.username"
                 clearable
                 placeholder="手机号/邮箱"
                 maxlength="40"
@@ -253,7 +253,7 @@ export default {
         if (valid) {
           if (this.currentIndex === 0) { // 当currentIndex为0时为密码登录
             let params = {
-              ak: this.form.userphone,
+              ak: this.form.username,
               sk: this.$md5(this.form.password),
               appId: 8134005370347520
             }
@@ -343,7 +343,6 @@ export default {
           isCertification = 0 ;
         } else {
           isCertification = 1;
-          console.log(isCertification, 'isCertification')
         }
         this.$store.commit('user/addRegisterType', isCertification);
       })

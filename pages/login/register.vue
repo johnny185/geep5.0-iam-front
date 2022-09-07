@@ -13,50 +13,105 @@
             <el-radio v-model="form.registerType" label="1" border>个人开发者</el-radio>
             <el-radio v-model="form.registerType" label="2" border>商业伙伴</el-radio>
           </el-form-item> -->
-          <el-form-item label="手机号码" prop="ak">
-            <el-input v-model.trim="form.ak" maxlength="11" placeholder="请输入手机号" clearable>
-             <template slot="prepend">+86(中国)</template>
-             </el-input>
+          <el-form-item label="注册类型">
+            <el-radio-group v-model="registerMode" @change="selectMode" style="line-height: 50px;">
+              <el-radio :label="1">手机号</el-radio>
+              <el-radio :label="2">邮箱</el-radio>
+            </el-radio-group>
           </el-form-item>
-          <el-form-item prop="picCode" label="图形验证码">
-            <div class="codeContent">
-              <el-input v-model="form.picCode" placeholder="请输入图形验证码" clearable></el-input>
-              <img :src="img" class="codeBg hoverStyle" alt @click="captcha" />
-            </div>
-          </el-form-item>
-          <el-form-item label="短信验证码" prop="code">
-            <div class="smsContent">
-              <el-input v-model="form.code" maxlength="6" placeholder="请输入短信验证码"></el-input>
-              <div v-if="isShowGetCode" class="sendSms hoverStyle fontCenter" @click="getCode">发送验证码</div>
-              <div v-else class="smsBtn fontCenter">{{ countdown }}s后可重试</div>
-              <!-- <el-button v-if="isShowGetCode" type="primary" @click="getCode" :disabled="isClickable" style="margin-left: 20px;">发送验证码</el-button> -->
-              <!-- <el-button v-else  type="info">{{ countdown }}s后可重试</el-button> -->
-            </div>
-          </el-form-item>
-          <el-form-item label="设置新密码" prop="sk">
-            <el-input
-              clearable
-              :type="skType"
-              v-model.trim="form.sk"
-              inline-message
-              placeholder="不少于6位密码，包含数字、大小写字母、特殊字符任两种"
-            ></el-input>
-            <span class="showPwd" @click="showPwd">
-              <svg-icon :icon-class="skType === 'password' ? 'eye' : 'eye-open'" />
-            </span>
-          </el-form-item>
-          <el-form-item label="重复新密码" prop="sk2">
-            <el-input
-              :type="skType2"
-              v-model.trim="form.sk2"
-              clearable
-              inline-message
-              placeholder="不少于6位密码，包含数字、大小写字母、特殊字符任两种"
-            ></el-input>
-            <span class="showPwd" @click="showPwd2">
-              <svg-icon :icon-class="skType2 === 'password' ? 'eye' : 'eye-open'" />
-            </span>
-          </el-form-item>
+          <div v-if="registerMode === 1">
+            <el-form-item label="手机号码" prop="phoneNumber">
+              <el-input v-model.trim="form.phoneNumber" maxlength="11" placeholder="请输入手机号" clearable>
+              <template slot="prepend">+86(中国)</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="picCode" label="图形验证码">
+              <div class="codeContent">
+                <el-input v-model="form.picCode" placeholder="请输入图形验证码" clearable></el-input>
+                <img :src="img" class="codeBg hoverStyle" alt @click="captcha" />
+              </div>
+            </el-form-item>
+            <el-form-item label="短信验证码" prop="phoneCode">
+              <div class="smsContent">
+                <el-input v-model="form.phoneCode" maxlength="6" placeholder="请输入短信验证码"></el-input>
+                <div v-if="isShowGetCode" class="sendSms hoverStyle fontCenter" @click="getCode">发送验证码</div>
+                <div v-else class="smsBtn fontCenter">{{ countdown }}s后可重试</div>
+                <!-- <el-button v-if="isShowGetCode" type="primary" @click="getCode" :disabled="isClickable" style="margin-left: 20px;">发送验证码</el-button> -->
+                <!-- <el-button v-else  type="info">{{ countdown }}s后可重试</el-button> -->
+              </div>
+            </el-form-item>
+            <el-form-item label="设置新密码" prop="newPassword">
+              <el-input
+                clearable
+                :type="skType"
+                v-model.trim="form.newPassword"
+                inline-message
+                placeholder="不少于6位密码，包含数字、大小写字母、特殊字符任两种"
+              ></el-input>
+              <span class="showPwd" @click="showPwd">
+                <svg-icon :icon-class="skType === 'password' ? 'eye' : 'eye-open'" />
+              </span>
+            </el-form-item>
+            <el-form-item label="重复新密码" prop="newPassword2">
+              <el-input
+                :type="skType2"
+                v-model.trim="form.newPassword2"
+                clearable
+                inline-message
+                placeholder="不少于6位密码，包含数字、大小写字母、特殊字符任两种"
+              ></el-input>
+              <span class="showPwd" @click="showPwd2">
+                <svg-icon :icon-class="skType2 === 'password' ? 'eye' : 'eye-open'" />
+              </span>
+            </el-form-item>
+          </div>
+          <!-- 邮箱注册 -->
+          <div v-else-if="registerMode === 2">
+            <el-form-item label="电子邮箱" prop="emailNumber">
+              <el-input v-model.trim="form.emailNumber" maxlength="40" placeholder="请输入电子邮箱" clearable>
+              <!-- <template slot="prepend">+86(中国)</template> -->
+              </el-input>
+            </el-form-item>
+            <el-form-item prop="picCode" label="图形验证码">
+              <div class="codeContent">
+                <el-input v-model="form.picCode" placeholder="请输入邮箱验证码" clearable></el-input>
+                <img :src="img" class="codeBg hoverStyle" alt @click="captcha" />
+              </div>
+            </el-form-item>
+            <el-form-item label="邮箱验证码" prop="emailPicCode">
+              <div class="smsContent">
+                <el-input v-model="form.emailPicCode" maxlength="6" placeholder="请输入邮箱验证码"></el-input>
+                <div v-if="isShowGeteEmailCode" class="sendSms hoverStyle fontCenter" @click="sendOutEmail">发送邮箱验证码</div>
+                <div v-else class="smsBtn fontCenter">{{ countdown }}s后可重试</div>
+                <!-- <el-button v-if="isShowGetCode" type="primary" @click="getCode" :disabled="isClickable" style="margin-left: 20px;">发送验证码</el-button> -->
+                <!-- <el-button v-else  type="info">{{ countdown }}s后可重试</el-button> -->
+              </div>
+            </el-form-item>
+            <el-form-item label="设置新密码" prop="newPassword">
+              <el-input
+                clearable
+                :type="skType"
+                v-model.trim="form.newPassword"
+                inline-message
+                placeholder="不少于6位密码，包含数字、大小写字母、特殊字符任两种"
+              ></el-input>
+              <span class="showPwd" @click="showPwd">
+                <svg-icon :icon-class="skType === 'password' ? 'eye' : 'eye-open'" />
+              </span>
+            </el-form-item>
+            <el-form-item label="重复新密码" prop="newPassword2">
+              <el-input
+                :type="skType2"
+                v-model.trim="form.newPassword2"
+                clearable
+                inline-message
+                placeholder="不少于6位密码，包含数字、大小写字母、特殊字符任两种"
+              ></el-input>
+              <span class="showPwd" @click="showPwd2">
+                <svg-icon :icon-class="skType2 === 'password' ? 'eye' : 'eye-open'" />
+              </span>
+            </el-form-item>
+          </div>
           <!-- <el-form-item label="微信号" prop="wechatNum">
             <el-input
               v-model.trim="form.wechatNum"
@@ -90,7 +145,8 @@
       </div>
     </div>
     <!-- 查看协议 -->
-    <checkDealDialog ref="checkDealDialog" :dealData="dealData" :agreementType="agreementType"></checkDealDialog>
+    <!-- <checkDealDialog ref="checkDealDialog" :dealData="dealData" :agreementType="agreementType"></checkDealDialog> -->
+    <checkDealDialog ref="checkDealDialog" :agreementType="agreementType"></checkDealDialog>
   </div>
 </template>
 
@@ -111,7 +167,7 @@ export default {
       } else if (!telReg(value)) {
         callback(new Error('请输入正确的手机号'));
       } else {
-        callback(this.phoneNumberBlur());
+        callback(this.userNameBlur(1));
       }
     };
     // 邮箱 校验
@@ -122,12 +178,22 @@ export default {
     //     callback();
     //   }
     // };
+    // 邮箱 校验
+    var validateEmailNumber = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('邮箱不能为空'));
+      } else if (!emailReg(value)) {
+        callback(new Error('请输入正确邮箱地址'));
+      } else {
+        callback(this.userNameBlur(3));
+      }
+    };
     // 输入密码 校验
     var validatePass = (rule, value, callback) => {
       if (!value) {
         callback(new Error('设置新密码不能为空'));
       } else if (!passwordReg(value)) {
-        callback(new Error('密码 6-20位英文字母、数字或者符号（除空格），且字母、数字和标点符号至少包含两种'));
+        callback(new Error('密码设置需符合6-20位，且满足大小写字母、特殊字符的至少两种组合的条件'));
       } else {
         callback();
       }
@@ -137,31 +203,46 @@ export default {
       if (!value) {
         callback(new Error('重复密码不能为空'));
       } else if (!passwordReg(value)) {
-        callback(new Error('密码 6-20位英文字母、数字或者符号（除空格），且字母、数字和标点符号至少包含两种'));
-      } else if (value !== this.form.sk) {
-        return callback(new Error('与设置登录密码一致'));
+        callback(new Error('密码设置需符合6-20位，且满足大小写字母、特殊字符的至少两种组合的条件'));
+      } else if (value !== this.form.newPassword) {
+        return callback(new Error('两次输入密码不一致，请重新输入'));
       } else {
         callback();
       }
     };
     return {
-      dealData: {}, //服务协议和隐私保护政策
+      // dealData: {}, //服务协议和隐私保护政策
       agreementType: null, //区分三种协议： 1服务协议2隐私保护政策3论坛协议
       isShowGetCode: true, //区别 获取短信验证码/倒计时 默认true 获取短信验证码
+      // isShowGetCode: true, //区别 获取短信验证码/倒计时 默认true 获取短信验证码
+      isShowGeteEmailCode: true, // 区别 获取邮箱验证码/倒计时 默认true 获取邮箱验证码
       countdown: 60, //倒计时60
       skType: 'password', //区别 显示隐藏密码
       skType2: 'password', //区别 显示隐藏密码
       uuid: '', //后台需要验证的
       img: '', //动态验证码
+      registerMode: 1, // 注册类型
       // isClickable: true,
       form: {
-        // registerType: '', //用户身份
-        ak: '', // 用户的用户名或者手机号或者邮箱号
+        emailNumber: '', // 邮箱
+        phoneNumber: '', //手机号
+        emailPicCode: '', // 邮箱验证码
+        phoneCode: '', //短信验证码
+        picCode: '', //图形验证码
+        newPassword: '', //设置新密码
+        newPassword2: '', //重复新密码
+        uuid: null, // 短信验证码返回
         appId: '', // 应用id(从哪个应用进入到注册)
-        code: '', // 用户收到的短信验证码 或 邮箱验证码
-        sk: '', //密码
-        sk2: '', //二次密码
-        registerType: 1, // ,1-手机号加短信验证码加密码|2-手机号加短信验证码|3-邮箱号加邮箱验证码加密码|4-邮箱号加邮箱验证码|5-用户名加密码
+
+
+
+        // registerType: '', //用户身份
+        // ak: '', // 用户的用户名或者手机号或者邮箱号
+        // appId: '', // 应用id(从哪个应用进入到注册)
+        // code: '', // 用户收到的短信验证码 或 邮箱验证码
+        // sk: '', //密码
+        // sk2: '', //二次密码
+        // registerType: 1, // ,1-手机号加短信验证码加密码|2-手机号加短信验证码|3-邮箱号加邮箱验证码加密码|4-邮箱号加邮箱验证码|5-用户名加密码
         // email: '', //邮件
         // wechatNum: '', //微信号
         checked: false, //是否勾选上 默认false 没勾选上
@@ -169,23 +250,26 @@ export default {
       },
       rules: {
         // 用户身份 校验
+        emailNumber: [{ required: true, validator: validateEmailNumber, trigger: 'blur'}],
         // registerType: [{ required: true, message: '用户身份不能为空', trigger: 'change' }],
         // 电话号码 校验
-        ak: [{ required: true, validator: validatephoneNumberber, trigger: 'blur' }],
+        phoneNumber: [{ required: true, validator: validatephoneNumberber, trigger: 'blur' }],
         // 图形验证码 校验
         picCode: [{ required: true, message: '图形验证码不能为空', trigger: 'change' }],
+        // 邮箱验证码 校验
+        emailPicCode: [{ required: true, message: '邮箱验证码不能为空', trigger: 'change' }],
         // 短信验证码 校验
-        code: [{ required: true, message: '短信验证码不能为空', trigger: 'change' }],
+        phoneCode: [{ required: true, message: '短信验证码不能为空', trigger: 'change' }],
         // email: [{ validator: validateEmail, trigger: 'change' }],
         // wechatNum: [{ message: '微信号不能为空', trigger: 'change' }],
-        sk: [
+        newPassword: [
           {
             required: true,
             trigger: 'blur',
             validator: validatePass
           }
         ],
-        sk2: [
+        newPassword2: [
           {
             required: true,
             trigger: 'blur',
@@ -223,14 +307,14 @@ export default {
       // Geep5.0开发者平台服务协议,catalogId:352
       // Geep5.0开发者平台隐私保护政策,catalogId:353
       // Geep5.0开发者平台论坛服务协议,catalogId:354
-      const params = {
-        catalogId: catalogId
-      };
-      this.$axios.post('/api/document/doc/getDocumentContent', params).then((res) => {
+      // const params = {
+      //   catalogId: catalogId
+      // };
+      // this.$axios.post('/api/document/doc/getDocumentContent', params).then((res) => {
         this.$refs.checkDealDialog.dialogVisible = true;
-        this.dealData = res.body;
+        // this.dealData = res.body;
         this.agreementType = agreementType;
-      });
+      // });
       // let params = { agreementType: data };
       // this.$axios.post('/api/system/systemAgreement/detail', params).then((res) => {
       //   this.$refs.checkDealDialog.dialogVisible = true;
@@ -254,20 +338,58 @@ export default {
       }
     },
     // 短信倒计时
-    getIdentifyCode() {
-      this.countDown();
-      this.isShowGetCode = false;
+    getIdentifyCode(type) {
+      this.countDown(type);
+      if (type === 'email') {
+        this.isShowGeteEmailCode = false;
+      } else if (type === 'phone') {
+        this.isShowGetCode = false;
+      }
+      // this.isShowGetCode = false;
     },
     // 倒计时
-    countDown() {
+    countDown(type) {
       this.timer = setInterval(() => {
         this.countdown--;
         if (this.countdown === 0) {
           clearInterval(this.timer);
           this.countdown = 60;
-          this.isShowGetCode = true;
+          if (type === 'email') {
+            this.isShowGeteEmailCode = true;
+          } else if (type === 'phone') {
+            this.isShowGetCode = true;
+          }
+          // this.isShowGetCode = true;
         }
       }, 1000);
+    },
+    selectMode(e) {
+      this.$refs['form'].resetFields();
+      this.$refs['form'].clearValidate()
+    },
+    // 输入手机号或者邮箱校验是否存在
+    userNameBlur(value) {
+      let userName = '';
+      let message = '';
+      if (value === 1) { // 手机号校验
+        userName = this.form.phoneNumber;
+      } else if (value === 3) { // 邮箱校验
+        userName = this.form.emailNumber;
+      }
+      this.$axios.get(`/api/iam/v1/open/user/find?ak=${userName}&akType=${value}&appId=${this.form.appId}`).then((res) => {
+        if (res.body) {
+          if (value === 1) {
+            message = '手机号已注册，可以直接登录';
+          } else if (value === 3) {
+            message = '邮箱已注册，可以直接登录';
+          }
+          this.$notify({
+            title: '提示',
+            message: message,
+            type: 'error'
+          });
+        }
+      });
     },
     // 获取 动态验证
     captcha() {
@@ -276,13 +398,38 @@ export default {
         this.uuid = res.uuid;
       });
     },
+    // 获取邮箱验证码
+    sendOutEmail() {
+      const { emailNumber, picCode } = this.form;
+      if (emailNumber && picCode) {
+        let params = {
+          target: this.form.emailNumber,
+          uuid: this.uuid,
+          code: this.form.picCode,
+          verifyType: 6 //verifyType 验证类型 6:邮箱验证码类型
+        };
+        this.$axios.post('/api/message/openapi/common/sms/verificationCode/send', params).then((res) => {
+          if (res.status === 200) {
+            this.form.uuid = res.body.uuid;
+            this.getIdentifyCode('email');
+            this.$notify({
+              title: '提示',
+              message: '发送邮箱验证码操作成功',
+              type: 'success'
+            });
+          }
+        });
+      } else {
+        this.$refs['form'].validateField(['emailNumber', 'picCode']);
+      }
+    },
     // 获取短信验证码
     getCode() {
       // this.getIdentifyCode();
-      const { ak, picCode } = this.form;
-      if (ak && picCode) {
+      const { phoneNumber, picCode } = this.form;
+      if (phoneNumber && picCode) {
         let params = {
-          target: this.form.ak,
+          target: this.form.phoneNumber,
           uuid: this.uuid,
           code: this.form.picCode,
           verifyType: 1 //verifyType 验证类型 1:注册时手机验证码 2:重置密码验证码
@@ -290,7 +437,8 @@ export default {
         this.$axios.post('/api/message/openapi/common/sms/verificationCode/send', params).then((res) => {
           if (res.status === 200) {
             this.form.uuid = res.body.uuid;
-            this.getIdentifyCode();
+            this.getIdentifyCode('phone');
+            // this.getIdentifyCode();
             this.$notify({
               title: '提示',
               // message: '发送短信验证码操作成功',
@@ -300,42 +448,61 @@ export default {
           }
         });
       } else {
-        this.$refs['form'].validateField(['ak', 'picCode']);
+        this.$refs['form'].validateField(['phoneNumber', 'picCode']);
       }
     },
     // 注册信息 提交
     submitBtn() {
+      console.log(this.registerMode, 'registerMode')
       if (!this.form.checked) {
         this.$notify({
           title: '提示',
-          message: '请勾选协议',
+          message: '请选择同意并遵守用户协议',
           type: 'warning'
         });
         return false;
       }
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          const params = {
-            ak: this.form.ak,
-            appId: this.form.appId,
-            code: this.form.code,
-            registerType: 1,
-            sk: this.$md5(this.form.sk),
-            uuid: this.form.uuid
+          let params = {}
+          if(this.registerMode === 1) { // 手机号注册
+            params = {
+              ak: this.form.phoneNumber,
+              appId: this.form.appId,
+              code: this.form.phoneCode,
+              registerType: 1,
+              sk: this.$md5(this.form.newPassword),
+              uuid: this.form.uuid
+            }
+          } else if (this.registerMode === 2) { // 邮箱注册
+            params = {
+              ak: this.form.emailNumber,
+              appId: this.form.appId,
+              code: this.form.emailPicCode,
+              registerType: 3,
+              sk: this.$md5(this.form.newPassword),
+              uuid: this.form.uuid
+            }
           }
+          // const params = {
+          //   ak: this.form.ak,
+          //   appId: this.form.appId,
+          //   code: this.form.code,
+          //   registerType: 1,
+          //   sk: this.$md5(this.form.sk),
+          //   uuid: this.form.uuid
+          // }
           this.$axios.post('/api/iam/v1/open/user/register/submit', params).then((res) => {
-            console.log(res, 'res')
             if (res.status === 200) {
-            this.$notify({
-              title: '提示',
-              message: '用户注册成功',
-              type: 'success'
-            });
-            this.$router.push({
-              path: '/login'
-            });
-          }
-            
+              this.$notify({
+                title: '提示',
+                message: '用户注册成功',
+                type: 'success'
+              });
+              this.$router.push({
+                path: '/login'
+              });
+            }
           });
         } else {
           return false;
