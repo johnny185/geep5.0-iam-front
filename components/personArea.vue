@@ -28,13 +28,14 @@
             <span>{{ '暂未开通' }}</span>
           </el-form-item>
           <el-form-item label="电子邮箱">
-            <span>{{ $store.state.user.userInfo.email === null ? '未填写': $store.state.user.userInfo.email }}</span>
+            <span>{{ $store.state.user.userInfo.email === null ? '无': $store.state.user.userInfo.email }}</span>
             <el-button size="small" @click="upDateEmail" type="primary" style="display: inline-block; margin-left: 10px"
               >{{ $store.state.user.userInfo.email === null ? '绑定' : '修改' }}电子邮箱</el-button
             >
           </el-form-item>
           <el-form-item label="手机号">
-            <span>{{ $store.state.user.userInfo.phoneNum | replacestar }}</span>
+            <span v-if="$store.state.user.userInfo.phoneNum === null">无</span>
+            <span v-else>{{ $store.state.user.userInfo.phoneNum | replacestar }}</span>
             <el-button
               size="small"
               @click="upDatePhoneNum"
