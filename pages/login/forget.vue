@@ -182,7 +182,7 @@ export default {
         appId: '', // 应用id(从哪个应用进入到注册)
       },
       tabList: ['通过邮箱找回', '通过手机找回'],
-      currentIndex: 0, //切换短信验证码登录 帐号登录
+      currentIndex: 1, //切换短信验证码登录 帐号登录
       slideLeft: '', // 下划线位置
       tabLen: '', // tab数组长度
       rules: {
