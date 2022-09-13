@@ -305,18 +305,12 @@ export default {
       }
     },
     areaChange () {
-      console.log(this.areaList, this.areaCode, 'areaCode')
       let obj = this.areaList.find((item) => {
         if (this.areaCode === item.code) {
           return item;
         }
       })
       this.fullName = obj.fullName;
-      console.log(obj, 'obj')
-      // if (this.areaCode) {
-      //   this.parentCode =  this.cityCode;
-      //   this.areaDisabled = false;
-      // }
     },
     radioClisk(e) {
       e === this.form.personIdCardIsLongEffective ? (this.form.personIdCardIsLongEffective = true):(this.form.personIdCardIsLongEffective = e)
@@ -350,10 +344,10 @@ export default {
         if (valid) {
           if (this.fullName === '') {
             this.$notify({
-                title: '提示',
-                message: '请选择通讯地址',
-                type: 'error'
-              });
+              title: '提示',
+              message: '请选择通讯地址',
+              type: 'error'
+            });
           }
           // let params = Object.assign(this.form, {
           //   registerType: '1'
@@ -365,7 +359,7 @@ export default {
           //   personIdCardPeriodEndDate: this.form.personIdCardPeriodDate[1],
           // });
           // delete this.form.personIdCardPeriodDate;
-          this.$axios.post('api/iam/v1/auth/certification/person/apply', params).then((res) => {
+          this.$axios.post('api/iam/v1/auth/certification/person/apply', this.form).then((res) => {
             if (res.status === 200 && res.body === true) {
               this.$notify({
                 title: '成功',
