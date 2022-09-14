@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dialog 
-      title="修改邮箱" 
+      :title="emailStatus+'邮箱'" 
       width="40%" 
       top="15vh" 
       :visible.sync="dialogVisible" 
@@ -47,6 +47,10 @@ export default {
   props: {
     // appId
     appId: {
+      type: String,
+      default: null
+    },
+    emailStatus: {
       type: String,
       default: null
     }

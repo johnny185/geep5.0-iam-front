@@ -114,38 +114,46 @@
           </ul>
         </div>
       </el-form-item>
-      <el-form-item label="通讯地址" prop="provinceCode">
-        <el-select v-model="provinceCode" placeholder="请选择省" @focus="provinceSelect(1)" @change="provinceChange()">
-          <el-option
-            v-for="item in provinceList"
-            :key="item.code"
-            :label="item.shortName"
-            :value="item.code">
-          </el-option>
-        </el-select>
-        <el-select v-model="cityCode" :disabled="cityDisabled" placeholder="请选择市" @focus="provinceSelect(2)" @change="cityChange()">
-          <el-option
-            v-for="item in cityList"
-            :key="item.code"
-            :label="item.shortName"
-            :value="item.code">
-          </el-option>
-        </el-select>
-        <el-select v-model="areaCode" :disabled="areaDisabled" placeholder="请选择区" @focus="provinceSelect(3)" @change="areaChange()">
-          <el-option
-            v-for="item in areaList"
-            :key="item.code"
-            :label="item.shortName"
-            :value="item.code">
-          </el-option>
-        </el-select>
+      <el-form-item label="通讯地址">
+        <div  class="IDImgWrap">
+          <el-form-item prop="addressLeve1Id">
+            <el-select ref="provinceLabel" v-model="form.addressLeve1Id" placeholder="请选择省" @focus="provinceSelect(1)" @change="provinceChange()">
+              <el-option
+                v-for="item in provinceList"
+                :key="item.code"
+                :label="item.shortName"
+                :value="item.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="addressLeve2Id">
+            <el-select ref="cityLabel" v-model="form.addressLeve2Id" placeholder="请选择市" @focus="provinceSelect(2)" @change="cityChange()">
+              <el-option
+                v-for="item in cityList"
+                :key="item.code"
+                :label="item.shortName"
+                :value="item.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="addressLeve3Id">
+            <el-select ref="areaLabel" v-model="form.addressLeve3Id" placeholder="请选择区" @focus="provinceSelect(3)">
+              <el-option
+                v-for="item in areaList"
+                :key="item.code"
+                :label="item.shortName"
+                :value="item.code">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </div>
       </el-form-item>
-      <el-form-item prop="address1">
+      <el-form-item prop="address">
         <el-input
           style="margin-top: 8px;"
           type="textarea"
           placeholder="详细地址（街道/门牌号）"
-          v-model="form.address1"
+          v-model="form.address"
           maxlength="200"
           show-word-limit
           :rows="4"
@@ -153,7 +161,6 @@
       </el-form-item>
       <el-form-item>
         <div class="personBottom fontCenter">
-          <!-- <div class="reset" @click="reset">取消</div> -->
           <div class="submit" @click="submitBtn">提交</div>
         </div>
       </el-form-item>
@@ -167,34 +174,6 @@ import bgImg1 from '../static/img/login/positiveImg.png';
 import bgImg2 from '../static/img/login/backImg.png';
 import bgImg3 from '../static/img/login/holdImg.png';
 export default {
-  // props: {
-  //   // 用户初始化信息
-  //   initInfo: {
-  //     type: Object,
-  //     default: () => {
-  //       return {
-  //         personFullName: '', //真实姓名
-  //         personIdCardNum: '', //身份证号
-  //         address: '', //地址
-  //         personIdCardPhotoFront: '', //身份证 正面 图片id
-  //         personIdCardPhotoFrontUrl: '', //身份证 正面 文件图片回显url
-  //         personIdCardPhotoNegative: '', //身份证 反面 图片id
-  //         personIdCardPhotoNegativeUrl: '', //身份证 反面 文件图片回显url
-  //         personIdCardPhotoHand: '', //手持身份证 图片id
-  //         personIdCardPhotoHandUrl: '' //手持身份证 文件图片回显url
-  //       };
-  //     }
-  //   }
-  // },
-  // watch: {
-  //   initInfo: {
-  //     handler: function (data) {
-  //       this.form = data;
-  //     },
-  //     deep: true,
-  //     immediate: true
-  //   }
-  // },
   data() {
     // 身份证号 校验
     var validatepersonIdCardNum = (rule, value, callback) => {
@@ -221,26 +200,21 @@ export default {
       form: {
         personFullName: '', //真实姓名
         personIdCardNum: '', //身份证号
-        // personIdCardPeriodDate: [],
         personIdCardPeriodStartDate: '', // 身份证有效期开始日期
         personIdCardPeriodEndDate: '', // 身份证有效期截止日期
         personIdCardIsLongEffective: false, // 身份证是否长期有效
         personIdCardPhotoFrontId: '', //身份证 正面
         personIdCardPhotoNegativeId: '', //身份证 反面
         personIdCardPhotoHandId: '', //手持身份证
-        address1: '' //地址
+        addressLeve1Id: null, // 省
+        addressLeve2Id: null, // 市
+        addressLeve3Id: null, // 区
+        address: '' //地址
       },
-      provinceCode: '', // 省名称
       provinceList: [], // 省数组
-      cityCode: '', // 市名称
       cityList: [], // 市数组
-      cityDisabled: true,
-      areaCode: '', // 区名称
       areaList: [], // 区数组
-      areaDisabled: true,
       parentCode: '0', // 0为省份
-      fullName: '', // 地区
-      // personIdCardPeriodDate: [],
       rules: {
         // 真实姓名 校验
         personFullName: [{ required: true, message: '真实姓名不能为空', trigger: 'change' }],
@@ -250,9 +224,14 @@ export default {
         personIdCardPeriodStartDate: [{ required: true, message: '身份证有效开始不能为空', trigger: 'change' }],
         // 身份证有效截止日期 校验
         personIdCardPeriodEndDate: [{ required: true, message: '身份证有效截止不能为空', trigger: 'change' }],
-        provinceCode: [{ required: false, message: '地址不能为空', trigger: 'change' }],
+        // 省
+        addressLeve1Id: [{ required: true, message: '省不能为空', trigger: 'change' }],
+        // 市
+        addressLeve2Id: [{ required: true, message: '市不能为空', trigger: 'change' }],
+        // 区
+        addressLeve3Id: [{ required: true, message: '区不能为空', trigger: 'change' }],
         // 地址 校验
-        address1: [{ required: true, message: '详细地址不能为空', trigger: 'change' }],
+        address: [{ required: true, message: '详细地址不能为空', trigger: 'change' }],
         // 身份证正面  校验
         personIdCardPhotoFrontId: [{ required: true, message: '身份证正面不能为空', trigger: 'change' }],
         //  身份证反面 校验
@@ -266,17 +245,17 @@ export default {
     // 省份选择
     provinceSelect(value) {
       let parentCode = '';
-      let provinceCode = this.provinceCode;
-      let cityCode = this.cityCode;
+      let addressLeve1Id = this.form.addressLeve1Id;
+      let addressLeve2Id = this.form.addressLeve2Id;
       if (value === 1) {
         parentCode = '0'
         if (this.provinceList.length !== 0) {
           return false;
         }
       } else if (value === 2) {
-        parentCode = provinceCode;
+        parentCode = addressLeve1Id;
       } else if (value === 3) {
-        parentCode = cityCode
+        parentCode = addressLeve2Id
       }
       let params = {
         parentCode: parentCode,
@@ -293,24 +272,14 @@ export default {
       })
     },
     provinceChange() {
-      if (this.provinceCode) {
-        this.parentCode = this.provinceCode;
-        this.cityDisabled = false;
+      if (this.form.addressLeve1Id) {
+        this.parentCode = this.form.addressLeve1Id;
       }
     },
     cityChange() {
-      if (this.cityCode) {
-        this.parentCode =  this.cityCode;
-        this.areaDisabled = false;
+      if (this.form.addressLeve2Id) {
+        this.parentCode =  this.form.addressLeve2Id;
       }
-    },
-    areaChange () {
-      let obj = this.areaList.find((item) => {
-        if (this.areaCode === item.code) {
-          return item;
-        }
-      })
-      this.fullName = obj.fullName;
     },
     radioClisk(e) {
       e === this.form.personIdCardIsLongEffective ? (this.form.personIdCardIsLongEffective = true):(this.form.personIdCardIsLongEffective = e)
@@ -342,24 +311,12 @@ export default {
     submitBtn() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          if (this.fullName === '') {
-            this.$notify({
-              title: '提示',
-              message: '请选择通讯地址',
-              type: 'error'
-            });
-          }
-          // let params = Object.assign(this.form, {
-          //   registerType: '1'
-          // });
-          this.form.address = `${this.fullName}${this.form.address1}`;
-          delete this.form.address1;
-          // let params = Object.assign(this.form, {
-          //   personIdCardPeriodStartDate: this.form.personIdCardPeriodDate[0],
-          //   personIdCardPeriodEndDate: this.form.personIdCardPeriodDate[1],
-          // });
-          // delete this.form.personIdCardPeriodDate;
-          this.$axios.post('api/iam/v1/auth/certification/person/apply', this.form).then((res) => {
+          let params = Object.assign(this.form, {
+            addressLeve1: this.$refs.provinceLabel.selected.label,
+            addressLeve2: this.$refs.cityLabel.selected.label,
+            addressLeve3: this.$refs.areaLabel.selected.label
+          });
+          this.$axios.post('api/iam/v1/auth/certification/person/apply', params).then((res) => {
             if (res.status === 200 && res.body === true) {
               this.$notify({
                 title: '成功',
