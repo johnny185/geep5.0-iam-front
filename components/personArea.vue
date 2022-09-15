@@ -407,10 +407,11 @@ export default {
       }
     },
     submitBtn() {
-      const { oldPhoneNumber, phoneNumber } = this.form;
+      // const { oldPhoneNumber, phoneNumber } = this.form;
       this.$refs['form'].validate((valid) => {
         if (valid) {
           let params = {
+            akOld: this.form.oldPhoneNumber, // 旧手机号
             ak: this.form.phoneNumber, // 新手机号
             uuid: this.form.uuid,
             code: this.form.phoneCode
