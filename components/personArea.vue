@@ -415,22 +415,22 @@ export default {
             uuid: this.form.uuid,
             code: this.form.phoneCode
           };
-          if (oldPhoneNumber !== this.$store.state.user.userInfo.phoneNum) {
-            this.$notify({
-              title: '提示',
-              message: '旧手机号不正确，请重新输入。',
-              type: 'info'
-            });
-            return;
-          }
-          if (phoneNumber === this.$store.state.user.userInfo.phoneNum) {
-            this.$notify({
-              title: '提示',
-              message: '新手机号和旧手机号一致，请重新输入。',
-              type: 'info'
-            });
-            return;
-          }
+          // if (oldPhoneNumber !== this.$store.state.user.userInfo.phoneNum) {
+          //   this.$notify({
+          //     title: '提示',
+          //     message: '旧手机号不正确，请重新输入。',
+          //     type: 'info'
+          //   });
+          //   return;
+          // }
+          // if (phoneNumber === this.$store.state.user.userInfo.phoneNum) {
+          //   this.$notify({
+          //     title: '提示',
+          //     message: '新手机号和旧手机号一致，请重新输入。',
+          //     type: 'info'
+          //   });
+          //   return;
+          // }
           this.$axios.post('/api/iam/v1/auth/user/info/change/phone', params).then((res) => {
             if (res.status === 200) {
               this.$notify({
