@@ -50,6 +50,9 @@ export default {
       }
     };
   },
+  // mounted() {
+  //   this.sex = this.form.sex;
+  // },
   methods: {
     // 提交修改 昵称
     submitBtn() {

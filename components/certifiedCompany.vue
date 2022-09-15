@@ -240,7 +240,7 @@
                 v-for="item in provinceList"
                 :key="item.code"
                 :label="item.shortName"
-                :value="item.code">
+                :value="Number(item.code)">
               </el-option>
             </el-select>
           </el-form-item>
@@ -250,7 +250,7 @@
                 v-for="item in cityList"
                 :key="item.code"
                 :label="item.shortName"
-                :value="item.code">
+                :value="Number(item.code)">
               </el-option>
             </el-select>
           </el-form-item>
@@ -260,7 +260,7 @@
                 v-for="item in areaList"
                 :key="item.code"
                 :label="item.shortName"
-                :value="item.code">
+                :value="Number(item.code)">
               </el-option>
             </el-select>
           </el-form-item>

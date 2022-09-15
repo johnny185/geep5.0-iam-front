@@ -76,7 +76,7 @@ export default {
       countdownEmail: 60, // 邮箱验证码倒计时
       rules: {
         // 邮箱 校验
-        email: [{ required: true, validator: validateEmail, trigger: 'change' }],
+        email: [{ required: true, validator: validateEmail, trigger: 'blur' }],
         // 图形验证码 校验
         code: [{ required: true, message: '图形验证码不能为空', trigger: 'change' }],
         // 短信验证码 校验
@@ -95,12 +95,6 @@ export default {
           this.$notify({
             title: '提示',
             message: '邮箱已存在',
-            type: 'error'
-          });
-        } else {
-          this.$notify({
-            title: '提示',
-            message: '邮箱不存在',
             type: 'error'
           });
         }

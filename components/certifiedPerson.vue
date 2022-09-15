@@ -122,7 +122,7 @@
                 v-for="item in provinceList"
                 :key="item.code"
                 :label="item.shortName"
-                :value="item.code">
+                :value="Number(item.code)">
               </el-option>
             </el-select>
           </el-form-item>
@@ -132,7 +132,7 @@
                 v-for="item in cityList"
                 :key="item.code"
                 :label="item.shortName"
-                :value="item.code">
+                :value="Number(item.code)">
               </el-option>
             </el-select>
           </el-form-item>
@@ -142,7 +142,7 @@
                 v-for="item in areaList"
                 :key="item.code"
                 :label="item.shortName"
-                :value="item.code">
+                :value="Number(item.code)">
               </el-option>
             </el-select>
           </el-form-item>
@@ -255,7 +255,7 @@ export default {
       } else if (value === 2) {
         parentCode = addressLeve1Id;
       } else if (value === 3) {
-        parentCode = addressLeve2Id
+        parentCode = addressLeve2Id;
       }
       let params = {
         parentCode: parentCode,
@@ -294,15 +294,12 @@ export default {
     handleSuccess(data) {
       // 身份证 正面
       if (data[1] === 'positive') {
-        // this.form.personIdCardPhotoFrontId = data[0].body.fileUid;
         this.$set(this.form, 'personIdCardPhotoFrontId', data[0].body.fileUid);
         this.$refs.form.clearValidate('personIdCardPhotoFrontId');
       } else if (data[1] === 'back') {
-        // this.form.personIdCardPhotoNegative = data[0].body.fileUid;
         this.$set(this.form, 'personIdCardPhotoNegativeId', data[0].body.fileUid);
         this.$refs.form.clearValidate('personIdCardPhotoNegativeId');
       } else {
-        // this.form.personIdCardPhotoHandId = data[0].body.fileUid;
         this.$set(this.form, 'personIdCardPhotoHandId', data[0].body.fileUid);
         this.$refs.form.clearValidate('personIdCardPhotoHandId');
       }

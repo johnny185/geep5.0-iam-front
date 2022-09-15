@@ -15,10 +15,11 @@
             >
           </el-form-item>
           <el-form-item label="性别">
-            <span v-if="$store.state.user.userInfo.sex === 0">未知</span>
+            <span>{{ sexFilter($store.state.user.userInfo.sex) }}</span>
+            <!-- <span v-if="$store.state.user.userInfo.sex === 0">未知</span>
             <span v-else-if="$store.state.user.userInfo.sex === 1">男</span>
             <span v-else-if="$store.state.user.userInfo.sex === 2">女</span>
-            <span v-else-if="$store.state.user.userInfo.sex === 3">保密</span>
+            <span v-else-if="$store.state.user.userInfo.sex === 3">保密</span> -->
             <!-- <span>{{ $store.state.user.userInfo.sex === 0 ? '未知': $store.state.user.userInfo.sex === 1 ? '男': $store.state.user.userInfo.sex === 1 ? '女' : '保密' }}</span> -->
             <el-button size="small" @click="upDateSex" type="primary" style="display: inline-block; margin-left: 10px"
               >设置</el-button
@@ -53,6 +54,23 @@
       <el-tab-pane label="认证信息" name="2">
         <div class="padding20">
           <div v-if="$store.state.user.userInfo.registerType !== 0">
+            <el-form label-width="100px">
+              <el-form-item label="认证类型">
+                <span>个人</span>
+              </el-form-item>
+              <el-form-item label="认证主体">
+                <span>姓名</span>
+              </el-form-item>
+              <el-form-item label="身份证有效期">
+                <span>2022-08-21 至 2022-09-21 或 长期</span>
+              </el-form-item>
+              <el-form-item label="通讯地址">
+                <span>北京市海淀区复兴路110号</span>
+              </el-form-item>
+              <!-- <el-form-item label="认证类型">
+                <span>个人</span>
+              </el-form-item> -->
+            </el-form>
             <p class="title fontSize24">认证记录</p>
             <p class="fontSize24 fontCenter" v-if="tableData.length === 0">暂无记录</p>
             <el-table v-else :data="tableData" style="width: 100%">
@@ -65,10 +83,10 @@
               <el-radio :label="1">个人</el-radio>
               <el-radio :label="2">企业</el-radio>
             </el-radio-group>
-            <div v-if="registerType === 1" style="width: 740px; margin: 0 auto;">
+            <div v-if="registerType === 1" style="width: 760px; margin: 0 auto;">
               <certifiedPerson @queryInfo="queryInfo"></certifiedPerson>
             </div>
-            <div v-if="registerType === 2">
+            <div v-if="registerType === 2" style="width:90%">
               <certifiedCompany></certifiedCompany>
             </div>
           </div>
@@ -120,14 +138,14 @@
     </el-tabs>
     <!-- 修改手机号 -->
     <el-dialog
-      title="修改手机号"
+      :title="titleStatus+'手机号'"
       width="40%"
       top="15vh"
       :visible.sync="phoneNumVisible"
       :before-close="phoneNumhandleClose"
     >
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="旧手机号码" prop="oldPhoneNumber">
+        <el-form-item v-if="$store.state.user.userInfo.phoneNum !== null" label="旧手机号码" prop="oldPhoneNumber">
           <el-input v-model.trim="form.oldPhoneNumber" maxlength="11" placeholder="请输入旧手机号" clearable></el-input>
         </el-form-item>
         <el-form-item label="新手机号码" prop="phoneNumber">
@@ -173,12 +191,14 @@
     <!-- 修改性别 :upDateSexs="upDateSexs"-->
     <upDateSexDialog
       ref="upDateSexDialog"
+      :upDateSexs="upDateSexs"
       @upDataSuccess="upDataSuccess"
       ></upDateSexDialog>
     <!-- 修改邮箱 -->
     <upDateEmailDialog
       ref="upDateEmailDialog"
       :appId="appId"
+      :emailStatus="emailStatus"
       @upDataSuccess="upDataSuccess"
     ></upDateEmailDialog>
   </div>
@@ -246,7 +266,10 @@ export default {
       },
       accountVisible: false,
       // 认证信息
-      registerType: 1
+      registerType: 1,
+      titleStatus: '',
+      emailStatus: '',
+      upDateSexs: null
       // registerHeight: false
     };
   },
@@ -432,6 +455,7 @@ export default {
       this.isShowGetCode = true;
     },
     upDatePhoneNum() {
+      this.titleStatus = this.$store.state.user.userInfo.phoneNum === null ? '绑定' : '修改';
       this.phoneNumVisible = true;
       this.captcha(1);
     },
@@ -459,10 +483,13 @@ export default {
     replaceRegisterType(e) {
     },
     upDateEmail() {
+      this.emailStatus = this.$store.state.user.userInfo.email === null ? '绑定' : '修改'
       this.$refs.upDateEmailDialog.dialogVisible = true;
     },
     // 修改性别
     upDateSex() {
+      console.log(typeof this.$store.state.user.userInfo.sex, 'this.$store.state.user.userInfo.sex')
+      this.upDateSexs = this.$store.state.user.userInfo.sex;
       this.$refs.upDateSexDialog.dialogVisible = true;
     },
     // 帐号注销弹框
@@ -507,27 +534,31 @@ export default {
         });
     },
     loginMode(type) {
-      console.log(type, 'type1231')
-      // const text = ''
       switch(type) {
         case 1:
           return '登录 用户名密码';
-          // break;
         case 2:
           return '登录 手机号密码';
-          // break;
         case 3:
           return '登录 手机号验证码';
-          // break;
         case 4:
           return '登录 邮箱密码';
-          // break;
         case 5:
           return '登录 邮箱验证码';
-          // break;
         case 6:
           return '登录 微信扫码';
-          // break; 
+      }
+    },
+    sexFilter(value) {
+      switch(value) {
+        case 0:
+          return '未知';
+        case 1:
+          return '男';
+        case 2:
+          return '女';
+        case 3:
+          return '未知';
       }
     }
   }
