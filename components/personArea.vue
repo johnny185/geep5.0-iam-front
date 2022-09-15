@@ -407,7 +407,7 @@ export default {
       }
     },
     submitBtn() {
-      // const { oldPhoneNumber, phoneNumber } = this.form;
+      const { oldPhoneNumber, phoneNumber } = this.form;
       this.$refs['form'].validate((valid) => {
         if (valid) {
           let params = {
@@ -424,14 +424,14 @@ export default {
           //   });
           //   return;
           // }
-          // if (phoneNumber === this.$store.state.user.userInfo.phoneNum) {
-          //   this.$notify({
-          //     title: '提示',
-          //     message: '新手机号和旧手机号一致，请重新输入。',
-          //     type: 'info'
-          //   });
-          //   return;
-          // }
+          if (phoneNumber === oldPhoneNumber) {
+            this.$notify({
+              title: '提示',
+              message: '新手机号和旧手机号一致，请重新输入。',
+              type: 'info'
+            });
+            return;
+          }
           this.$axios.post('/api/iam/v1/auth/user/info/change/phone', params).then((res) => {
             if (res.status === 200) {
               this.$notify({
