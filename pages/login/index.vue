@@ -7,12 +7,18 @@
       <div class="loginLeft"></div>
       <div class="loginRight">
         <ul class="loginMthod fontSize16">
-          <i class="line" :style="{left: slideLeft}"></i>
-          <li v-for="(item, index) in tabList" :key="index"
+          <i class="line" :style="{ left: slideLeft }"></i>
+          <li
+            v-for="(item, index) in tabList"
+            :key="index"
             class="loginMthodItem hoverStyle"
             :class="{ fontBlue: currentIndex === index }"
-            @click="changeName(index)">{{item}}</li>
+            @click="changeName(index)"
+          >
+            {{ item }}
+          </li>
         </ul>
+        <!-- 法6546 -->
         <el-form ref="form" :model="form" :rules="rules" class="login-form">
           <!-- 用户名登录，密码验证 --支持手机号/邮箱/昵称作为用户名-->
           <div v-if="currentIndex === 0">
@@ -41,7 +47,7 @@
                 <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
               </span>
             </el-form-item>
-              <el-link>密码规则说明</el-link>
+            <el-link>密码规则说明</el-link>
           </div>
           <!-- 手机号登录，短信验证 -->
           <div v-if="currentIndex === 1">
@@ -56,7 +62,12 @@
             </el-form-item>
             <el-form-item prop="imgcode">
               <div class="codeContent">
-                <el-input v-model="form.imgcode" placeholder="请输入图片验证码" @keyup.enter.native="handleLogin" clearable></el-input>
+                <el-input
+                  v-model="form.imgcode"
+                  placeholder="请输入图片验证码"
+                  @keyup.enter.native="handleLogin"
+                  clearable
+                ></el-input>
                 <img :src="img" class="codeBg" alt @click="captcha" />
               </div>
             </el-form-item>
@@ -69,7 +80,7 @@
             </el-form-item>
           </div>
           <!-- 密码验证和短信验证登录方式切换 -->
-          <el-form-item align="right" style="cursor: pointer;">
+          <el-form-item align="right" style="cursor: pointer">
             <div class="fontSize14 fontBlue" @click="forgetBtn">忘记密码</div>
           </el-form-item>
           <!-- 登录按钮 -->
@@ -121,8 +132,8 @@ export default {
         password: '', // 密码
         username: '', // 帐号
         imgcode: '', // 图片验证码
-        dynamicCode: '', // 动态验证码 
-        uuid: null 
+        dynamicCode: '', // 动态验证码
+        uuid: null
       },
       tabList: ['密码登录', '验证码登录'],
       currentIndex: 0, // 切换短信验证码登录 帐号帐登录
@@ -149,7 +160,7 @@ export default {
   mounted() {
     this.captcha();
     this.getConfig();
-    this.slideLineLeft()
+    this.slideLineLeft();
   },
   methods: {
     // 切换tab
@@ -196,20 +207,22 @@ export default {
     },
     // 输入手机号校验手机号是否存在
     phoneNumberBlur() {
-      this.$axios.get(`/api/iam/v1/open/user/find?ak=${this.form.userphone}&akType=${1}&appId=8134005370347520`).then((res) => {
-        if (!res.body) {
-          this.$notify({
-            title: '提示',
-            message: '手机号未注册',
-            type: 'error'
-          });
-        }
-      });
+      this.$axios
+        .get(`/api/iam/v1/open/user/find?ak=${this.form.userphone}&akType=${1}&appId=8134005370347520`)
+        .then((res) => {
+          if (!res.body) {
+            this.$notify({
+              title: '提示',
+              message: '手机号未注册',
+              type: 'error'
+            });
+          }
+        });
     },
     // 获取公共应用配置
     getConfig() {
       this.$axios.get('/api/iam/v1/open/application/config').then((res) => {
-        // console.log(res, 'res') 
+        // console.log(res, 'res')
         // this.$store.commit('user/addUserInfo', res.body);
         // this.$router.push({
         //   path: '/'
@@ -222,9 +235,9 @@ export default {
       const { username, imgcode } = this.form;
       if (username && imgcode) {
         if (telReg(this.form.username)) {
-          verifyTypeNub = 1
+          verifyTypeNub = 1;
         } else if (emailReg(this.form.username)) {
-          verifyTypeNub = 6
+          verifyTypeNub = 6;
         }
         let params = {
           target: this.form.username,
@@ -251,12 +264,13 @@ export default {
     handleLogin() {
       this.$refs.form.validate((valid) => {
         if (valid) {
-          if (this.currentIndex === 0) { // 当currentIndex为0时为密码登录
+          if (this.currentIndex === 0) {
+            // 当currentIndex为0时为密码登录
             let params = {
               ak: this.form.username,
               sk: this.$md5(this.form.password),
               appId: 8134005370347520
-            }
+            };
             this.$axios.post('/api/iam/v1/open/login/account', params).then((res) => {
               if (res.status === 200) {
                 setToken(res.body.access_token);
@@ -264,8 +278,9 @@ export default {
                 this.getUserInfo();
                 this.certificationInfo();
               }
-            })
-          } else if (this.currentIndex === 1) { // 当currentIndex为0时为验证码登录
+            });
+          } else if (this.currentIndex === 1) {
+            // 当currentIndex为0时为验证码登录
             if (this.form.uuid === null) {
               this.$notify({
                 title: '提示',
@@ -274,46 +289,54 @@ export default {
               });
               return;
             }
-            if (telReg(this.form.username)) { // 输入帐号为手机号时
+            if (telReg(this.form.username)) {
+              // 输入帐号为手机号时
               let params = {
                 ak: this.form.username,
                 code: this.form.dynamicCode,
                 uuid: this.form.uuid,
                 appId: 8134005370347520
-              }
-              this.$axios.post('/api/iam/v1/open/login/phone-code', params).then((res) => {
-                if (res.status === 200) {
-                  setToken(res.body.access_token);
-                  this.$store.commit('user/addToken', res.body.access_token);
-                  this.getUserInfo();
-                }
-              }).catch((err) => {
-                // 图形验证码错误 重新获取验证码
-                if (err === '图形验证码错误') {
-                  this.captcha();
-                  this.form.dynamicCode = '';
-                }
-              })
-            } else if (emailReg(this.form.username)) { // 输入帐号为邮箱时
+              };
+              this.$axios
+                .post('/api/iam/v1/open/login/phone-code', params)
+                .then((res) => {
+                  if (res.status === 200) {
+                    setToken(res.body.access_token);
+                    this.$store.commit('user/addToken', res.body.access_token);
+                    this.getUserInfo();
+                  }
+                })
+                .catch((err) => {
+                  // 图形验证码错误 重新获取验证码
+                  if (err === '图形验证码错误') {
+                    this.captcha();
+                    this.form.dynamicCode = '';
+                  }
+                });
+            } else if (emailReg(this.form.username)) {
+              // 输入帐号为邮箱时
               let params = {
                 ak: this.form.username,
                 code: this.form.dynamicCode,
                 uuid: this.form.uuid,
                 appId: 8134005370347520
-              }
-               this.$axios.post('/api/iam/v1/open/login/email-code', params).then((res) => {
-                if (res.status === 200) {
-                  setToken(res.body.access_token);
-                  this.$store.commit('user/addToken', res.body.access_token);
-                  this.getUserInfo();
-                }
-              }).catch((err) => {
-                // 图形验证码错误 重新获取验证码
-                if (err === '图形验证码错误') {
-                  this.captcha();
-                  this.form.dynamicCode = '';
-                }
-              })
+              };
+              this.$axios
+                .post('/api/iam/v1/open/login/email-code', params)
+                .then((res) => {
+                  if (res.status === 200) {
+                    setToken(res.body.access_token);
+                    this.$store.commit('user/addToken', res.body.access_token);
+                    this.getUserInfo();
+                  }
+                })
+                .catch((err) => {
+                  // 图形验证码错误 重新获取验证码
+                  if (err === '图形验证码错误') {
+                    this.captcha();
+                    this.form.dynamicCode = '';
+                  }
+                });
             }
           } else {
             return false;
@@ -340,17 +363,16 @@ export default {
       let isCertification = null;
       this.$axios.get('/api/iam/v1/auth/certification/apply/info').then((res) => {
         if (res.body === null) {
-          isCertification = 0 ;
+          isCertification = 0;
         } else {
           isCertification = 1;
         }
         this.$store.commit('user/addRegisterType', isCertification);
-      })
-
+      });
     },
     // 新用户注册
     newUserBtn() {
-      console.log('chufa')
+      console.log('chufa');
       this.$router.push({
         path: '/login/register',
         query: {
