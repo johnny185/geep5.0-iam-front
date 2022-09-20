@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- 导航 -->
+    <!-- 导航 daohang -->
     <controlNav></controlNav>
     <!-- <navContent></navContent> -->
     <div class="loginWrap">
