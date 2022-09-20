@@ -55,27 +55,61 @@
         <div class="padding20">
           <div v-if="$store.state.user.userInfo.registerType !== 0">
             <el-form label-width="100px">
-              <el-form-item label="认证类型">
-                <span>个人</span>
+              <el-form-item label="认证类型" label-width="150px">
+                <span>{{authenticationInfo.applyType === 1 ? '个人' : '企业'}}</span>
               </el-form-item>
-              <el-form-item label="认证主体">
-                <span>姓名</span>
-              </el-form-item>
-              <el-form-item label="身份证有效期">
-                <span>2022-08-21 至 2022-09-21 或 长期</span>
-              </el-form-item>
-              <el-form-item label="通讯地址">
-                <span>北京市海淀区复兴路110号</span>
+              <div v-if="authenticationInfo.applyType === 1">
+                <el-form-item label="认证主体" label-width="150px">
+                  <span>{{ authenticationInfo.personFullName }}</span>
+                </el-form-item>
+                <el-form-item label="身份证有效期" label-width="150px">
+                  <span>{{ authenticationInfo.personIdCardPeriodStartDate }} 至 {{ authenticationInfo.personIdCardPeriodEndDate }}</span>
+                  <span v-if="authenticationInfo.personIdCardIsLongEffective">长期</span>
+                </el-form-item>
+              </div>
+              <div v-else>
+                <el-form-item label="认证主体" label-width="150px">
+                  <span>{{ authenticationInfo.companyName }}</span>
+                </el-form-item>
+                <el-form-item label="营业执照有效期" label-width="150px">
+                  <!-- <span v-if="authenticationInfo.personIdCardIsLongEffective">长期</span> -->
+                  <span>{{ authenticationInfo.licenseStartDate }} 至 {{ authenticationInfo.licenseEndDate }}</span>
+                </el-form-item>
+                <el-form-item label="管理员" label-width="150px">
+                  {{ authenticationInfo.personFullName }}
+                </el-form-item>
+                <el-form-item label="管理员身份证有效期" label-width="150px">
+                  <span>{{ authenticationInfo.personIdCardPeriodStartDate }} 至 {{ authenticationInfo.personIdCardPeriodEndDate }}</span>
+                </el-form-item>
+              </div>
+              <el-form-item label="通讯地址" label-width="150px">
+                <span>{{ addressDetails }}</span>
               </el-form-item>
               <!-- <el-form-item label="认证类型">
                 <span>个人</span>
               </el-form-item> -->
             </el-form>
-            <p class="title fontSize24">认证记录</p>
-            <p class="fontSize24 fontCenter" v-if="tableData.length === 0">暂无记录</p>
-            <el-table v-else :data="tableData" style="width: 100%">
-              <el-table-column prop="logContent"></el-table-column>
-              <el-table-column prop="createTime"></el-table-column>
+            <p class="title fontSize16">认证记录</p>
+            <p class="fontSize16 fontCenter" v-if="tableData.length === 0">暂无记录</p>
+            <el-table v-else :data="tableData" style="width: 100%"> 
+              <el-table-column prop="applyType" label="认证类型" align="center">
+                <template slot-scope="scope">
+                  {{ scope.row.applyType === 1 ? '个人' : '企业' }}
+                </template>
+              </el-table-column>
+              <el-table-column prop="createTime" label="提交时间" align="center"></el-table-column>
+              <el-table-column prop="submitAuditTime" label="审核时间" align="center"></el-table-column>
+              <el-table-column prop="auditPassed" label="审核结果" align="center">
+                <template slot-scope="scope">
+                  {{ scope.row.auditPassed === 0 ? '审核中' : scope.row.auditPassed === 1 ? '审核通过' : '审核不通过' }}
+                </template>
+              </el-table-column>
+              <el-table-column  prop="auditPassed">
+                <template slot-scope="scope">
+                  <el-button v-if="scope.row.auditPassed === 0">重新提交</el-button>
+                  <!-- {{ scope.row.auditPassed === 2 ? '审核中' : scope.row.auditPassed === 1 ? '审核通过' : '审核不通过' }} -->
+                </template>
+              </el-table-column>
             </el-table>
           </div>
           <div v-else>
@@ -87,7 +121,7 @@
               <certifiedPerson @queryInfo="queryInfo"></certifiedPerson>
             </div>
             <div v-if="registerType === 2" style="width:90%">
-              <certifiedCompany></certifiedCompany>
+              <certifiedCompany @queryInfo="queryInfo"></certifiedCompany>
             </div>
           </div>
         </div>
@@ -267,9 +301,11 @@ export default {
       accountVisible: false,
       // 认证信息
       registerType: 1,
-      titleStatus: '',
-      emailStatus: '',
-      upDateSexs: null
+      titleStatus: '', // 手机号绑定状态
+      emailStatus: '', // 邮箱绑定状态
+      upDateSexs: null, // 性别更新
+      authenticationInfo: {}, // 认证详情
+      addressDetails: '' // 认证详情地址
       // registerHeight: false
     };
   },
@@ -280,6 +316,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.$store.state.user.userInfo, 'info')
     this.queryInfo(this.activeName);
   },
   methods: {
@@ -301,7 +338,7 @@ export default {
       this.$refs.upDateNickNameDialog.dialogVisible = true;
     },
     // 点击 个人信息 认证信息 登录信息 模块
-    queryInfo(data) {
+    queryInfo(data, type) {
       let params = {};
       // 当为 个人信息、管理员信息
       if (data === '1') {
@@ -314,12 +351,15 @@ export default {
       // 当为 认证信息
       if (data === '2') {
         this.registerType = 1;
-        if (this.$store.state.user.userInfo.registerType === 1) {
+        if (this.$store.state.user.userInfo.registerType !== 0 || type === 'sumitExamine') {
+          this.$axios.get('api/iam/v1/auth/certification/apply/info').then((res) => {
+            this.authenticationInfo = res.body;
+            this.addressDetails = `${res.body.addressLeve1}${res.body.addressLeve2}${res.body.addressLeve3}${res.body.address}`
+          })
           this.$axios.post('api/iam/v1/auth/certification/list/log', params).then((res) => {
-            this.tableData = res.body.list;
+            this.tableData = res.body;
           });
         }
-        
         this.isExceedHeight = true;
         return false;
       }

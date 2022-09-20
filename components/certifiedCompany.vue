@@ -481,7 +481,7 @@ export default {
                 message: '提交认证操作成功',
                 type: 'success'
               });
-              this.$emit('queryInfo', '2');
+              this.$emit('queryInfo', '2', 'sumitExamine');
               this.$store.commit('user/addRegisterType', 1);
             }
           });

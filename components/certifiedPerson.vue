@@ -284,12 +284,6 @@ export default {
     radioClisk(e) {
       e === this.form.personIdCardIsLongEffective ? (this.form.personIdCardIsLongEffective = true):(this.form.personIdCardIsLongEffective = e)
     },
-    // 取消
-    // reset() {
-      // this.$router.push({
-      //   path: '/'
-      // });
-    // },
     // 图片上传成功
     handleSuccess(data) {
       // 身份证 正面
@@ -320,7 +314,7 @@ export default {
                 message: '提交认证操作成功',
                 type: 'success'
               });
-              this.$emit('queryInfo', '2');
+              this.$emit('queryInfo', '2', 'sumitExamine');
               this.$store.commit('user/addRegisterType', 1);
             }
           });
