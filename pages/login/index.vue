@@ -18,7 +18,7 @@
             {{ item }}
           </li>
         </ul>
-        <!-- 法6546 -->
+        <!-- 法6546 6969-->
         <el-form ref="form" :model="form" :rules="rules" class="login-form">
           <!-- 用户名登录，密码验证 --支持手机号/邮箱/昵称作为用户名-->
           <div v-if="currentIndex === 0">
