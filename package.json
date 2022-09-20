@@ -1,0 +1,36 @@
+{
+  "name": "gwmdp",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "build:test": "nuxt generate",
+    "build:dev": "nuxt generate"
+  },
+  "dependencies": {
+    "@logicflow/core": "^0.7.16",
+    "@nuxtjs/axios": "^5.13.6",
+    "axios": "^0.24.0",
+    "core-js": "^3.15.1",
+    "echarts": "^5.3.2",
+    "element-ui": "^2.15.6",
+    "js-md5": "^0.7.3",
+    "nuxt": "^2.15.7",
+    "vue-cropper": "^0.5.8",
+    "wangeditor": "^4.7.15"
+  },
+  "devDependencies": {
+    "@nuxtjs/proxy": "^2.1.0",
+    "svg-sprite-loader": "^6.0.11",
+    "vue-count-to": "^1.0.13"
+  },
+  "config": {
+    "nuxt": {
+      "host": "0.0.0.0",
+      "port": "3000"
+    }
+  }
+}
