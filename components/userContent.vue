@@ -101,6 +101,7 @@ export default {
     // if (this.$route.query.hasOwnProperty('userId')) {
     //   this.checkiIfFollow();
     // }
+    this.certificationInfo()
   },
   watch: {
     // 监听 当前作者是否被关注
@@ -121,6 +122,18 @@ export default {
     }
   },
   methods: {
+    // 认证详情
+    certificationInfo() {
+      let isCertification = null;
+      this.$axios.get('/api/iam/v1/auth/certification/apply/info').then((res) => {
+        if (res.body === null) {
+          isCertification = 0;
+        } else {
+          isCertification = 1;
+        }
+        this.$store.commit('user/addRegisterType', isCertification);
+      });
+    },
     // 关注  praise 1关注0取消
     // followBtn() {
     //   let params = {

@@ -161,6 +161,7 @@
       </el-form-item>
       <el-form-item>
         <div class="personBottom fontCenter">
+          <div v-show="resetCertified" class="submit cancel" @click="cancel">取消</div>
           <div class="submit" @click="submitBtn">提交</div>
         </div>
       </el-form-item>
@@ -173,7 +174,38 @@ import { regId } from '../utils/validate';
 import bgImg1 from '../static/img/login/positiveImg.png';
 import bgImg2 from '../static/img/login/backImg.png';
 import bgImg3 from '../static/img/login/holdImg.png';
+import costPerPopupVue from './costPerPopup.vue';
+import { timingSafeEqual } from 'crypto';
 export default {
+  props:{
+    resetCertified:Boolean,
+    // 表单参数
+    formParams: {
+      type: Object,
+      default: ()=>{
+        return {}
+      },
+    },
+  },
+  mounted(){
+    if(this.$props.formParams.personFullName){
+      const json=JSON.parse(JSON.stringify(this.$props.formParams));
+      this.form=json;
+      this.provinceList=[{
+        shortName:json.addressLeve1,
+        code:json.addressLeve1Id
+      }]
+      this.cityList=[{
+        shortName:json.addressLeve2,
+        code:json.addressLeve2Id
+      }]
+      this.areaList=[{
+        shortName:json.addressLeve3,
+        code:json.addressLeve3Id
+      }]
+    }
+   
+  },
   data() {
     // 身份证号 校验
     var validatepersonIdCardNum = (rule, value, callback) => {
@@ -187,18 +219,7 @@ export default {
       }
     };
     return {
-      isPublic: false,
-      isTmp: true,
-      bgImg1: bgImg1, //身份证 正面 背景图
-      bgImg2: bgImg2, //身份 背面 背景图
-      bgImg3: bgImg3, //手持身份证 背景图
-      uploadType1: 'positive', //标识 上传的图片 是 身份正面
-      uploadType2: 'back', //标识 上传的图片 是 身份证反面
-      uploadType3: 'hold', //标识 上传的图片 是 手持身份图片
-      fileType: 'jpg,jpeg,png',
-      fileSize: 5,
-      form: {
-        personFullName: '', //真实姓名
+      form:{
         personIdCardNum: '', //身份证号
         personIdCardPeriodStartDate: '', // 身份证有效期开始日期
         personIdCardPeriodEndDate: '', // 身份证有效期截止日期
@@ -211,6 +232,16 @@ export default {
         addressLeve3Id: null, // 区
         address: '' //地址
       },
+      isPublic: false,
+      isTmp: true,
+      bgImg1: bgImg1, //身份证 正面 背景图
+      bgImg2: bgImg2, //身份 背面 背景图
+      bgImg3: bgImg3, //手持身份证 背景图
+      uploadType1: 'positive', //标识 上传的图片 是 身份正面
+      uploadType2: 'back', //标识 上传的图片 是 身份证反面
+      uploadType3: 'hold', //标识 上传的图片 是 手持身份图片
+      fileType: 'jpg,jpeg,png',
+      fileSize: 5,
       provinceList: [], // 省数组
       cityList: [], // 市数组
       areaList: [], // 区数组
@@ -249,7 +280,7 @@ export default {
       let addressLeve2Id = this.form.addressLeve2Id;
       if (value === 1) {
         parentCode = '0'
-        if (this.provinceList.length !== 0) {
+        if (this.provinceList.length > 1) {
           return false;
         }
       } else if (value === 2) {
@@ -282,7 +313,7 @@ export default {
       }
     },
     radioClisk(e) {
-      e === this.form.personIdCardIsLongEffective ? (this.form.personIdCardIsLongEffective = true):(this.form.personIdCardIsLongEffective = e)
+      this.form.personIdCardIsLongEffective =  e === this.form.personIdCardIsLongEffective ? true:e
     },
     // 图片上传成功
     handleSuccess(data) {
@@ -297,6 +328,10 @@ export default {
         this.$set(this.form, 'personIdCardPhotoHandId', data[0].body.fileUid);
         this.$refs.form.clearValidate('personIdCardPhotoHandId');
       }
+    },
+    // 取消提交
+    cancel(){
+      this.$emit('cancel')
     },
     // 提交
     submitBtn() {
@@ -389,8 +424,9 @@ export default {
   margin-right: 50px;
   cursor: pointer;
 } */
-.submit {
+.cancel,.submit {
   width: 300px;
+  margin: 0 20px;
   /* flex: 1; */
   height: 40px;
   line-height: 40px;
@@ -399,5 +435,10 @@ export default {
   background: #fafdff;
   border: 1px solid #2f74ff;
   cursor: pointer;
+}
+.cancel{
+  background-color: #fff;
+  color: #999990;
+  border-color: #999990;
 }
 </style>

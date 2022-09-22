@@ -279,6 +279,7 @@
       </el-form-item>
       <el-form-item>
         <div class="personBottom fontCenter">
+          <div v-show="resetCertified" class="submit cancel" @click="cancel">取消</div>
           <div class="submit" @click="submitBtn">提交</div>
         </div>
       </el-form-item>
@@ -292,6 +293,16 @@ import bgImg1 from '../static/img/login/positiveImg.png';
 import bgImg2 from '../static/img/login/backImg.png';
 import bgImg3 from '../static/img/login/holdImg.png';
 export default {
+  props:{
+    resetCertified:Boolean,
+    // 表单参数
+    formParams: {
+      type: Object,
+      default: ()=>{
+        return {}
+      },
+    },
+  },
   data() {
     // 身份证号 校验
     var validatepersonIdCardNum = (rule, value, callback) => {
@@ -389,6 +400,25 @@ export default {
       }
     };
   },
+  mounted(){
+    if(this.$props.formParams.companyName){
+      const json=JSON.parse(JSON.stringify(this.$props.formParams));
+      this.form=json;
+      this.provinceList=[{
+        shortName:json.addressLeve1,
+        code:json.addressLeve1Id
+      }]
+      this.cityList=[{
+        shortName:json.addressLeve2,
+        code:json.addressLeve2Id
+      }]
+      this.areaList=[{
+        shortName:json.addressLeve3,
+        code:json.addressLeve3Id
+      }]
+    }
+   
+  },
   methods: {
     // 省份选择
     provinceSelect(value) {
@@ -465,6 +495,10 @@ export default {
     //     path: '/'
     //   });
     // },
+    // 取消提交
+    cancel(){
+      this.$emit('cancel')
+    },
     // 提交
     submitBtn() {
       this.$refs['form'].validate((valid) => {
@@ -553,14 +587,20 @@ export default {
   border: 1px solid #cccccc;
   margin-right: 50px;
 } */
-.submit {
+.cancel,.submit {
   /* flex: 1; */
   width: 300px;
+  margin: 0 20px;
   height: 40px;
   line-height: 40px;
   color: #2f74ff;
   border-radius: 4px;
   background: #fafdff;
   border: 1px solid #2f74ff;
+}
+.cancel{
+  background-color: #fff;
+  color: #999990;
+  border-color: #999990;
 }
 </style>

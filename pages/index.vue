@@ -27,7 +27,6 @@ export default {
   data() {
     return {
       menu: this.$route.query.menu,
-      name:'1234'
     };
   },
   mounted() {

@@ -106,7 +106,7 @@
               </el-table-column>
               <el-table-column  prop="auditPassed">
                 <template slot-scope="scope">
-                  <el-button v-if="scope.row.auditPassed === 0">重新提交</el-button>
+                  <el-button v-if="scope.row.auditPassed === 0" @click="resetSubmit">重新提交</el-button>
                   <!-- {{ scope.row.auditPassed === 2 ? '审核中' : scope.row.auditPassed === 1 ? '审核通过' : '审核不通过' }} -->
                 </template>
               </el-table-column>
@@ -118,10 +118,10 @@
               <el-radio :label="2">企业</el-radio>
             </el-radio-group>
             <div v-if="registerType === 1" style="width: 760px; margin: 0 auto;">
-              <certifiedPerson @queryInfo="queryInfo"></certifiedPerson>
+              <certifiedPerson @queryInfo="queryInfo" @cancel="cancelResetSubmit" :resetCertified="resetCertified" :formParams="authenticationInfo"></certifiedPerson>
             </div>
             <div v-if="registerType === 2" style="width:90%">
-              <certifiedCompany @queryInfo="queryInfo"></certifiedCompany>
+              <certifiedCompany @queryInfo="queryInfo" @cancel="cancelResetSubmit" :resetCertified="resetCertified" :formParams="authenticationInfo"></certifiedCompany>
             </div>
           </div>
         </div>
@@ -305,8 +305,9 @@ export default {
       emailStatus: '', // 邮箱绑定状态
       upDateSexs: null, // 性别更新
       authenticationInfo: {}, // 认证详情
-      addressDetails: '' // 认证详情地址
+      addressDetails: '', // 认证详情地址
       // registerHeight: false
+      resetCertified:false,// 重新认证显示取消按钮
     };
   },
   watch: {
@@ -318,8 +319,18 @@ export default {
   mounted() {
     console.log(this.$store.state.user.userInfo, 'info')
     this.queryInfo(this.activeName);
+    this.cancelResetSubmit()
   },
   methods: {
+    // 重新提交
+    resetSubmit(){
+      this.$store.commit('user/addRegisterType', 0);
+      this.resetCertified = true
+    },
+    cancelResetSubmit(){
+      this.$store.commit('user/addRegisterType', 1);
+      this.resetCertified = false
+    },
     alterAdmin() {
       this.$refs.upDateAdminInfoDialog.captcha();
       this.$refs.upDateAdminInfoDialog.dialogVisible = true;
