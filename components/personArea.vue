@@ -1,18 +1,13 @@
 <template>
   <div :class="isExceedHeight ? 'ExceedHeightWrap' : 'wrap'">
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-model="activeName" @tab-click="handleClick" class="tab-box">
       <!-- 个人信息 -->
       <el-tab-pane label="个人信息" name="1">
         <el-form label-width="100px">
           <el-form-item label="昵称">
             <span>{{ $store.state.user.userInfo.nickName }}</span>
-            <el-button
-              size="small"
-              @click="upDateNickName"
-              style="display: inline-block; margin-left: 10px"
-              type="primary"
-              >修改昵称</el-button
-            >
+            <el-button size="small" @click="upDateNickName" style="display: inline-block; margin-left: 10px"
+              type="primary">修改昵称</el-button>
           </el-form-item>
           <el-form-item label="性别">
             <span>{{ sexFilter($store.state.user.userInfo.sex) }}</span>
@@ -21,29 +16,24 @@
             <span v-else-if="$store.state.user.userInfo.sex === 2">女</span>
             <span v-else-if="$store.state.user.userInfo.sex === 3">保密</span> -->
             <!-- <span>{{ $store.state.user.userInfo.sex === 0 ? '未知': $store.state.user.userInfo.sex === 1 ? '男': $store.state.user.userInfo.sex === 1 ? '女' : '保密' }}</span> -->
-            <el-button size="small" @click="upDateSex" type="primary" style="display: inline-block; margin-left: 10px"
-              >设置</el-button
-            >
+            <el-button size="small" @click="upDateSex" type="primary" style="display: inline-block; margin-left: 10px">
+              设置</el-button>
           </el-form-item>
           <el-form-item label="三方登录">
             <span>{{ '暂未开通' }}</span>
           </el-form-item>
           <el-form-item label="电子邮箱">
             <span>{{ $store.state.user.userInfo.email === null ? '无': $store.state.user.userInfo.email }}</span>
-            <el-button size="small" @click="upDateEmail" type="primary" style="display: inline-block; margin-left: 10px"
-              >{{ $store.state.user.userInfo.email === null ? '绑定' : '修改' }}电子邮箱</el-button
-            >
+            <el-button size="small" @click="upDateEmail" type="primary"
+              style="display: inline-block; margin-left: 10px">{{ $store.state.user.userInfo.email === null ? '绑定' :
+              '修改' }}电子邮箱</el-button>
           </el-form-item>
           <el-form-item label="手机号">
             <span v-if="$store.state.user.userInfo.phoneNum === null">无</span>
             <span v-else>{{ $store.state.user.userInfo.phoneNum | replacestar }}</span>
-            <el-button
-              size="small"
-              @click="upDatePhoneNum"
-              type="primary"
-              style="display: inline-block; margin-left: 10px"
-              >{{ $store.state.user.userInfo.phoneNum === null ? '绑定' : '修改' }}手机号</el-button
-            >
+            <el-button size="small" @click="upDatePhoneNum" type="primary"
+              style="display: inline-block; margin-left: 10px">{{ $store.state.user.userInfo.phoneNum === null ? '绑定' :
+              '修改' }}手机号</el-button>
           </el-form-item>
           <el-form-item label="注册时间">
             <p>{{ $store.state.user.userInfo.createTime }}</p>
@@ -63,13 +53,18 @@
                   <span>{{ authenticationInfo.personFullName }}</span>
                 </el-form-item>
                 <el-form-item label="身份证有效期" label-width="150px">
-                  <span>{{ authenticationInfo.personIdCardPeriodStartDate }} 至 {{ authenticationInfo.personIdCardPeriodEndDate }}</span>
+                  <span>{{ authenticationInfo.personIdCardPeriodStartDate }} 至 {{
+                  authenticationInfo.personIdCardPeriodEndDate }}</span>
                   <span v-if="authenticationInfo.personIdCardIsLongEffective">长期</span>
+                  <el-button v-show="auditPassed!==0" type="primary" class="marginLeft10" size="mini"
+                    @click="resetSubmit('idCard')">更新身份证</el-button>
                 </el-form-item>
               </div>
               <div v-else>
                 <el-form-item label="认证主体" label-width="150px">
                   <span>{{ authenticationInfo.companyName }}</span>
+                  <el-button v-show="auditPassed!==0" type="primary" class="marginLeft10" size="mini"
+                    @click="resetSubmit('license')">变更营业执照</el-button>
                 </el-form-item>
                 <el-form-item label="营业执照有效期" label-width="150px">
                   <!-- <span v-if="authenticationInfo.personIdCardIsLongEffective">长期</span> -->
@@ -77,13 +72,18 @@
                 </el-form-item>
                 <el-form-item label="管理员" label-width="150px">
                   {{ authenticationInfo.personFullName }}
+                  <el-button v-show="auditPassed!==0" type="primary" class="marginLeft10" size="mini"
+                    @click="resetSubmit('name')">变更管理员</el-button>
                 </el-form-item>
                 <el-form-item label="管理员身份证有效期" label-width="150px">
-                  <span>{{ authenticationInfo.personIdCardPeriodStartDate }} 至 {{ authenticationInfo.personIdCardPeriodEndDate }}</span>
+                  <span>{{ authenticationInfo.personIdCardPeriodStartDate }} 至 {{
+                  authenticationInfo.personIdCardPeriodEndDate }}</span>
                 </el-form-item>
               </div>
               <el-form-item label="通讯地址" label-width="150px">
                 <span>{{ addressDetails }}</span>
+                <el-button v-show="auditPassed!==0" type="primary" class="marginLeft10" size="mini"
+                  @click="resetSubmit('address')">修改地址</el-button>
               </el-form-item>
               <!-- <el-form-item label="认证类型">
                 <span>个人</span>
@@ -91,7 +91,7 @@
             </el-form>
             <p class="title fontSize16">认证记录</p>
             <p class="fontSize16 fontCenter" v-if="tableData.length === 0">暂无记录</p>
-            <el-table v-else :data="tableData" style="width: 100%"> 
+            <el-table v-else :data="tableData" style="width: 100%">
               <el-table-column prop="applyType" label="认证类型" align="center">
                 <template slot-scope="scope">
                   {{ scope.row.applyType === 1 ? '个人' : '企业' }}
@@ -104,24 +104,30 @@
                   {{ scope.row.auditPassed === 0 ? '审核中' : scope.row.auditPassed === 1 ? '审核通过' : '审核不通过' }}
                 </template>
               </el-table-column>
-              <el-table-column  prop="auditPassed">
-                <template slot-scope="scope">
-                  <el-button v-if="scope.row.auditPassed === 0" @click="resetSubmit">重新提交</el-button>
+              <el-table-column prop="auditPassed">
+                <template slot-scope="scope" v-if="scope.$index==tableData.length-1">
+                  <el-button size="small" v-if="scope.row.auditPassed !== 0" @click="resetSubmit('reset')">重新提交
+                  </el-button>
+                  <el-button size="small" @click="applyPost">审核</el-button>
+
                   <!-- {{ scope.row.auditPassed === 2 ? '审核中' : scope.row.auditPassed === 1 ? '审核通过' : '审核不通过' }} -->
                 </template>
               </el-table-column>
             </el-table>
           </div>
           <div v-else>
-            <el-radio-group v-model="registerType" @change="replaceRegisterType" style="display:block; text-align:center">
+            <el-radio-group v-model="registerType" @change="replaceRegisterType"
+              style="display:block; text-align:center" v-show="editType==='reset'||!editType">
               <el-radio :label="1">个人</el-radio>
               <el-radio :label="2">企业</el-radio>
             </el-radio-group>
             <div v-if="registerType === 1" style="width: 760px; margin: 0 auto;">
-              <certifiedPerson @queryInfo="queryInfo" @cancel="cancelResetSubmit" :resetCertified="resetCertified" :formParams="authenticationInfo"></certifiedPerson>
+              <certifiedPerson @queryInfo="queryInfo" @cancel="cancelResetSubmit" :resetCertified="resetCertified"
+                :formParams="authenticationInfo" :editType="editType"></certifiedPerson>
             </div>
             <div v-if="registerType === 2" style="width:90%">
-              <certifiedCompany @queryInfo="queryInfo" @cancel="cancelResetSubmit" :resetCertified="resetCertified" :formParams="authenticationInfo"></certifiedCompany>
+              <certifiedCompany @queryInfo="queryInfo" @cancel="cancelResetSubmit" :resetCertified="resetCertified"
+                :formParams="authenticationInfo" :editType="editType"></certifiedCompany>
             </div>
           </div>
         </div>
@@ -136,30 +142,42 @@
           <el-table-column prop="createTime" label="登录时间"></el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="安全信息"  name="4">
+      <el-tab-pane label="安全信息" name="4">
         <div class="padding20">
           <p class="title fontSize24">安全信息</p>
           <div class="padding20">
             <dl style="width: 46%">
-              <dt class="dtStyle"><div class="">密码重置：</div><div class="btnStyle" @click="resetPassword">重置</div></dt>
+              <dt class="dtStyle">
+                <div class="">密码重置：</div>
+                <div class="btnStyle" @click="resetPassword">重置</div>
+              </dt>
               <dd class="ddStyle">上次重置密码时间{{resetTime}}</dd>
             </dl>
           </div>
           <div class="padding20">
             <dl style="width: 46%">
-              <dt class="dtStyle"><div class="">帐户注销：</div><div class="btnStyle" @click="accountNubLogOff">注销</div></dt>
+              <dt class="dtStyle">
+                <div class="">帐户注销：</div>
+                <div class="btnStyle" @click="accountNubLogOff">注销</div>
+              </dt>
               <dd class="ddStyle">帐号注销后将彻底清除您的帐号和相关数据</dd>
             </dl>
           </div>
           <div class="padding20">
             <dl style="width: 46%">
-              <dt class="dtStyle"><div class="">帐户退出：</div><div class="btnStyle" @click="accountOut">退出</div></dt>
+              <dt class="dtStyle">
+                <div class="">帐户退出：</div>
+                <div class="btnStyle" @click="accountOut">退出</div>
+              </dt>
               <dd class="ddStyle">退出当前帐号在所有浏览器的登录，并清除浏览器的信任状态</dd>
             </dl>
           </div>
           <div class="padding20">
             <dl style="width: 46%">
-              <dt class="dtStyle"><div class="">隐私政策</div><div class="btnStyle">查看</div></dt>
+              <dt class="dtStyle">
+                <div class="">隐私政策</div>
+                <div class="btnStyle">查看</div>
+              </dt>
               <!-- <dd class="ddStyle">上次重置密码时间：2022-08-08  10：00：00</dd> -->
             </dl>
           </div>
@@ -171,13 +189,8 @@
       </el-tab-pane> -->
     </el-tabs>
     <!-- 修改手机号 -->
-    <el-dialog
-      :title="titleStatus+'手机号'"
-      width="40%"
-      top="15vh"
-      :visible.sync="phoneNumVisible"
-      :before-close="phoneNumhandleClose"
-    >
+    <el-dialog :title="titleStatus+'手机号'" width="40%" top="15vh" :visible.sync="phoneNumVisible"
+      :before-close="phoneNumhandleClose">
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item v-if="$store.state.user.userInfo.phoneNum !== null" label="旧手机号码" prop="oldPhoneNumber">
           <el-input v-model.trim="form.oldPhoneNumber" maxlength="11" placeholder="请输入旧手机号" clearable></el-input>
@@ -207,34 +220,17 @@
       </span>
     </el-dialog>
     <!-- 帐户注销 -->
-    <el-dialog
-     title="帐号注销"
-     width="40%"
-     top="15vh"
-     :visible.sync="accountVisible"
-     :before-close="accounthandleClose"
-    >
+    <el-dialog title="帐号注销" width="40%" top="15vh" :visible.sync="accountVisible" :before-close="accounthandleClose">
       <span>请联系管理员400-000-000!</span>
     </el-dialog>
     <!-- 修改昵称 -->
-    <upDateNickNameDialog
-      ref="upDateNickNameDialog"
-      :upDataNickNam="upDataNickNam"
-      @upDataSuccess="upDataSuccess"
-    ></upDateNickNameDialog>
+    <upDateNickNameDialog ref="upDateNickNameDialog" :upDataNickNam="upDataNickNam" @upDataSuccess="upDataSuccess">
+    </upDateNickNameDialog>
     <!-- 修改性别 :upDateSexs="upDateSexs"-->
-    <upDateSexDialog
-      ref="upDateSexDialog"
-      :upDateSexs="upDateSexs"
-      @upDataSuccess="upDataSuccess"
-      ></upDateSexDialog>
+    <upDateSexDialog ref="upDateSexDialog" :upDateSexs="upDateSexs" @upDataSuccess="upDataSuccess"></upDateSexDialog>
     <!-- 修改邮箱 -->
-    <upDateEmailDialog
-      ref="upDateEmailDialog"
-      :appId="appId"
-      :emailStatus="emailStatus"
-      @upDataSuccess="upDataSuccess"
-    ></upDateEmailDialog>
+    <upDateEmailDialog ref="upDateEmailDialog" :appId="appId" :emailStatus="emailStatus" @upDataSuccess="upDataSuccess">
+    </upDateEmailDialog>
   </div>
 </template>
 
@@ -307,7 +303,9 @@ export default {
       authenticationInfo: {}, // 认证详情
       addressDetails: '', // 认证详情地址
       // registerHeight: false
-      resetCertified:false,// 重新认证显示取消按钮
+      resetCertified: false,// 重新认证显示取消按钮
+      editType: undefined,//修改字段类型
+      auditPassed: 0,//审核状态
     };
   },
   watch: {
@@ -317,19 +315,34 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$store.state.user.userInfo, 'info')
+    // console.log(this.$store.state.user.userInfo, 'info')
     this.queryInfo(this.activeName);
     this.cancelResetSubmit()
   },
   methods: {
+    applyPost() {
+      const params = {
+        "applyId": '1573187316845404162',
+        "applyType": 2,
+        "auditOpinion": "测试通过",
+        "auditPassed": 1
+      }
+      this.$axios.post('/api/iam/v1/auth/manage/certification/apply/audit', params).then((res) => {
+        this.$store.commit('user/addRegisterType', 1);
+      });
+
+    },
     // 重新提交
-    resetSubmit(){
+    resetSubmit(e) {
       this.$store.commit('user/addRegisterType', 0);
       this.resetCertified = true
+      this.editType = e;
     },
-    cancelResetSubmit(){
+    cancelResetSubmit() {
       this.$store.commit('user/addRegisterType', 1);
       this.resetCertified = false
+      this.editType = undefined;
+      this.registerType = this.tableData.length > 0 && this.tableData[this.tableData.length - 1].applyType;
     },
     alterAdmin() {
       this.$refs.upDateAdminInfoDialog.captcha();
@@ -369,6 +382,11 @@ export default {
           })
           this.$axios.post('api/iam/v1/auth/certification/list/log', params).then((res) => {
             this.tableData = res.body;
+
+            if (this.tableData.length > 0) {
+              this.auditPassed = this.tableData[this.tableData.length - 1].auditPassed;
+              this.registerType = this.tableData[this.tableData.length - 1].applyType;
+            }
           });
         }
         this.isExceedHeight = true;
@@ -377,7 +395,7 @@ export default {
       //当为 登录信息
       if (data === '3') {
         let params = {
-          eventType: [1,2,3,4,5,6],
+          eventType: [1, 2, 3, 4, 5, 6],
           pageNum: 1,
           pageSize: 5
         }
@@ -540,7 +558,6 @@ export default {
     },
     // 修改性别
     upDateSex() {
-      console.log(typeof this.$store.state.user.userInfo.sex, 'this.$store.state.user.userInfo.sex')
       this.upDateSexs = this.$store.state.user.userInfo.sex;
       this.$refs.upDateSexDialog.dialogVisible = true;
     },
@@ -563,30 +580,30 @@ export default {
     },
     accountOut() {
       this.$confirm('是否确定退出个人中心', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          let params = {
-            username: '', //用户名称
-            registerStatus: '', //用户状态  "0", "只注册还未提交认证"  "1", "已提交认证-待审核" "2", "审核通过" "3", "审核被拒"
-            avatarUrl: '', //帐户头像
-            nickName: '', //昵称
-            account: ''
-          };
-          this.$axios.delete('/api/iam/v1/open/login/out').then((res) => {
-            // 删除token
-            removeToken();
-            this.$store.commit('user/resetUserd', params);
-            this.$router.push({
-              path: '/login'
-            });
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let params = {
+          username: '', //用户名称
+          registerStatus: '', //用户状态  "0", "只注册还未提交认证"  "1", "已提交认证-待审核" "2", "审核通过" "3", "审核被拒"
+          avatarUrl: '', //帐户头像
+          nickName: '', //昵称
+          account: ''
+        };
+        this.$axios.delete('/api/iam/v1/open/login/out').then((res) => {
+          // 删除token
+          removeToken();
+          this.$store.commit('user/resetUserd', params);
+          this.$router.push({
+            path: '/login'
           });
-        }).catch(() => {    
         });
+      }).catch(() => {
+      });
     },
     loginMode(type) {
-      switch(type) {
+      switch (type) {
         case 1:
           return '登录 用户名密码';
         case 2:
@@ -602,7 +619,7 @@ export default {
       }
     },
     sexFilter(value) {
-      switch(value) {
+      switch (value) {
         case 0:
           return '未知';
         case 1:
@@ -621,6 +638,7 @@ export default {
 .alterStyle {
   margin-left: 30px;
 }
+
 .ExceedHeightWrap {
   width: 1020px;
   /* height: 1040px; */
@@ -628,6 +646,7 @@ export default {
   box-shadow: 0px 0px 20px 2px rgba(152, 173, 216, 0.3);
   margin-left: 20px;
 }
+
 .wrap {
   width: 1020px;
   height: 589px;
@@ -635,6 +654,7 @@ export default {
   box-shadow: 0px 0px 20px 2px rgba(152, 173, 216, 0.3);
   margin-left: 20px;
 }
+
 .notCertified {
   width: 100px;
   height: 30px;
@@ -647,12 +667,15 @@ export default {
   color: #ffffff;
   cursor: pointer;
 }
+
 .title {
   color: #333333;
 }
+
 .codeContent {
   display: flex;
 }
+
 .codeBg {
   width: 204px;
   height: 40px;
@@ -660,9 +683,11 @@ export default {
   border-radius: 4px;
   margin-left: 20px;
 }
+
 .smsContent {
   display: flex;
 }
+
 .sendSms {
   width: 204px;
   height: 40px;
@@ -671,6 +696,7 @@ export default {
   border-radius: 4px;
   margin-left: 20px;
 }
+
 .smsBtn {
   width: 204px;
   height: 40px;
@@ -678,11 +704,13 @@ export default {
   border-radius: 4px;
   margin-left: 20px;
 }
+
 .dtStyle {
-  display:flex;
+  display: flex;
   justify-content: space-between;
   margin-bottom: 12px;
 }
+
 .btnStyle {
   width: 80px;
   line-height: 22px;
@@ -691,7 +719,12 @@ export default {
   border-radius: 6px;
   cursor: pointer;
 }
+
 .ddStyle {
   color: #AAAAAA;
+}
+
+.tab-box {
+  padding: 0 15px !important;
 }
 </style>

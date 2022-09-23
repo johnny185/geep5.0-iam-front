@@ -2,7 +2,7 @@
   <div>
     <el-form :model="form" :rules="rules" ref="form" label-width="140px" class="demo-ruleForm" label-position="right">
       <!-- 企业信息 -->
-      <el-row>
+      <el-row v-show="editType==='reset'||editType==='license'">
         <el-col :span="12">
           <el-form-item label="企业名称" prop="companyName">
             <el-input v-model="form.companyName" placeholder="请输入企业名称"></el-input>
@@ -14,7 +14,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row>
+      <el-row v-show="editType==='reset'||editType==='license'">
         <el-col :span="10">
           <el-form-item label="统一社会信用代码" prop="creditCode">
             <el-input v-model="form.creditCode" placeholder="请输入统一社会信用代码"></el-input>
@@ -41,7 +41,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="上传营业执照">
+      <el-form-item label="上传营业执照" v-show="editType==='reset'||editType==='license'">
         <p class="remarksStyle">图片格式JPG、JPEG、PNG，尺寸不大于3M</p>
         <ul class="IDImgWrap">
           <!-- 上传营业执照 -->
@@ -66,7 +66,7 @@
           </li>
         </ul>
       </el-form-item>
-      <el-row>
+      <el-row v-show="editType==='reset'||editType==='name'">
         <el-col :span="10">
           <el-form-item label="管理员真实姓名" prop="personFullName">
             <el-input v-model="form.personFullName" placeholder="请输入管理员真实姓名"></el-input>
@@ -93,7 +93,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row>
+      <el-row v-show="editType==='reset'||editType==='name'">
         <el-col :span="12">
           <el-form-item label="管理员身份证号" prop="personIdCardNum">
             <el-input v-model="form.personIdCardNum" placeholder="请输入管理员身份证号"></el-input>
@@ -155,7 +155,7 @@
       <el-form-item label="身份证号" prop="personIdCardNum">
         <el-input v-model="form.personIdCardNum" placeholder="请输入身份证号"></el-input>
       </el-form-item> -->
-      <el-form-item label="上传手持身份证照片">
+      <el-form-item label="上传手持身份证照片" v-show="editType==='reset'||editType==='name'">
         <div>
           <p class="remarksStyle">图片格式JPG、JPEG、PNG，尺寸不大于3M</p>
           <ul class="IDImgWrap">
@@ -232,7 +232,7 @@
           </ul>
         </div>
       </el-form-item>
-      <el-form-item label="通讯地址">
+      <el-form-item label="通讯地址" v-show="editType==='reset'||editType==='address'">
         <div  class="IDImgWrap">
           <el-form-item prop="addressLeve1Id" style="margin-right:10px">
             <el-select ref="provinceLabel" v-model="form.addressLeve1Id" placeholder="请选择省" @focus="provinceSelect(1)" @change="provinceChange()">
@@ -295,6 +295,7 @@ import bgImg3 from '../static/img/login/holdImg.png';
 export default {
   props:{
     resetCertified:Boolean,
+    editType:String|undefined,
     // 表单参数
     formParams: {
       type: Object,
@@ -364,9 +365,9 @@ export default {
         // 统一社会信用代码 校验
         creditCode: [{ required: true, message: '统一社会信用代码不能为空', trigger: 'change' }],
         // 上传营业执照开始有效期 校验
-        licenseStartDate: [{ required: true, message: '上传营业执照开始有效期不能为空', trigger: 'change' }],
+        licenseStartDate: [{ required: true, message: '营业执照开始有效期不能为空', trigger: 'change' }],
         // 上传营业执照结束有效期 校验
-        licenseEndDate: [{ required: true, message: '上传营业执照结束有效期不能为空', trigger: 'change' }],
+        licenseEndDate: [{ required: true, message: '营业执照结束有效期不能为空', trigger: 'change' }],
         // 省
         addressLeve1Id: [{ required: true, message: '省不能为空', trigger: 'change' }],
         // 市
@@ -427,7 +428,7 @@ export default {
       let addressLeve2Id = this.form.addressLeve2Id;
       if (value === 1) {
         parentCode = '0'
-        if (this.provinceList.length !== 0) {
+        if (this.provinceList.length > 1) {
           return false;
         }
       } else if (value === 2) {
