@@ -108,8 +108,7 @@
                 <template slot-scope="scope" v-if="scope.$index==tableData.length-1">
                   <el-button size="small" v-if="scope.row.auditPassed !== 0" @click="resetSubmit('reset')">重新提交
                   </el-button>
-                  <el-button size="small" @click="applyPost">审核</el-button>
-
+                  <!-- <el-button size="small" @click="applyPost">审核</el-button> -->
                   <!-- {{ scope.row.auditPassed === 2 ? '审核中' : scope.row.auditPassed === 1 ? '审核通过' : '审核不通过' }} -->
                 </template>
               </el-table-column>
@@ -322,7 +321,7 @@ export default {
   methods: {
     applyPost() {
       const params = {
-        "applyId": '1573187316845404162',
+        "applyId": '1573222286020337665',
         "applyType": 2,
         "auditOpinion": "测试通过",
         "auditPassed": 1
