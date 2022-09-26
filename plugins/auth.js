@@ -5,6 +5,16 @@ export default({app,store})=>{
     let token = getToken('token')
     // console.log(to, from)
     if(token){
+      if(to.fullPath === '/'){
+        next({
+          path: '/',
+          query: {
+            menu: 1,
+            tab: 1,
+            appId: 8134005370347520
+          }
+        })
+      }
       next()
       // console.log('跳登录')
       // next({path:'/login'});
