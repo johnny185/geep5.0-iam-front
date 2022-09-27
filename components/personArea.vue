@@ -303,7 +303,7 @@ export default {
       addressDetails: '', // 认证详情地址
       // registerHeight: false
       resetCertified: false,// 重新认证显示取消按钮
-      editType: undefined,//修改字段类型
+      editType: 'reset',//修改字段类型
       auditPassed: 0,//审核状态
     };
   },
@@ -316,7 +316,7 @@ export default {
   mounted() {
     // console.log(this.$store.state.user.userInfo, 'info')
     this.queryInfo(this.activeName);
-    this.cancelResetSubmit()
+    if(!!this.$store.state.user.userInfo.token)this.cancelResetSubmit()
   },
   methods: {
     applyPost() {
@@ -340,8 +340,8 @@ export default {
     cancelResetSubmit() {
       this.$store.commit('user/addRegisterType', 1);
       this.resetCertified = false
-      this.editType = undefined;
-      this.registerType = this.tableData.length > 0 && this.tableData[this.tableData.length - 1].applyType;
+      this.editType = 'reset';
+      this.registerType = this.tableData.length > 0 ? this.tableData[this.tableData.length - 1].applyType:1;
     },
     alterAdmin() {
       this.$refs.upDateAdminInfoDialog.captcha();
@@ -420,6 +420,8 @@ export default {
     // 切换标签
     handleClick(tab) {
       this.queryInfo(tab.name);
+      console.log(this.$store.state.user.userInfo.registerType)
+      if(this.$store.state.user.userInfo.registerType !== 0)this.cancelResetSubmit()
     },
     // 短信倒计时
     getIdentifyCode() {

@@ -108,6 +108,7 @@ export default {
         this.$axios.delete('/api/iam/v1/open/login/out').then((res) => {
           // 删除token
           removeToken();
+          this.$store.commit('user/addRegisterType', 0);
           this.$store.commit('user/resetUserd', params);
           this.$router.push({
             path: '/login'
