@@ -1,5 +1,9 @@
 const path = require('path')
+const env = require('./env')
 export default {
+  env: {
+    NODE_ENV: process.env.NODE_ENV
+  },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: '统一身份认证系统',
@@ -82,7 +86,7 @@ export default {
     '/api/': {
       // target: 'http://10.53.174.46:8848', // 请求  地址
       // target: 'http://10.255.132.40:8848', // 请求  地址
-      target: 'http://10.255.132.40:8888', // 请求  地址
+      target: env[process.env.NODE_ENV].ENV_API, // 请求  地址
       // target: 'http://10.255.132.40:7001/api', // 请求  地址
       changeOrigin: true,
       pathRewrite: { '^/api': '' }
@@ -94,8 +98,5 @@ export default {
     //   changeOrigin: true,
     //   pathRewrite: { '^/jj': '' }
     // },
-
-
-
   }
 }
