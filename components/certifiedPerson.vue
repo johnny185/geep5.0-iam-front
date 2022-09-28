@@ -299,7 +299,8 @@ export default {
           let params = Object.assign(this.form, {
             addressLeve1: this.$refs.provinceLabel.selected.label,
             addressLeve2: this.$refs.cityLabel.selected.label,
-            addressLeve3: this.$refs.areaLabel.selected.label
+            addressLeve3: this.$refs.areaLabel.selected.label,
+            applyType:1
           });
           if (this.editType === 'address') {
             this.$axios.post('api/iam/v1/auth/certification/update/address', params).then((res) => {
@@ -315,6 +316,7 @@ export default {
             });
             return;
           }
+          if(this.editType==='idCard')params.applyType=3;
           this.$axios.post('api/iam/v1/auth/certification/person/apply', params).then((res) => {
             if (res.status === 200 && res.body === true) {
               this.$notify({

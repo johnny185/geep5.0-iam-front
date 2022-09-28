@@ -53,7 +53,7 @@
           </li>
         </ul>
       </el-form-item>
-      <el-row v-show="editType==='reset'||editType==='name'">
+      <!-- <el-row v-show="editType==='reset'||editType==='name'">
         <el-col :span="10">
           <el-form-item label="管理员真实姓名" prop="personFullName">
             <el-input v-model="form.personFullName" placeholder="请输入管理员真实姓名"></el-input>
@@ -80,104 +80,36 @@
             <el-input v-model="form.personIdCardNum" placeholder="请输入管理员身份证号"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
-      <!-- <el-form-item label="上传法人身份证照片" prop="updataLegalPersonImg">
+      </el-row> -->
+      <!-- <el-form-item label="上传手持身份证照片" v-show="editType==='reset'||editType==='name'">
         <div>
           <p class="remarksStyle">图片格式JPG、JPEG、PNG，尺寸不大于3M</p>
           <ul class="IDImgWrap">
-            企业法人 身份证正面
             <li class="IDImgItem marginRight20">
-              <el-form-item prop="companyLegalPersonIdCardPhotoFront">
-                <el-input v-if="false" v-model="form.companyLegalPersonIdCardPhotoFront" />
-                <upload
-                  :isPublic="isPublic"
-                  :isTmp="isTmp"
-                  :fileType="fileType"
-                  :fileSize="fileSize"
-                  @handleSuccess="handleSuccess(arguments)"
-                  :imgUrl="form.companyLegalPersonIdCardPhotoFrontUrl"
-                  :bgImg="bgImg1"
-                  :uploadType="uploadType2"
-                ></upload>
-              </el-form-item>
-              <p class="IDtitle">
-                上传身份证
-                <span class="bold">姓名面</span>照片
-              </p>
-            </li>
-            身份证 反面
-            <li class="IDImgItem">
-              <el-form-item prop="companyLegalPersonIdCardPhotoNegative">
-                <el-input v-if="false" v-model="form.companyLegalPersonIdCardPhotoNegative" />
-                <upload
-                  :isPublic="isPublic"
-                  :isTmp="isTmp"
-                  :fileType="fileType"
-                  :fileSize="fileSize"
-                  @handleSuccess="handleSuccess(arguments)"
-                  :uploadType="uploadType3"
-                  :imgUrl="form.companyLegalPersonIdCardPhotoNegativeUrl"
-                  :bgImg="bgImg2"
-                ></upload>
-              </el-form-item>
-              <p class="IDtitle">
-                上传身份证
-                <span class="bold">国徽面</span>照片
-              </p>
-            </li>
-          </ul>
-        </div>
-      </el-form-item> -->
-      <!-- 管理员 信息 -->
-      <!-- <p class="fontSize24 bold">管理员信息</p> -->
-      <!-- <el-form-item label="真实姓名" prop="personFullName">
-        <el-input v-model="form.personFullName" placeholder="请输入真实姓名" maxlength="50" show-word-limit></el-input>
-      </el-form-item>
-      <el-form-item label="身份证号" prop="personIdCardNum">
-        <el-input v-model="form.personIdCardNum" placeholder="请输入身份证号"></el-input>
-      </el-form-item> -->
-      <el-form-item label="上传手持身份证照片" v-show="editType==='reset'||editType==='name'">
-        <div>
-          <p class="remarksStyle">图片格式JPG、JPEG、PNG，尺寸不大于3M</p>
-          <ul class="IDImgWrap">
-            <!-- 身份证正面 -->
-            <li class="IDImgItem marginRight20">
-              <!-- <div class="IDImgBox"> -->
               <el-form-item prop="personIdCardPhotoFrontId">
                 <el-input v-if="false" v-model="form.personIdCardPhotoFrontId" />
                 <upload :isPublic="isPublic" :isTmp="isTmp" :fileType="fileType" :fileSize="fileSize"
                   @handleSuccess="handleSuccess(arguments)" :imgUrl="form.personIdCardPhotoFrontUrl" :bgImg="bgImg1"
                   :uploadType="uploadType4"></upload>
-                <!-- <div class="IDImg positive">
-                </div>-->
-                <!-- </div> -->
               </el-form-item>
               <p class="IDtitle">
                 上传身份证
                 <span class="bold">姓名面</span>照片
               </p>
             </li>
-            <!-- 身份证 反面 -->
             <li class="IDImgItem marginRight20">
               <el-form-item prop="personIdCardPhotoNegativeId">
                 <el-input v-if="false" v-model="form.personIdCardPhotoNegativeId" />
                 <upload :isPublic="isPublic" :isTmp="isTmp" :fileType="fileType" :fileSize="fileSize"
                   @handleSuccess="handleSuccess(arguments)" :uploadType="uploadType5"
                   :imgUrl="form.personIdCardPhotoNegativeUrl" :bgImg="bgImg2"></upload>
-                <!-- <div class="IDImgBox">
-                <div class="IDImg back"></div>
-                </div>-->
               </el-form-item>
               <p class="IDtitle">
                 上传身份证
                 <span class="bold">国徽面</span>照片
               </p>
             </li>
-            <!-- 手持身份证 -->
             <li class="IDImgItem hold">
-              <!-- <div class="IDImgBox">
-                <div class="IDImg hold"></div>
-              </div>-->
               <el-form-item prop="personIdCardPhotoHandId">
                 <el-input v-if="false" v-model="form.personIdCardPhotoHandId" />
                 <upload :isPublic="isPublic" :isTmp="isTmp" :fileType="fileType" :fileSize="fileSize"
@@ -191,7 +123,7 @@
             </li>
           </ul>
         </div>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="通讯地址" v-show="editType==='reset'||editType==='address'">
         <div class="IDImgWrap">
           <el-form-item prop="addressLeve1Id" style="margin-right:10px">
@@ -451,7 +383,8 @@ export default {
           let params = Object.assign(this.form, {
             addressLeve1: this.$refs.provinceLabel.selected.label,
             addressLeve2: this.$refs.cityLabel.selected.label,
-            addressLeve3: this.$refs.areaLabel.selected.label
+            addressLeve3: this.$refs.areaLabel.selected.label,
+            applyType:2
           });
           if (this.editType === 'address') {
             this.$axios.post('api/iam/v1/auth/certification/update/address', params).then((res) => {
@@ -467,6 +400,7 @@ export default {
             });
             return;
           }
+          if(this.editType==='license')params.applyType=4;
           this.$axios.post('api/iam/v1/auth/certification/company/apply', params).then((res) => {
             if (res.status === 200 && res.body === true) {
               this.$notify({
