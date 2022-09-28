@@ -53,7 +53,7 @@
           </li>
         </ul>
       </el-form-item>
-      <!-- <el-row v-show="editType==='reset'||editType==='name'">
+      <el-row v-show="editType==='reset'||editType==='name'">
         <el-col :span="10">
           <el-form-item label="管理员真实姓名" prop="personFullName">
             <el-input v-model="form.personFullName" placeholder="请输入管理员真实姓名"></el-input>
@@ -80,8 +80,8 @@
             <el-input v-model="form.personIdCardNum" placeholder="请输入管理员身份证号"></el-input>
           </el-form-item>
         </el-col>
-      </el-row> -->
-      <!-- <el-form-item label="上传手持身份证照片" v-show="editType==='reset'||editType==='name'">
+      </el-row>
+      <el-form-item label="上传手持身份证照片" v-show="editType==='reset'||editType==='name'">
         <div>
           <p class="remarksStyle">图片格式JPG、JPEG、PNG，尺寸不大于3M</p>
           <ul class="IDImgWrap">
@@ -123,7 +123,7 @@
             </li>
           </ul>
         </div>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item label="通讯地址" v-show="editType==='reset'||editType==='address'">
         <div class="IDImgWrap">
           <el-form-item prop="addressLeve1Id" style="margin-right:10px">
