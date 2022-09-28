@@ -17,7 +17,7 @@
       <el-row v-show="editType==='reset'||editType==='license'">
         <el-col :span="10">
           <el-form-item label="统一社会信用代码" prop="creditCode">
-            <el-input v-model="form.creditCode" placeholder="请输入统一社会信用代码"></el-input>
+            <el-input :disabled="editType!=='reset'" v-model="form.creditCode" placeholder="请输入统一社会信用代码"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="7">

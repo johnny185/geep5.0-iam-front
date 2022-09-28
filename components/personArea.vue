@@ -57,7 +57,7 @@
                   authenticationInfo.personIdCardPeriodEndDate }}</span>
                   <span v-if="authenticationInfo.personIdCardIsLongEffective">长期</span>
                   <el-button type="primary" class="marginLeft10" size="mini"
-                    @click="resetSubmit('idCard')">更新身份证</el-button>
+                    @click="resetSubmit('idCard')">更换身份证</el-button>
                 </el-form-item>
               </div>
               <div v-else>
@@ -70,7 +70,7 @@
                   <!-- <span v-if="authenticationInfo.personIdCardIsLongEffective">长期</span> -->
                   <span>{{ authenticationInfo.licenseStartDate }} 至 {{ authenticationInfo.licenseEndDate }}</span>
                 </el-form-item>
-                <el-form-item label="管理员" label-width="150px" v-show="auditPassed===1">
+                <!-- <el-form-item label="管理员" label-width="150px" v-show="auditPassed===1">
                   {{ authenticationInfo.personFullName }}
                   <el-button type="primary" class="marginLeft10" size="mini"
                     @click="resetSubmit('name')">变更管理员</el-button>
@@ -78,7 +78,7 @@
                 <el-form-item label="管理员身份证有效期" label-width="150px" v-show="auditPassed===1">
                   <span>{{ authenticationInfo.personIdCardPeriodStartDate }} 至 {{
                   authenticationInfo.personIdCardPeriodEndDate }}</span>
-                </el-form-item>
+                </el-form-item> -->
               </div>
               <el-form-item label="通讯地址" label-width="150px" v-show="auditPassed===1">
                 <span>{{ addressDetails }}</span>
