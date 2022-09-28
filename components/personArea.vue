@@ -94,7 +94,7 @@
             <el-table v-else :data="tableData" style="width: 100%">
               <el-table-column prop="applyType" label="认证类型" align="center">
                 <template slot-scope="scope">
-                  {{ scope.row.applyType === 1 ? '个人' : '企业' }}
+                  {{ scope.row.applyType === 1 ? '个人' : scope.row.applyType === 2 ? '企业' : scope.row.applyType === 3 ? '更换身份证':'变更营业执照' }}
                 </template>
               </el-table-column>
               <el-table-column prop="createTime" label="提交时间" align="center"></el-table-column>
