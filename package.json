@@ -7,12 +7,8 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-        "build:test": "cross-env NODE_ENV=test nuxt generate",
-        "build:dev": "cross-env NODE_ENV=dev nuxt generate"
-//    "build:test": "nuxt generate",
-//    "build:dev": "nuxt generate"
-//    "build:test": "cross-env NODE_ENV=test nuxt build",
-//    "test": "cross-env NODE_ENV=test nuxt start"
+    "build:test": "nuxt generate",
+    "build:dev": "nuxt generate"
   },
   "dependencies": {
     "@logicflow/core": "^0.7.16",
@@ -28,7 +24,6 @@
   },
   "devDependencies": {
     "@nuxtjs/proxy": "^2.1.0",
-    "cross-env": "^7.0.3",
     "svg-sprite-loader": "^6.0.11",
     "vue-count-to": "^1.0.13"
   },
