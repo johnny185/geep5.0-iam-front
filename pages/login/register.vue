@@ -193,7 +193,7 @@ export default {
       if (!value) {
         callback(new Error('设置新密码不能为空'));
       } else if (!passwordReg(value)) {
-        callback(new Error('密码设置需符合6-20位，且满足大小写字母、特殊字符的至少两种组合的条件'));
+        callback(new Error('限6-20位，需含字母、数字、标点符号中的两种及以上'));
       } else {
         callback();
       }
@@ -203,7 +203,7 @@ export default {
       if (!value) {
         callback(new Error('重复密码不能为空'));
       } else if (!passwordReg(value)) {
-        callback(new Error('密码设置需符合6-20位，且满足大小写字母、特殊字符的至少两种组合的条件'));
+        callback(new Error('限6-20位，需含字母、数字、标点符号中的两种及以上'));
       } else if (value !== this.form.newPassword) {
         return callback(new Error('两次输入密码不一致，请重新输入'));
       } else {

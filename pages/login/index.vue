@@ -36,7 +36,7 @@
                                 <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
                             </span>
                         </el-form-item>
-                        <el-link>密码规则说明</el-link>
+                        <!-- <el-link>密码规则说明</el-link> -->
                     </div>
                     <!-- 手机号登录，短信验证 -->
                     <div v-if="currentIndex === 1">
