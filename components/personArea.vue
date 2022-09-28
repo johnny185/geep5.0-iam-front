@@ -52,37 +52,37 @@
                 <el-form-item label="认证主体" label-width="150px">
                   <span>{{ authenticationInfo.personFullName }}</span>
                 </el-form-item>
-                <el-form-item label="身份证有效期" label-width="150px">
+                <el-form-item label="身份证有效期" label-width="150px" v-show="auditPassed===1">
                   <span>{{ authenticationInfo.personIdCardPeriodStartDate }} 至 {{
                   authenticationInfo.personIdCardPeriodEndDate }}</span>
                   <span v-if="authenticationInfo.personIdCardIsLongEffective">长期</span>
-                  <el-button v-show="auditPassed!==0" type="primary" class="marginLeft10" size="mini"
+                  <el-button type="primary" class="marginLeft10" size="mini"
                     @click="resetSubmit('idCard')">更新身份证</el-button>
                 </el-form-item>
               </div>
               <div v-else>
                 <el-form-item label="认证主体" label-width="150px">
                   <span>{{ authenticationInfo.companyName }}</span>
-                  <el-button v-show="auditPassed!==0" type="primary" class="marginLeft10" size="mini"
+                  <el-button v-show="auditPassed===1" type="primary" class="marginLeft10" size="mini"
                     @click="resetSubmit('license')">变更营业执照</el-button>
                 </el-form-item>
-                <el-form-item label="营业执照有效期" label-width="150px">
+                <el-form-item label="营业执照有效期" label-width="150px" v-show="auditPassed===1">
                   <!-- <span v-if="authenticationInfo.personIdCardIsLongEffective">长期</span> -->
                   <span>{{ authenticationInfo.licenseStartDate }} 至 {{ authenticationInfo.licenseEndDate }}</span>
                 </el-form-item>
-                <el-form-item label="管理员" label-width="150px">
+                <el-form-item label="管理员" label-width="150px" v-show="auditPassed===1">
                   {{ authenticationInfo.personFullName }}
-                  <el-button v-show="auditPassed!==0" type="primary" class="marginLeft10" size="mini"
+                  <el-button type="primary" class="marginLeft10" size="mini"
                     @click="resetSubmit('name')">变更管理员</el-button>
                 </el-form-item>
-                <el-form-item label="管理员身份证有效期" label-width="150px">
+                <el-form-item label="管理员身份证有效期" label-width="150px" v-show="auditPassed===1">
                   <span>{{ authenticationInfo.personIdCardPeriodStartDate }} 至 {{
                   authenticationInfo.personIdCardPeriodEndDate }}</span>
                 </el-form-item>
               </div>
-              <el-form-item label="通讯地址" label-width="150px">
+              <el-form-item label="通讯地址" label-width="150px" v-show="auditPassed===1">
                 <span>{{ addressDetails }}</span>
-                <el-button v-show="auditPassed!==0" type="primary" class="marginLeft10" size="mini"
+                <el-button type="primary" class="marginLeft10" size="mini"
                   @click="resetSubmit('address')">修改地址</el-button>
               </el-form-item>
               <!-- <el-form-item label="认证类型">
@@ -106,7 +106,7 @@
               </el-table-column>
               <el-table-column prop="auditPassed">
                 <template slot-scope="scope" v-if="scope.$index==tableData.length-1">
-                  <el-button size="small" v-if="scope.row.auditPassed !== 0" @click="resetSubmit('reset')">重新提交
+                  <el-button size="small" v-if="scope.row.auditPassed === 2" @click="resetSubmit('reset')">重新提交
                   </el-button>
                   <!-- <el-button size="small" @click="applyPost">审核</el-button> -->
                   <!-- {{ scope.row.auditPassed === 2 ? '审核中' : scope.row.auditPassed === 1 ? '审核通过' : '审核不通过' }} -->
@@ -321,7 +321,7 @@ export default {
   methods: {
     applyPost() {
       const params = {
-        "applyId": '1574935388533354498',
+        "applyId": '1574998286509080577',
         "applyType": 2,
         "auditOpinion": "测试通过",
         "auditPassed": 1
