@@ -301,6 +301,20 @@ export default {
             addressLeve2: this.$refs.cityLabel.selected.label,
             addressLeve3: this.$refs.areaLabel.selected.label
           });
+          if (this.editType === 'address') {
+            this.$axios.post('api/iam/v1/auth/certification/update/address', params).then((res) => {
+              if (res.status === 200 && res.body === true) {
+                this.$notify({
+                  title: '成功',
+                  message: '提交认证操作成功',
+                  type: 'success'
+                });
+                this.$emit('queryInfo', '2', 'sumitExamine');
+                this.$store.commit('user/addRegisterType', 1);
+              }
+            });
+            return;
+          }
           this.$axios.post('api/iam/v1/auth/certification/person/apply', params).then((res) => {
             if (res.status === 200 && res.body === true) {
               this.$notify({

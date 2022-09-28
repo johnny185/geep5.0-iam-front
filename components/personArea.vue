@@ -321,7 +321,7 @@ export default {
   methods: {
     applyPost() {
       const params = {
-        "applyId": '1573222286020337665',
+        "applyId": '1574935388533354498',
         "applyType": 2,
         "auditOpinion": "测试通过",
         "auditPassed": 1
@@ -420,8 +420,7 @@ export default {
     // 切换标签
     handleClick(tab) {
       this.queryInfo(tab.name);
-      console.log(this.$store.state.user.userInfo.registerType)
-      if(this.$store.state.user.userInfo.registerType !== 0)this.cancelResetSubmit()
+      if(this.resetCertified)this.cancelResetSubmit()
     },
     // 短信倒计时
     getIdentifyCode() {

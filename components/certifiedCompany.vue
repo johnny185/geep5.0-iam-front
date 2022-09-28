@@ -22,20 +22,14 @@
         </el-col>
         <el-col :span="7">
           <el-form-item label="营业执照有效期" prop="licenseStartDate">
-            <el-date-picker
-              v-model="form.licenseStartDate"
-              type="date"
-              placeholder="选择开始日期"
+            <el-date-picker v-model="form.licenseStartDate" type="date" placeholder="选择开始日期"
               value-format="yyyy-MM-dd HH:mm:ss">
             </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="7">
           <el-form-item prop="licenseEndDate" style="margin-left: -56px">
-            <el-date-picker
-              v-model="form.licenseEndDate"
-              type="date"
-              placeholder="选择结束日期"
+            <el-date-picker v-model="form.licenseEndDate" type="date" placeholder="选择结束日期"
               value-format="yyyy-MM-dd HH:mm:ss">
             </el-date-picker>
           </el-form-item>
@@ -48,16 +42,9 @@
           <li class="IDImgItem">
             <el-form-item prop="licensePhotoId">
               <el-input v-if="false" v-model="form.licensePhotoId" />
-              <upload
-                :isPublic="isPublic"
-                :isTmp="isTmp"
-                :fileType="fileType"
-                :fileSize="fileSize"
-                @handleSuccess="handleSuccess(arguments)"
-                :bgImg="bgImg1"
-                :imgUrl="form.companyLicensePhotoUrl"
-                :uploadType="uploadType1"
-              ></upload>
+              <upload :isPublic="isPublic" :isTmp="isTmp" :fileType="fileType" :fileSize="fileSize"
+                @handleSuccess="handleSuccess(arguments)" :bgImg="bgImg1" :imgUrl="form.companyLicensePhotoUrl"
+                :uploadType="uploadType1"></upload>
             </el-form-item>
             <p class="IDtitle">
               上传营业执照
@@ -74,20 +61,14 @@
         </el-col>
         <el-col :span="7">
           <el-form-item label="身份证有效期" prop="personIdCardPeriodStartDate">
-            <el-date-picker
-              v-model="form.personIdCardPeriodStartDate"
-              type="date"
-              placeholder="选择开始日期"
+            <el-date-picker v-model="form.personIdCardPeriodStartDate" type="date" placeholder="选择开始日期"
               value-format="yyyy-MM-dd HH:mm:ss">
             </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="7">
           <el-form-item prop="personIdCardPeriodEndDate" style="margin-left: -56px">
-            <el-date-picker
-              v-model="form.personIdCardPeriodEndDate"
-              type="date"
-              placeholder="选择结束日期"
+            <el-date-picker v-model="form.personIdCardPeriodEndDate" type="date" placeholder="选择结束日期"
               value-format="yyyy-MM-dd HH:mm:ss">
             </el-date-picker>
           </el-form-item>
@@ -164,16 +145,9 @@
               <!-- <div class="IDImgBox"> -->
               <el-form-item prop="personIdCardPhotoFrontId">
                 <el-input v-if="false" v-model="form.personIdCardPhotoFrontId" />
-                <upload
-                  :isPublic="isPublic"
-                  :isTmp="isTmp"
-                  :fileType="fileType"
-                  :fileSize="fileSize"
-                  @handleSuccess="handleSuccess(arguments)"
-                  :imgUrl="form.personIdCardPhotoFrontUrl"
-                  :bgImg="bgImg1"
-                  :uploadType="uploadType4"
-                ></upload>
+                <upload :isPublic="isPublic" :isTmp="isTmp" :fileType="fileType" :fileSize="fileSize"
+                  @handleSuccess="handleSuccess(arguments)" :imgUrl="form.personIdCardPhotoFrontUrl" :bgImg="bgImg1"
+                  :uploadType="uploadType4"></upload>
                 <!-- <div class="IDImg positive">
                 </div>-->
                 <!-- </div> -->
@@ -187,16 +161,9 @@
             <li class="IDImgItem marginRight20">
               <el-form-item prop="personIdCardPhotoNegativeId">
                 <el-input v-if="false" v-model="form.personIdCardPhotoNegativeId" />
-                <upload
-                  :isPublic="isPublic"
-                  :isTmp="isTmp"
-                  :fileType="fileType"
-                  :fileSize="fileSize"
-                  @handleSuccess="handleSuccess(arguments)"
-                  :uploadType="uploadType5"
-                  :imgUrl="form.personIdCardPhotoNegativeUrl"
-                  :bgImg="bgImg2"
-                ></upload>
+                <upload :isPublic="isPublic" :isTmp="isTmp" :fileType="fileType" :fileSize="fileSize"
+                  @handleSuccess="handleSuccess(arguments)" :uploadType="uploadType5"
+                  :imgUrl="form.personIdCardPhotoNegativeUrl" :bgImg="bgImg2"></upload>
                 <!-- <div class="IDImgBox">
                 <div class="IDImg back"></div>
                 </div>-->
@@ -213,16 +180,9 @@
               </div>-->
               <el-form-item prop="personIdCardPhotoHandId">
                 <el-input v-if="false" v-model="form.personIdCardPhotoHandId" />
-                <upload
-                  :isPublic="isPublic"
-                  :isTmp="isTmp"
-                  :fileType="fileType"
-                  :fileSize="fileSize"
-                  @handleSuccess="handleSuccess(arguments)"
-                  :bgImg="bgImg3"
-                  :imgUrl="form.personIdCardPhotoHandUrl"
-                  :uploadType="uploadType6"
-                ></upload>
+                <upload :isPublic="isPublic" :isTmp="isTmp" :fileType="fileType" :fileSize="fileSize"
+                  @handleSuccess="handleSuccess(arguments)" :bgImg="bgImg3" :imgUrl="form.personIdCardPhotoHandUrl"
+                  :uploadType="uploadType6"></upload>
               </el-form-item>
               <p class="IDtitle">
                 上传手持
@@ -233,49 +193,33 @@
         </div>
       </el-form-item>
       <el-form-item label="通讯地址" v-show="editType==='reset'||editType==='address'">
-        <div  class="IDImgWrap">
+        <div class="IDImgWrap">
           <el-form-item prop="addressLeve1Id" style="margin-right:10px">
-            <el-select ref="provinceLabel" v-model="form.addressLeve1Id" placeholder="请选择省" @focus="provinceSelect(1)" @change="provinceChange()">
-              <el-option
-                v-for="item in provinceList"
-                :key="item.code"
-                :label="item.shortName"
+            <el-select ref="provinceLabel" v-model="form.addressLeve1Id" placeholder="请选择省" @focus="provinceSelect(1)"
+              @change="provinceChange()">
+              <el-option v-for="item in provinceList" :key="item.code" :label="item.shortName"
                 :value="Number(item.code)">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item prop="addressLeve2Id" style="margin-right:10px">
-            <el-select ref="cityLabel" v-model="form.addressLeve2Id" placeholder="请选择市" @focus="provinceSelect(2)" @change="cityChange()">
-              <el-option
-                v-for="item in cityList"
-                :key="item.code"
-                :label="item.shortName"
-                :value="Number(item.code)">
+            <el-select ref="cityLabel" v-model="form.addressLeve2Id" placeholder="请选择市" @focus="provinceSelect(2)"
+              @change="cityChange()">
+              <el-option v-for="item in cityList" :key="item.code" :label="item.shortName" :value="Number(item.code)">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item prop="addressLeve3Id">
             <el-select ref="areaLabel" v-model="form.addressLeve3Id" placeholder="请选择区" @focus="provinceSelect(3)">
-              <el-option
-                v-for="item in areaList"
-                :key="item.code"
-                :label="item.shortName"
-                :value="Number(item.code)">
+              <el-option v-for="item in areaList" :key="item.code" :label="item.shortName" :value="Number(item.code)">
               </el-option>
             </el-select>
           </el-form-item>
         </div>
       </el-form-item>
-      <el-form-item prop="address">
-        <el-input
-          style="margin-top: 8px;"
-          type="textarea"
-          placeholder="详细地址（街道/门牌号）"
-          v-model="form.address"
-          maxlength="200"
-          show-word-limit
-          :rows="4"
-        />
+      <el-form-item prop="address" v-show="editType==='reset'||editType==='address'">
+        <el-input style="margin-top: 8px;" type="textarea" placeholder="详细地址（街道/门牌号）" v-model="form.address"
+          maxlength="200" show-word-limit :rows="4" />
       </el-form-item>
       <el-form-item>
         <div class="personBottom fontCenter">
@@ -293,13 +237,13 @@ import bgImg1 from '../static/img/login/positiveImg.png';
 import bgImg2 from '../static/img/login/backImg.png';
 import bgImg3 from '../static/img/login/holdImg.png';
 export default {
-  props:{
-    resetCertified:Boolean,
-    editType:String|undefined,
+  props: {
+    resetCertified: Boolean,
+    editType: String | undefined,
     // 表单参数
     formParams: {
       type: Object,
-      default: ()=>{
+      default: () => {
         return {}
       },
     },
@@ -401,24 +345,24 @@ export default {
       }
     };
   },
-  mounted(){
-    if(this.$props.formParams.companyName){
-      const json=JSON.parse(JSON.stringify(this.$props.formParams));
-      this.form=json;
-      this.provinceList=[{
-        shortName:json.addressLeve1,
-        code:json.addressLeve1Id
+  mounted() {
+    if (this.$props.formParams.companyName) {
+      const json = JSON.parse(JSON.stringify(this.$props.formParams));
+      this.form = json;
+      this.provinceList = [{
+        shortName: json.addressLeve1,
+        code: json.addressLeve1Id
       }]
-      this.cityList=[{
-        shortName:json.addressLeve2,
-        code:json.addressLeve2Id
+      this.cityList = [{
+        shortName: json.addressLeve2,
+        code: json.addressLeve2Id
       }]
-      this.areaList=[{
-        shortName:json.addressLeve3,
-        code:json.addressLeve3Id
+      this.areaList = [{
+        shortName: json.addressLeve3,
+        code: json.addressLeve3Id
       }]
     }
-   
+
   },
   methods: {
     // 省份选择
@@ -457,7 +401,7 @@ export default {
     },
     cityChange() {
       if (this.form.addressLeve2Id) {
-        this.parentCode =  this.form.addressLeve2Id;
+        this.parentCode = this.form.addressLeve2Id;
       }
     },
     // 图片上传成功
@@ -497,7 +441,7 @@ export default {
     //   });
     // },
     // 取消提交
-    cancel(){
+    cancel() {
       this.$emit('cancel')
     },
     // 提交
@@ -509,6 +453,20 @@ export default {
             addressLeve2: this.$refs.cityLabel.selected.label,
             addressLeve3: this.$refs.areaLabel.selected.label
           });
+          if (this.editType === 'address') {
+            this.$axios.post('api/iam/v1/auth/certification/update/address', params).then((res) => {
+              if (res.status === 200 && res.body === true) {
+                this.$notify({
+                  title: '成功',
+                  message: '提交认证操作成功',
+                  type: 'success'
+                });
+                this.$emit('queryInfo', '2', 'sumitExamine');
+                this.$store.commit('user/addRegisterType', 1);
+              }
+            });
+            return;
+          }
           this.$axios.post('api/iam/v1/auth/certification/company/apply', params).then((res) => {
             if (res.status === 200 && res.body === true) {
               this.$notify({
@@ -539,10 +497,12 @@ export default {
   /* flex-wrap: wrap;
   justify-content: space-between; */
 }
+
 .IDImgItem {
   width: 166px;
   height: auto;
 }
+
 .IDImgBox {
   width: 166px;
   height: 132px;
@@ -551,6 +511,7 @@ export default {
   border: 1px solid #e1e1e1;
   position: relative;
 }
+
 .IDImg {
   position: absolute;
   left: 50%;
@@ -560,25 +521,31 @@ export default {
   height: 104px;
   border: 1px dotted #999990;
 }
+
 .IDtitle {
   margin-top: 6px;
 }
+
 .positive {
   background: url('/img/login/positiveImg.png') no-repeat;
   background-size: 100%;
 }
+
 .back {
   background: url('/img/login/backImg.png') no-repeat;
   background-size: 100%;
 }
+
 .hold {
   background: url('/img/login/holdImg.png') no-repeat;
   background-size: 100%;
 }
+
 .personBottom {
   display: flex;
   justify-content: center;
 }
+
 /* .reset {
   flex: 1;
   background: #fafdff;
@@ -588,7 +555,8 @@ export default {
   border: 1px solid #cccccc;
   margin-right: 50px;
 } */
-.cancel,.submit {
+.cancel,
+.submit {
   /* flex: 1; */
   width: 300px;
   margin: 0 20px;
@@ -599,7 +567,8 @@ export default {
   background: #fafdff;
   border: 1px solid #2f74ff;
 }
-.cancel{
+
+.cancel {
   background-color: #fff;
   color: #999990;
   border-color: #999990;
