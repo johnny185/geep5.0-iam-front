@@ -7,8 +7,10 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "build:test": "cross-env NODE_ENV=test nuxt build",
-    "test": "cross-env NODE_ENV=test nuxt start"
+    "build:test": "nuxt generate",
+    "build:dev": "nuxt generate"
+//    "build:test": "cross-env NODE_ENV=test nuxt build",
+//    "test": "cross-env NODE_ENV=test nuxt start"
   },
   "dependencies": {
     "@logicflow/core": "^0.7.16",
