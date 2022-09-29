@@ -313,8 +313,22 @@ export default {
         }
       } else if (value === 2) {
         parentCode = addressLeve1Id;
+        if (!parentCode) {
+          this.$notify({
+            message: '请先选择省',
+            type: 'error'
+          });
+          return false;
+        }
       } else if (value === 3) {
         parentCode = addressLeve2Id
+        if (!parentCode) {
+          this.$notify({
+            message: '请先选择省市',
+            type: 'error'
+          });
+          return false;
+        }
       }
       let params = {
         parentCode: parentCode,

@@ -25,7 +25,7 @@ export default({app,store})=>{
       } else {
         next({path: "/login"})
       }
-       console.log('不跳登录')
+      // console.log('不跳登录')
       // next({path: "/login"})
     }
   })

@@ -98,7 +98,7 @@
                 </template>
               </el-table-column>
               <el-table-column prop="createTime" label="提交时间" align="center"></el-table-column>
-              <el-table-column prop="submitAuditTime" label="审核时间" align="center"></el-table-column>
+              <el-table-column prop="auditTime" label="审核时间" align="center"></el-table-column>
               <el-table-column prop="auditPassed" label="审核结果" align="center">
                 <template slot-scope="scope">
                   {{ scope.row.auditPassed === 0 ? '审核中' : scope.row.auditPassed === 1 ? '审核通过' : '审核不通过' }}

@@ -127,7 +127,8 @@ export default {
       } else if (!telReg(value)) {
         callback(new Error('请输入正确手机号'));
       } else {
-        callback(this.userNameBlur(1));
+        // callback(this.userNameBlur(1));
+        callback()
       }
     };
     // 邮箱 校验
@@ -137,7 +138,8 @@ export default {
       } else if (!emailReg(value)) {
         callback(new Error('请输入正确邮箱地址'));
       } else {
-        callback(this.userNameBlur(3));
+        callback()
+        // callback(this.userNameBlur(3));
       }
     };
     // 输入密码 校验
