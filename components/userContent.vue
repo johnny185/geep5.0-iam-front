@@ -15,29 +15,29 @@
         <span v-show="!editNickNameInput">{{
           $route.query.hasOwnProperty('userName') ? $route.query.userName : $store.state.user.userInfo.nickName
         }}</span>
-        <i
+        <!-- <i
           class="el-icon-edit el-input__icon"
           v-show="isshowEditIcon"
           slot="suffix"
           style="color: #2f74ff; margin-left: 5px; cursor: pointer"
           @click="editIconClick"
-        ></i>
+        ></i> -->
       </div>
       <div v-show="editNickNameInput">
         <el-input placeholder="请输入新昵称" v-model.trim="nickNameVal" clearable maxlength="40" show-word-limit>
         </el-input>
-        <i
+        <!-- <i
           slot="suffix"
           class="el-input__icon el-icon-success"
           style="color: #2f74ff; font-size: 18px; cursor: pointer"
           @click="saveNickName"
-        ></i>
-        <i
+        ></i> -->
+        <!-- <i
           slot="suffix"
           class="el-input__icon el-icon-refresh-left"
           style="color: #2f74ff; font-size: 18px; cursor: pointer"
           @click="cancelSave"
-        ></i>
+        ></i> -->
       </div>
     </div>
 
