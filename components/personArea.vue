@@ -53,8 +53,8 @@
                   <span>{{ authenticationInfo.personFullName }}</span>
                 </el-form-item>
                 <el-form-item label="身份证有效期" label-width="150px" v-show="auditPassed===1">
-                  <span>{{ authenticationInfo.personIdCardPeriodStartDate.substring(0,10) }} 至 {{
-                  authenticationInfo.personIdCardPeriodEndDate.substring(0,10) }}</span>
+                  <span>{{authenticationInfo.personIdCardPeriodStartDate? authenticationInfo.personIdCardPeriodStartDate.substring(0,10):'' }} 至 
+                  {{authenticationInfo.personIdCardPeriodEndDate? authenticationInfo.personIdCardPeriodEndDate.substring(0,10):'' }}</span>
                   <span v-if="authenticationInfo.personIdCardIsLongEffective">长期</span>
                   <el-button type="primary" class="marginLeft10" size="mini"
                     @click="resetSubmit('idCard')">更换身份证</el-button>
@@ -68,7 +68,7 @@
                 </el-form-item>
                 <el-form-item label="营业执照有效期" label-width="150px" v-show="auditPassed===1">
                   <!-- <span v-if="authenticationInfo.personIdCardIsLongEffective">长期</span> -->
-                  <span>{{ authenticationInfo.licenseStartDate.substring(0,10) }} 至 {{ authenticationInfo.licenseEndDate.substring(0,10) }}</span>
+                  <span>{{ authenticationInfo.licenseStartDate?authenticationInfo.licenseStartDate.substring(0,10):'' }} 至 {{ authenticationInfo.licenseEndDate?authenticationInfo.licenseEndDate.substring(0,10):'' }}</span>
                 </el-form-item>
                 <!-- <el-form-item label="管理员" label-width="150px" v-show="auditPassed===1">
                   {{ authenticationInfo.personFullName }}
