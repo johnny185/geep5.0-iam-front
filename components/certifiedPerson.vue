@@ -2,14 +2,14 @@
   <div>
     <el-form :model="form" :rules="rules" ref="form" label-width="140px" class="demo-ruleForm" label-position="right">
       <el-form-item v-show="editType==='reset'||editType==='idCard'" label="真实姓名" prop="personFullName">
-        <el-input v-show="editType==='reset'||editType==='idCard'" v-model="form.personFullName" placeholder="请输入真实姓名"
+        <el-input class="paddingRight50" v-show="editType==='reset'||editType==='idCard'" v-model="form.personFullName" placeholder="请输入真实姓名"
           maxlength="50" show-word-limit></el-input>
       </el-form-item>
       <el-form-item v-show="editType==='reset'||editType==='idCard'" label="身份证号" prop="personIdCardNum">
         <el-input v-model="form.personIdCardNum" placeholder="请输入身份证号"></el-input>
       </el-form-item>
       <el-row v-show="editType==='reset'||editType==='idCard'">
-        <el-col :span="8">
+        <el-col :span="12">
           <el-form-item label="身份证有效期" prop="personIdCardPeriodStartDate">
             <el-date-picker v-model="form.personIdCardPeriodStartDate" type="date" placeholder="选择开始日期"
               value-format="yyyy-MM-dd HH:mm:ss">
@@ -17,14 +17,14 @@
           </el-form-item>
         </el-col>
         <el-col :span="8" v-if="form.personIdCardIsLongEffective === false">
-          <el-form-item prop="personIdCardPeriodEndDate">
+          <el-form-item prop="personIdCardPeriodEndDate" label-width="0px">
             <el-date-picker v-model="form.personIdCardPeriodEndDate" type="date" placeholder="选择结束日期"
               value-format="yyyy-MM-dd HH:mm:ss">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
-          <el-form-item style=" margin-left: 10px;">
+        <el-col :span="4">
+          <el-form-item label-width="10px">
             <el-radio-group v-model="form.personIdCardIsLongEffective" style="display: contents;">
               <el-radio :label="true" @click.native.prevent="radioClisk(false)">长期</el-radio>
             </el-radio-group>
@@ -32,9 +32,9 @@
         </el-col>
       </el-row>
       <!-- <el-form-item label="上传证件" prop="personIdCardNum" class="updataImg"> -->
-      <el-form-item label="上传身份证" v-show="editType==='reset'||editType==='idCard'">
+      <el-form-item label="上传身份证" v-show="editType==='reset'||editType==='idCard'" class="self-star">
         <div>
-          <p class="remarksStyle">图片格式JPG、JPEG、PNG，尺寸不大于3M</p>
+          <p class="remarksStyle">图片格式JPG、JPEG、PNG，尺寸不大于2M</p>
           <ul class="IDImgWrap">
             <!-- 身份证正面 -->
             <li class="IDImgItem">
@@ -88,7 +88,7 @@
           </ul>
         </div>
       </el-form-item>
-      <el-form-item label="通讯地址" v-show="editType==='reset'||editType==='address'">
+      <el-form-item label="通讯地址" v-show="editType==='reset'||editType==='address'" class="self-star">
         <div class="IDImgWrap">
           <el-form-item prop="addressLeve1Id">
             <el-select ref="provinceLabel" v-model="form.addressLeve1Id" placeholder="请选择省" @focus="provinceSelect(1)"
@@ -295,6 +295,7 @@ export default {
     // 提交
     submitBtn() {
       this.$refs['form'].validate((valid) => {
+        console.log(this.form)
         if (valid) {
           let params = Object.assign(this.form, {
             addressLeve1: this.$refs.provinceLabel.selected.label,
@@ -427,5 +428,8 @@ export default {
   background-color: #fff;
   color: #999990;
   border-color: #999990;
+}
+.paddingRight50 input{
+  padding-right: 50px;
 }
 </style>

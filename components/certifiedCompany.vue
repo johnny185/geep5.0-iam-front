@@ -15,28 +15,30 @@
         </el-col>
       </el-row>
       <el-row v-show="editType==='reset'||editType==='license'">
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item label="统一社会信用代码" prop="creditCode">
             <el-input :disabled="editType!=='reset'" v-model="form.creditCode" placeholder="请输入统一社会信用代码"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="7">
+      </el-row>
+      <el-row v-show="editType==='reset'||editType==='license'">
+        <el-col :span="11">
           <el-form-item label="营业执照有效期" prop="licenseStartDate">
             <el-date-picker v-model="form.licenseStartDate" type="date" placeholder="选择开始日期"
               value-format="yyyy-MM-dd HH:mm:ss">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="7">
-          <el-form-item prop="licenseEndDate" style="margin-left: -56px">
+        <el-col :span="10">
+          <el-form-item prop="licenseEndDate" label-width="0px">
             <el-date-picker v-model="form.licenseEndDate" type="date" placeholder="选择结束日期"
               value-format="yyyy-MM-dd HH:mm:ss">
             </el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="上传营业执照" v-show="editType==='reset'||editType==='license'">
-        <p class="remarksStyle">图片格式JPG、JPEG、PNG，尺寸不大于3M</p>
+      <el-form-item class="self-star" label="上传营业执照" v-show="editType==='reset'||editType==='license'">
+        <p class="remarksStyle">图片格式JPG、JPEG、PNG，尺寸不大于2M</p>
         <ul class="IDImgWrap">
           <!-- 上传营业执照 -->
           <li class="IDImgItem">
@@ -54,20 +56,22 @@
         </ul>
       </el-form-item>
       <el-row v-show="editType==='reset'||editType==='name'">
-        <el-col :span="10">
+        <el-col :span="12">
           <el-form-item label="管理员真实姓名" prop="personFullName">
             <el-input v-model="form.personFullName" placeholder="请输入管理员真实姓名"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="7">
+      </el-row>
+      <el-row v-show="editType==='reset'||editType==='name'">
+        <el-col :span="11">
           <el-form-item label="身份证有效期" prop="personIdCardPeriodStartDate">
             <el-date-picker v-model="form.personIdCardPeriodStartDate" type="date" placeholder="选择开始日期"
               value-format="yyyy-MM-dd HH:mm:ss">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="7">
-          <el-form-item prop="personIdCardPeriodEndDate" style="margin-left: -56px">
+        <el-col :span="10">
+          <el-form-item prop="personIdCardPeriodEndDate" label-width="0px">
             <el-date-picker v-model="form.personIdCardPeriodEndDate" type="date" placeholder="选择结束日期"
               value-format="yyyy-MM-dd HH:mm:ss">
             </el-date-picker>
@@ -81,9 +85,9 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="上传手持身份证照片" v-show="editType==='reset'||editType==='name'">
+      <el-form-item class="self-star" label="上传手持身份证照片" v-show="editType==='reset'||editType==='name'">
         <div>
-          <p class="remarksStyle">图片格式JPG、JPEG、PNG，尺寸不大于3M</p>
+          <p class="remarksStyle">图片格式JPG、JPEG、PNG，尺寸不大于2M</p>
           <ul class="IDImgWrap">
             <li class="IDImgItem marginRight20">
               <el-form-item prop="personIdCardPhotoFrontId">
@@ -124,7 +128,7 @@
           </ul>
         </div>
       </el-form-item>
-      <el-form-item label="通讯地址" v-show="editType==='reset'||editType==='address'">
+      <el-form-item class="self-star" label="通讯地址" v-show="editType==='reset'||editType==='address'">
         <div class="IDImgWrap">
           <el-form-item prop="addressLeve1Id" style="margin-right:10px">
             <el-select ref="provinceLabel" v-model="form.addressLeve1Id" placeholder="请选择省" @focus="provinceSelect(1)"
@@ -506,5 +510,8 @@ export default {
   background-color: #fff;
   color: #999990;
   border-color: #999990;
+}
+.paddingRight50 input{
+  padding-right: 50px;
 }
 </style>

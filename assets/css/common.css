@@ -209,3 +209,11 @@
   background: black !important;
   color: #fff !important;
 }
+.self-star{
+  position: relative;
+}
+.self-star .el-form-item__label::before{
+  content: '*';
+  color: #F56C6C;
+  margin-right: 4px;
+}
