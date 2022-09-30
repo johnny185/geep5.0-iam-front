@@ -92,9 +92,9 @@
             <p class="title fontSize16">认证记录</p>
             <p class="fontSize16 fontCenter" v-if="tableData.length === 0">暂无记录</p>
             <el-table v-else :data="tableData" style="width: 100%">
-              <el-table-column prop="applyType" label="认证类型" align="center">
+              <el-table-column prop="applyType" label="申请类型" align="center">
                 <template slot-scope="scope">
-                  {{ scope.row.applyType === 1 ? '个人' : scope.row.applyType === 2 ? '企业' : scope.row.applyType === 3 ? '更换身份证':'变更营业执照' }}
+                  {{ scope.row.applyType === 1 ? '个人实名认证' : scope.row.applyType === 2 ? '企业认证' : scope.row.applyType === 3 ? '更换身份证':'变更营业执照' }}
                 </template>
               </el-table-column>
               <el-table-column prop="createTime" label="提交时间" align="center"></el-table-column>
@@ -411,7 +411,7 @@ export default {
           pageSize: 0
         }
         this.$axios.post('/api/iam/v1/auth/user/getUserLog', params).then((res) => {
-          this.resetTime = res.body.list[0].createTime
+          this.resetTime = res.body.list.length>0?res.body.list[0].createTime:''
         });
         this.isExceedHeight = false;
         return false;

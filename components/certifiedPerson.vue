@@ -128,7 +128,7 @@
 </template>
 
 <script>
-import { regId } from '../utils/validate';
+import { regId ,contactsReg} from '../utils/validate';
 import bgImg1 from '../static/img/login/positiveImg.png';
 import bgImg2 from '../static/img/login/backImg.png';
 import bgImg3 from '../static/img/login/holdImg.png';
@@ -166,6 +166,17 @@ export default {
 
   },
   data() {
+    // 姓名校验
+    const validateFullName = (rule,value,callback)=>{
+      if (!value) {
+        return callback(new Error('真实姓名不能为空'));
+      }
+      if (!contactsReg(value)) {
+        callback(new Error('仅支持字母、汉字、空格，不能全部为空格，长度0-50个字符'));
+      } else {
+        callback();
+      }
+    }
     // 身份证号 校验
     var validatepersonIdCardNum = (rule, value, callback) => {
       if (!value) {
@@ -207,7 +218,7 @@ export default {
       parentCode: '0', // 0为省份
       rules: {
         // 真实姓名 校验
-        personFullName: [{ required: true, message: '真实姓名不能为空', trigger: 'change' }],
+        personFullName: [{validator:validateFullName, required: true,  trigger: 'change' }],
         // 身份证号 校验
         personIdCardNum: [{ validator: validatepersonIdCardNum, required: true, trigger: 'change' }],
         // 身份证有效开始日期 校验
