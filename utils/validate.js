@@ -30,7 +30,7 @@ export function contactsReg(value) {
 }
 // 邮箱 验证
 export function emailReg(value) {
-  return /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/.test(value)
+  return /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(.[a-zA-Z0-9_-]+)+$/.test(value)
 }
 // 身份证 验证
 export function regId(value) {
@@ -56,4 +56,8 @@ export function nickNameReg(value) {
 // url 验证
 export function urlReg(value) {
   return /(http|https):\/\/([\w.]+\/?)\S*/.test(value)
+}
+
+export function fullName(value) {
+  return /^[\u4e00-\u9fa5A-Za-z]+$/.test(value)
 }

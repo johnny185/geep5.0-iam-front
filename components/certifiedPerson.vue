@@ -19,7 +19,7 @@
         <el-col :span="8" v-if="form.personIdCardIsLongEffective === false">
           <el-form-item prop="personIdCardPeriodEndDate" label-width="0px">
             <el-date-picker v-model="form.personIdCardPeriodEndDate" type="date" placeholder="选择结束日期"
-              value-format="yyyy-MM-dd HH:mm:ss">
+              value-format="yyyy-MM-dd HH:mm:ss" :picker-options="pickerOptions">
             </el-date-picker>
           </el-form-item>
         </el-col>
@@ -128,7 +128,7 @@
 </template>
 
 <script>
-import { regId ,contactsReg} from '../utils/validate';
+import { regId ,fullName} from '../utils/validate';
 import bgImg1 from '../static/img/login/positiveImg.png';
 import bgImg2 from '../static/img/login/backImg.png';
 import bgImg3 from '../static/img/login/holdImg.png';
@@ -171,7 +171,7 @@ export default {
       if (!value) {
         return callback(new Error('真实姓名不能为空'));
       }
-      if (!contactsReg(value)) {
+      if (!fullName(value)) {
         callback(new Error('仅支持字母、汉字、空格，不能全部为空格，长度0-50个字符'));
       } else {
         callback();
@@ -239,6 +239,12 @@ export default {
         personIdCardPhotoNegativeId: [{ required: true, message: '身份证反面不能为空', trigger: 'change' }],
         // 手持身份证 校验
         personIdCardPhotoHandId: [{ required: true, message: '手持身份证不能为空', trigger: 'change' }]
+      },
+      pickerOptions: {
+        disabledDate:(time)=> {
+          // 禁止选择日期
+          return time.getTime() <= new Date(this.form.personIdCardPeriodStartDate).getTime() || this.form.personIdCardPeriodStartDate==='';
+        },
       }
     };
   },

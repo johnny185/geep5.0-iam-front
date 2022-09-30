@@ -18,7 +18,7 @@
           <!-- 通过邮箱帐户找回 -->
           <div v-if="currentIndex === 0">
             <el-form-item label="邮箱" prop="emailNumber">
-              <el-input v-model="form.emailNumber" placeholder="请输入邮箱地址" maxlength="40" clearable></el-input>
+              <el-input :disabled="type==1" v-model="form.emailNumber" placeholder="请输入邮箱地址" maxlength="40" clearable></el-input>
             </el-form-item>
             <el-form-item prop="picCode" label="图形验证码">
               <div class="codeContent">
@@ -62,7 +62,7 @@
           <!-- 通过手机号找回 -->
           <div v-if="currentIndex === 1">
             <el-form-item label="手机号" prop="phoneNumber">
-              <el-input v-model="form.phoneNumber" placeholder="请输入手机号" maxlength="11" clearable>
+              <el-input :disabled="type==1" v-model="form.phoneNumber" placeholder="请输入手机号" maxlength="11" clearable>
                 <template slot="prepend">+86(中国)</template>
               </el-input>
             </el-form-item>
@@ -212,19 +212,30 @@ export default {
             validator: validatePass2
           }
         ]
-      }
+      },
+      type: 0
     };
   },
   mounted() {
     this.form.appId = this.getQueryVariable('appId');
     this.captcha();
     this.slideLineLeft();
+    this.type = this.getQueryVariable('type');
+
+    const userInfo = this.$store.state.user.userInfo.email?this.$store.state.user.userInfo:JSON.parse(sessionStorage.getItem('userInfo'))
+    
+    this.form.phoneNumber=this.type==1?userInfo.username:''
+    this.form.emailNumber=this.type==1?userInfo.email:''
+
+    sessionStorage.setItem('userInfo',JSON.stringify(userInfo))
   },
   methods: {
     // 切换tab
     changeName(index) {
       this.$refs['form'].resetFields();
       this.$refs['form'].clearValidate()
+      this.form.phoneNumber=this.type==1?this.$store.state.user.userInfo.username:''
+      this.form.emailNumber=this.type==1?this.$store.state.user.userInfo.email:''
       this.currentIndex = index;
       const left = 100 / this.tabLen / 2;
       this.slideLeft = left * (index * 2 + 1) + '%';
@@ -437,9 +448,9 @@ export default {
         var pair = vars[i].split("=");
         if(pair[0] == variable){
           return pair[1];
-          }
-       }
-       return(false);
+        }
+      }
+      return false;
     }
   }
 };
