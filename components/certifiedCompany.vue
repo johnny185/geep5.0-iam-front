@@ -2,7 +2,7 @@
   <div>
     <el-form :model="form" :rules="rules" ref="form" label-width="140px" class="demo-ruleForm" label-position="right">
       <!-- 企业信息 -->
-      <el-row v-show="editType==='reset'||editType==='license'">
+      <el-row v-show="editType === 'reset' || editType === 'license'">
         <el-col :span="12">
           <el-form-item label="企业名称" prop="companyName">
             <el-input v-model="form.companyName" placeholder="请输入企业名称"></el-input>
@@ -14,39 +14,58 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row v-show="editType==='reset'||editType==='license'">
+      <el-row v-show="editType === 'reset' || editType === 'license'">
         <el-col :span="12">
           <el-form-item label="统一社会信用代码" prop="creditCode">
-            <el-input :disabled="editType!=='reset'" v-model="form.creditCode" placeholder="请输入统一社会信用代码"></el-input>
+            <el-input
+              :disabled="editType !== 'reset'"
+              v-model="form.creditCode"
+              placeholder="请输入统一社会信用代码"
+            ></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row v-show="editType==='reset'||editType==='license'">
+      <el-row v-show="editType === 'reset' || editType === 'license'">
         <el-col :span="11">
           <el-form-item label="营业执照有效期" prop="licenseStartDate">
-            <el-date-picker v-model="form.licenseStartDate" type="date" placeholder="选择开始日期"
-              value-format="yyyy-MM-dd HH:mm:ss">
+            <el-date-picker
+              v-model="form.licenseStartDate"
+              type="date"
+              placeholder="选择开始日期"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            >
             </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item prop="licenseEndDate" label-width="0px">
-            <el-date-picker v-model="form.licenseEndDate" type="date" placeholder="选择结束日期"
-              value-format="yyyy-MM-dd HH:mm:ss">
+            <el-date-picker
+              v-model="form.licenseEndDate"
+              type="date"
+              placeholder="选择结束日期"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            >
             </el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item class="self-star" label="上传营业执照" v-show="editType==='reset'||editType==='license'">
+      <el-form-item class="self-star" label="上传营业执照" v-show="editType === 'reset' || editType === 'license'">
         <p class="remarksStyle">图片格式JPG、JPEG、PNG，尺寸不大于2M</p>
         <ul class="IDImgWrap">
           <!-- 上传营业执照 -->
           <li class="IDImgItem">
             <el-form-item prop="licensePhotoId">
               <el-input v-if="false" v-model="form.licensePhotoId" />
-              <upload :isPublic="isPublic" :isTmp="isTmp" :fileType="fileType" :fileSize="fileSize"
-                @handleSuccess="handleSuccess(arguments)" :bgImg="bgImg1" :imgUrl="form.companyLicensePhotoUrl"
-                :uploadType="uploadType1"></upload>
+              <upload
+                :isPublic="isPublic"
+                :isTmp="isTmp"
+                :fileType="fileType"
+                :fileSize="fileSize"
+                @handleSuccess="handleSuccess(arguments)"
+                :bgImg="bgImg1"
+                :imgUrl="form.companyLicensePhotoUrl"
+                :uploadType="uploadType1"
+              ></upload>
             </el-form-item>
             <p class="IDtitle">
               上传营业执照
@@ -55,46 +74,61 @@
           </li>
         </ul>
       </el-form-item>
-      <el-row v-show="editType==='reset'||editType==='name'">
+      <el-row v-show="editType === 'reset' || editType === 'name'">
         <el-col :span="12">
           <el-form-item label="管理员真实姓名" prop="personFullName">
             <el-input v-model="form.personFullName" placeholder="请输入管理员真实姓名"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row v-show="editType==='reset'||editType==='name'">
+      <el-row v-show="editType === 'reset' || editType === 'name'">
         <el-col :span="11">
           <el-form-item label="身份证有效期" prop="personIdCardPeriodStartDate">
-            <el-date-picker v-model="form.personIdCardPeriodStartDate" type="date" placeholder="选择开始日期"
-              value-format="yyyy-MM-dd HH:mm:ss">
+            <el-date-picker
+              v-model="form.personIdCardPeriodStartDate"
+              type="date"
+              placeholder="选择开始日期"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            >
             </el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="10">
           <el-form-item prop="personIdCardPeriodEndDate" label-width="0px">
-            <el-date-picker v-model="form.personIdCardPeriodEndDate" type="date" placeholder="选择结束日期"
-              value-format="yyyy-MM-dd HH:mm:ss">
+            <el-date-picker
+              v-model="form.personIdCardPeriodEndDate"
+              type="date"
+              placeholder="选择结束日期"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            >
             </el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row v-show="editType==='reset'||editType==='name'">
+      <el-row v-show="editType === 'reset' || editType === 'name'">
         <el-col :span="12">
           <el-form-item label="管理员身份证号" prop="personIdCardNum">
             <el-input v-model="form.personIdCardNum" placeholder="请输入管理员身份证号"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item class="self-star" label="上传手持身份证照片" v-show="editType==='reset'||editType==='name'">
+      <el-form-item class="self-star" label="上传手持身份证照片" v-show="editType === 'reset' || editType === 'name'">
         <div>
           <p class="remarksStyle">图片格式JPG、JPEG、PNG，尺寸不大于2M</p>
           <ul class="IDImgWrap">
             <li class="IDImgItem marginRight20">
               <el-form-item prop="personIdCardPhotoFrontId">
                 <el-input v-if="false" v-model="form.personIdCardPhotoFrontId" />
-                <upload :isPublic="isPublic" :isTmp="isTmp" :fileType="fileType" :fileSize="fileSize"
-                  @handleSuccess="handleSuccess(arguments)" :imgUrl="form.personIdCardPhotoFrontUrl" :bgImg="bgImg1"
-                  :uploadType="uploadType4"></upload>
+                <upload
+                  :isPublic="isPublic"
+                  :isTmp="isTmp"
+                  :fileType="fileType"
+                  :fileSize="fileSize"
+                  @handleSuccess="handleSuccess(arguments)"
+                  :imgUrl="form.personIdCardPhotoFrontUrl"
+                  :bgImg="bgImg1"
+                  :uploadType="uploadType4"
+                ></upload>
               </el-form-item>
               <p class="IDtitle">
                 上传身份证
@@ -104,9 +138,16 @@
             <li class="IDImgItem marginRight20">
               <el-form-item prop="personIdCardPhotoNegativeId">
                 <el-input v-if="false" v-model="form.personIdCardPhotoNegativeId" />
-                <upload :isPublic="isPublic" :isTmp="isTmp" :fileType="fileType" :fileSize="fileSize"
-                  @handleSuccess="handleSuccess(arguments)" :uploadType="uploadType5"
-                  :imgUrl="form.personIdCardPhotoNegativeUrl" :bgImg="bgImg2"></upload>
+                <upload
+                  :isPublic="isPublic"
+                  :isTmp="isTmp"
+                  :fileType="fileType"
+                  :fileSize="fileSize"
+                  @handleSuccess="handleSuccess(arguments)"
+                  :uploadType="uploadType5"
+                  :imgUrl="form.personIdCardPhotoNegativeUrl"
+                  :bgImg="bgImg2"
+                ></upload>
               </el-form-item>
               <p class="IDtitle">
                 上传身份证
@@ -116,9 +157,16 @@
             <li class="IDImgItem hold">
               <el-form-item prop="personIdCardPhotoHandId">
                 <el-input v-if="false" v-model="form.personIdCardPhotoHandId" />
-                <upload :isPublic="isPublic" :isTmp="isTmp" :fileType="fileType" :fileSize="fileSize"
-                  @handleSuccess="handleSuccess(arguments)" :bgImg="bgImg3" :imgUrl="form.personIdCardPhotoHandUrl"
-                  :uploadType="uploadType6"></upload>
+                <upload
+                  :isPublic="isPublic"
+                  :isTmp="isTmp"
+                  :fileType="fileType"
+                  :fileSize="fileSize"
+                  @handleSuccess="handleSuccess(arguments)"
+                  :bgImg="bgImg3"
+                  :imgUrl="form.personIdCardPhotoHandUrl"
+                  :uploadType="uploadType6"
+                ></upload>
               </el-form-item>
               <p class="IDtitle">
                 上传手持
@@ -128,19 +176,33 @@
           </ul>
         </div>
       </el-form-item>
-      <el-form-item class="self-star" label="通讯地址" v-show="editType==='reset'||editType==='address'">
+      <el-form-item class="self-star" label="通讯地址" v-show="editType === 'reset' || editType === 'address'">
         <div class="IDImgWrap">
-          <el-form-item prop="addressLeve1Id" style="margin-right:10px">
-            <el-select ref="provinceLabel" v-model="form.addressLeve1Id" placeholder="请选择省" @focus="provinceSelect(1)"
-              @change="provinceChange()">
-              <el-option v-for="item in provinceList" :key="item.code" :label="item.shortName"
-                :value="Number(item.code)">
+          <el-form-item prop="addressLeve1Id" style="margin-right: 10px">
+            <el-select
+              ref="provinceLabel"
+              v-model="form.addressLeve1Id"
+              placeholder="请选择省"
+              @focus="provinceSelect(1)"
+              @change="provinceChange()"
+            >
+              <el-option
+                v-for="item in provinceList"
+                :key="item.code"
+                :label="item.shortName"
+                :value="Number(item.code)"
+              >
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item prop="addressLeve2Id" style="margin-right:10px">
-            <el-select ref="cityLabel" v-model="form.addressLeve2Id" placeholder="请选择市" @focus="provinceSelect(2)"
-              @change="cityChange()">
+          <el-form-item prop="addressLeve2Id" style="margin-right: 10px">
+            <el-select
+              ref="cityLabel"
+              v-model="form.addressLeve2Id"
+              placeholder="请选择市"
+              @focus="provinceSelect(2)"
+              @change="cityChange()"
+            >
               <el-option v-for="item in cityList" :key="item.code" :label="item.shortName" :value="Number(item.code)">
               </el-option>
             </el-select>
@@ -153,9 +215,16 @@
           </el-form-item>
         </div>
       </el-form-item>
-      <el-form-item prop="address" v-show="editType==='reset'||editType==='address'">
-        <el-input style="margin-top: 8px;" type="textarea" placeholder="详细地址（街道/门牌号）" v-model="form.address"
-          maxlength="200" show-word-limit :rows="4" />
+      <el-form-item prop="address" v-show="editType === 'reset' || editType === 'address'">
+        <el-input
+          style="margin-top: 8px"
+          type="textarea"
+          placeholder="详细地址（街道/门牌号）"
+          v-model="form.address"
+          maxlength="200"
+          show-word-limit
+          :rows="4"
+        />
       </el-form-item>
       <el-form-item>
         <div class="personBottom fontCenter">
@@ -180,9 +249,9 @@ export default {
     formParams: {
       type: Object,
       default: () => {
-        return {}
-      },
-    },
+        return {};
+      }
+    }
   },
   data() {
     // 身份证号 校验
@@ -209,7 +278,7 @@ export default {
       uploadType5: 'back', //标识 上传的图片 是 身份证反面
       uploadType6: 'hold', //标识 上传的图片 是 手持身份图片
       fileType: 'jpg,jpeg,png',
-      fileSize: 5,
+      fileSize: 2,
       form: {
         companyName: '', // 企业名称
         legalFullName: '', // 法人姓名
@@ -285,20 +354,25 @@ export default {
     if (this.$props.formParams.companyName) {
       const json = JSON.parse(JSON.stringify(this.$props.formParams));
       this.form = json;
-      this.provinceList = [{
-        shortName: json.addressLeve1,
-        code: json.addressLeve1Id
-      }]
-      this.cityList = [{
-        shortName: json.addressLeve2,
-        code: json.addressLeve2Id
-      }]
-      this.areaList = [{
-        shortName: json.addressLeve3,
-        code: json.addressLeve3Id
-      }]
+      this.provinceList = [
+        {
+          shortName: json.addressLeve1,
+          code: json.addressLeve1Id
+        }
+      ];
+      this.cityList = [
+        {
+          shortName: json.addressLeve2,
+          code: json.addressLeve2Id
+        }
+      ];
+      this.areaList = [
+        {
+          shortName: json.addressLeve3,
+          code: json.addressLeve3Id
+        }
+      ];
     }
-
   },
   methods: {
     // 省份选择
@@ -307,7 +381,7 @@ export default {
       let addressLeve1Id = this.form.addressLeve1Id;
       let addressLeve2Id = this.form.addressLeve2Id;
       if (value === 1) {
-        parentCode = '0'
+        parentCode = '0';
         if (this.provinceList.length > 1) {
           return false;
         }
@@ -321,7 +395,7 @@ export default {
           return false;
         }
       } else if (value === 3) {
-        parentCode = addressLeve2Id
+        parentCode = addressLeve2Id;
         if (!parentCode) {
           this.$notify({
             message: '请先选择省市',
@@ -333,7 +407,7 @@ export default {
       let params = {
         parentCode: parentCode,
         pageSize: 10000
-      }
+      };
       this.$axios.post('api/iam/v1/open/region/page', params).then((res) => {
         if (value === 1) {
           this.provinceList = res.body.list;
@@ -342,7 +416,7 @@ export default {
         } else if (value === 3) {
           this.areaList = res.body.list;
         }
-      })
+      });
     },
     provinceChange() {
       if (this.form.addressLeve1Id) {
@@ -392,7 +466,7 @@ export default {
     // },
     // 取消提交
     cancel() {
-      this.$emit('cancel')
+      this.$emit('cancel');
     },
     // 提交
     submitBtn() {
@@ -402,7 +476,7 @@ export default {
             addressLeve1: this.$refs.provinceLabel.selected.label,
             addressLeve2: this.$refs.cityLabel.selected.label,
             addressLeve3: this.$refs.areaLabel.selected.label,
-            applyType:2
+            applyType: 2
           });
           if (this.editType === 'address') {
             this.$axios.post('api/iam/v1/auth/certification/update/address', params).then((res) => {
@@ -418,7 +492,7 @@ export default {
             });
             return;
           }
-          if(this.editType==='license')params.applyType=4;
+          if (this.editType === 'license') params.applyType = 4;
           this.$axios.post('api/iam/v1/auth/certification/company/apply', params).then((res) => {
             if (res.status === 200 && res.body === true) {
               this.$notify({
@@ -525,7 +599,7 @@ export default {
   color: #999990;
   border-color: #999990;
 }
-.paddingRight50 input{
+.paddingRight50 input {
   padding-right: 50px;
 }
 </style>
