@@ -14,7 +14,7 @@
             <el-radio v-model="form.registerType" label="2" border>商业伙伴</el-radio>
           </el-form-item> -->
           <el-form-item label="注册类型">
-            <el-radio-group v-model="registerMode" @change="selectMode" style="line-height: 50px;">
+            <el-radio-group v-model="registerMode" @change="selectMode" style="line-height: 50px">
               <el-radio :label="1">手机号</el-radio>
               <el-radio :label="2">邮箱</el-radio>
             </el-radio-group>
@@ -22,7 +22,7 @@
           <div v-if="registerMode === 1">
             <el-form-item label="手机号码" prop="phoneNumber">
               <el-input v-model.trim="form.phoneNumber" maxlength="11" placeholder="请输入手机号" clearable>
-              <template slot="prepend">+86(中国)</template>
+                <template slot="prepend">+86(中国)</template>
               </el-input>
             </el-form-item>
             <el-form-item prop="picCode" label="图形验证码">
@@ -69,7 +69,7 @@
           <div v-else-if="registerMode === 2">
             <el-form-item label="电子邮箱" prop="emailNumber">
               <el-input v-model.trim="form.emailNumber" maxlength="40" placeholder="请输入电子邮箱" clearable>
-              <!-- <template slot="prepend">+86(中国)</template> -->
+                <!-- <template slot="prepend">+86(中国)</template> -->
               </el-input>
             </el-form-item>
             <el-form-item prop="picCode" label="图形验证码">
@@ -81,7 +81,9 @@
             <el-form-item label="邮箱验证码" prop="emailPicCode">
               <div class="smsContent">
                 <el-input v-model="form.emailPicCode" maxlength="6" placeholder="请输入邮箱验证码"></el-input>
-                <div v-if="isShowGeteEmailCode" class="sendSms hoverStyle fontCenter" @click="sendOutEmail">发送邮箱验证码</div>
+                <div v-if="isShowGeteEmailCode" class="sendSms hoverStyle fontCenter" @click="sendOutEmail">
+                  发送邮箱验证码
+                </div>
                 <div v-else class="smsBtn fontCenter">{{ countdown }}s后可重试</div>
                 <!-- <el-button v-if="isShowGetCode" type="primary" @click="getCode" :disabled="isClickable" style="margin-left: 20px;">发送验证码</el-button> -->
                 <!-- <el-button v-else  type="info">{{ countdown }}s后可重试</el-button> -->
@@ -171,14 +173,6 @@ export default {
       }
     };
     // 邮箱 校验
-    // var validateEmail = (rule, value, callback) => {
-    //   if (value !== '' && !emailReg(value)) {
-    //     callback(new Error('请输入正确的邮箱'));
-    //   } else {
-    //     callback();
-    //   }
-    // };
-    // 邮箱 校验
     var validateEmailNumber = (rule, value, callback) => {
       if (!value) {
         callback(new Error('邮箱不能为空'));
@@ -210,6 +204,20 @@ export default {
         callback();
       }
     };
+    const validateEmailCode = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('邮箱验证码不能为空'));
+      } else {
+        callback(this.codeNumberBlur(1));
+      }
+    };
+    const validatePhoneCode = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('短信验证码不能为空'));
+      } else {
+        callback(this.codeNumberBlur(2));
+      }
+    };
     return {
       // dealData: {}, //服务协议和隐私保护政策
       agreementType: null, //区分三种协议： 1服务协议2隐私保护政策3论坛协议
@@ -234,8 +242,6 @@ export default {
         uuid: null, // 短信验证码返回
         appId: '', // 应用id(从哪个应用进入到注册)
 
-
-
         // registerType: '', //用户身份
         // ak: '', // 用户的用户名或者手机号或者邮箱号
         // appId: '', // 应用id(从哪个应用进入到注册)
@@ -250,16 +256,16 @@ export default {
       },
       rules: {
         // 用户身份 校验
-        emailNumber: [{ required: true, validator: validateEmailNumber, trigger: 'blur'}],
+        emailNumber: [{ required: true, validator: validateEmailNumber, trigger: 'blur' }],
         // registerType: [{ required: true, message: '用户身份不能为空', trigger: 'change' }],
         // 电话号码 校验
         phoneNumber: [{ required: true, validator: validatephoneNumberber, trigger: 'blur' }],
         // 图形验证码 校验
         picCode: [{ required: true, message: '图形验证码不能为空', trigger: 'change' }],
         // 邮箱验证码 校验
-        emailPicCode: [{ required: true, message: '邮箱验证码不能为空', trigger: 'change' }],
+        emailPicCode: [{ required: true, validator: validateEmailCode, trigger: 'blur' }],
         // 短信验证码 校验
-        phoneCode: [{ required: true, message: '短信验证码不能为空', trigger: 'change' }],
+        phoneCode: [{ required: true, validator: validatePhoneCode, trigger: 'blur' }],
         // email: [{ validator: validateEmail, trigger: 'change' }],
         // wechatNum: [{ message: '微信号不能为空', trigger: 'change' }],
         newPassword: [
@@ -284,20 +290,16 @@ export default {
     this.captcha();
   },
   methods: {
-    // 输入手机号校验手机号是否存在
-    phoneNumberBlur() {
-      this.$axios.get(`/api/iam/v1/open/user/find?ak=${this.form.ak}&akType=${1}&appId=${this.form.appId}`).then((res) => {
-        if (res.body) {
-          this.$notify({
-            title: '提示',
-            message: '手机号已注册，可以直接登录',
-            type: 'error'
-          });
-        } 
-        // else {
-        //   this.isClickable = false;
-        // }
-      });
+    // 输入验证码
+    codeNumberBlur(type) {
+      const code = type === 1 ? this.form.emailPicCode : this.form.phoneCode;
+      const target = type === 1 ? this.form.emailNumber : this.form.phoneNumber;
+      const params = {
+        code,
+        target,
+        uuid: this.form.uuid
+      };
+      this.$axios.post('/api/message/openapi/common/sms/verificationCode/valid', params).then((res) => {});
     },
     /***
      * @param data 协议类型 1:平台服务协议 2:用户保密协议 3:论坛服务协议
@@ -311,9 +313,9 @@ export default {
       //   catalogId: catalogId
       // };
       // this.$axios.post('/api/document/doc/getDocumentContent', params).then((res) => {
-        this.$refs.checkDealDialog.dialogVisible = true;
-        // this.dealData = res.body;
-        this.agreementType = agreementType;
+      this.$refs.checkDealDialog.dialogVisible = true;
+      // this.dealData = res.body;
+      this.agreementType = agreementType;
       // });
       // let params = { agreementType: data };
       // this.$axios.post('/api/system/systemAgreement/detail', params).then((res) => {
@@ -365,31 +367,35 @@ export default {
     },
     selectMode(e) {
       this.$refs['form'].resetFields();
-      this.$refs['form'].clearValidate()
+      this.$refs['form'].clearValidate();
     },
     // 输入手机号或者邮箱校验是否存在
     userNameBlur(value) {
       let userName = '';
       let message = '';
-      if (value === 1) { // 手机号校验
+      if (value === 1) {
+        // 手机号校验
         userName = this.form.phoneNumber;
-      } else if (value === 3) { // 邮箱校验
+      } else if (value === 3) {
+        // 邮箱校验
         userName = this.form.emailNumber;
       }
-      this.$axios.get(`/api/iam/v1/open/user/find?ak=${userName}&akType=${value}&appId=${this.form.appId}`).then((res) => {
-        if (res.body) {
-          if (value === 1) {
-            message = '手机号已注册，可以直接登录';
-          } else if (value === 3) {
-            message = '邮箱已注册，可以直接登录';
+      this.$axios
+        .get(`/api/iam/v1/open/user/find?ak=${userName}&akType=${value}&appId=${this.form.appId}`)
+        .then((res) => {
+          if (res.body) {
+            if (value === 1) {
+              message = '手机号已注册，可以直接登录';
+            } else if (value === 3) {
+              message = '邮箱已注册，可以直接登录';
+            }
+            this.$notify({
+              title: '提示',
+              message: message,
+              type: 'error'
+            });
           }
-          this.$notify({
-            title: '提示',
-            message: message,
-            type: 'error'
-          });
-        }
-      });
+        });
     },
     // 获取 动态验证
     captcha() {
@@ -453,7 +459,7 @@ export default {
     },
     // 注册信息 提交
     submitBtn() {
-      console.log(this.registerMode, 'registerMode')
+      console.log(this.registerMode, 'registerMode');
       if (!this.form.checked) {
         this.$notify({
           title: '提示',
@@ -464,8 +470,9 @@ export default {
       }
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          let params = {}
-          if(this.registerMode === 1) { // 手机号注册
+          let params = {};
+          if (this.registerMode === 1) {
+            // 手机号注册
             params = {
               ak: this.form.phoneNumber,
               appId: this.form.appId,
@@ -473,8 +480,9 @@ export default {
               registerType: 1,
               sk: this.$md5(this.form.newPassword),
               uuid: this.form.uuid
-            }
-          } else if (this.registerMode === 2) { // 邮箱注册
+            };
+          } else if (this.registerMode === 2) {
+            // 邮箱注册
             params = {
               ak: this.form.emailNumber,
               appId: this.form.appId,
@@ -482,7 +490,7 @@ export default {
               registerType: 3,
               sk: this.$md5(this.form.newPassword),
               uuid: this.form.uuid
-            }
+            };
           }
           // const params = {
           //   ak: this.form.ak,
@@ -518,14 +526,14 @@ export default {
     // 获取地址栏中的appId
     getQueryVariable(variable) {
       var query = window.location.search.substring(1);
-      var vars = query.split("&");
-      for (var i=0;i<vars.length;i++) {
-        var pair = vars[i].split("=");
-        if(pair[0] == variable){
+      var vars = query.split('&');
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (pair[0] == variable) {
           return pair[1];
-          }
-       }
-       return(false);
+        }
+      }
+      return false;
     }
   }
 };
@@ -541,9 +549,11 @@ export default {
   width: 30px;
   height: 30px;
 }
+
 .codeContent {
   display: flex;
 }
+
 .codeBg {
   width: 204px;
   height: 40px;
@@ -551,25 +561,30 @@ export default {
   border-radius: 4px;
   margin-left: 20px;
 }
+
 .registerContentWrap {
   width: 100%;
   height: calc(100vh - 287px);
   background: #eff4f8;
   padding-top: 40px;
 }
+
 .registerContent {
   width: 540px;
   height: auto;
 }
+
 .userRegister {
   /* font-size: 16px; */
   /* font-weight: bolder; */
   /* margin-bottom: 12px; */
   line-height: 80px;
 }
+
 .smsContent {
   display: flex;
 }
+
 .sendSms {
   width: 204px;
   height: 40px;
@@ -577,6 +592,7 @@ export default {
   border-radius: 4px;
   margin-left: 20px;
 }
+
 .smsBtn {
   width: 204px;
   height: 40px;
@@ -584,6 +600,7 @@ export default {
   border-radius: 4px;
   margin-left: 20px;
 }
+
 .submitBtn {
   height: 40px;
   background: #fafdff;
@@ -592,12 +609,15 @@ export default {
   line-height: 40px;
   cursor: pointer;
 }
+
 .agreementFont {
   color: #999990;
 }
+
 .registerBottom {
   display: inline-flex;
 }
+
 .loginFont {
   color: #2f74ff;
   cursor: pointer;
