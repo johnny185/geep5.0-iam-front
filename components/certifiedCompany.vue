@@ -257,6 +257,14 @@ export default {
         callback();
       }
     };
+    // 详细地址 校验
+    var validatepersonCard = (rule, value, callback) => {
+      if (!value || !value.trim()) {
+        return callback(new Error('详细地址不能为空'));
+      }else {
+        callback();
+      }
+    };
     return {
       isPublic: true,
       isTmp: true,
@@ -316,7 +324,7 @@ export default {
         // 区
         addressLeve3Id: [{ required: true, message: '区不能为空', trigger: 'change' }],
         // 地址 校验
-        address: [{ required: true, message: '详细地址不能为空', trigger: 'change' }],
+        address: [{ required: true, validator: validatepersonCard, trigger: 'blur' }],
         //  营业执照 校验
         licensePhotoId: [{ required: true, message: '营业执照不能为空', trigger: 'change' }],
         // 法人姓名 校验
