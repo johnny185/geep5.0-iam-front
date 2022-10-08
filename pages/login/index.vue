@@ -60,17 +60,14 @@
                             </div>
                         </el-form-item>
                     </div>
-                    <!-- 密码验证和短信验证登录方式切换 -->
-                    <el-form-item align="right" style="cursor: pointer">
-                        <div class="fontSize14 fontBlue" @click="forgetBtn">忘记密码</div>
-                    </el-form-item>
                     <!-- 登录按钮 -->
                     <el-form-item>
                         <div class="submitBtn fontCenter fontSize18" @click="handleLogin" :loading="loading">登录</div>
                     </el-form-item>
                 </el-form>
                 <div class="loginBottom">
-                    <div class="fontSize14 fontBlue" @click="newUserBtn">注册帐户</div>
+                    <span class="fontSize14 fontBlue hoverStyle" @click="forgetBtn">忘记密码</span>
+                    <span class="fontSize14 fontBlue hoverStyle" @click="newUserBtn">注册帐户</span>
                 </div>
             </div>
         </div>
@@ -474,10 +471,8 @@ export default {
 }
 
 .loginBottom {
-    text-align: right;
-    /* display: flex; */
-    /* justify-content: space-between; */
-    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
 }
 
 .smsContent {
