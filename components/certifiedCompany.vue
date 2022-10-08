@@ -277,7 +277,7 @@ export default {
       uploadType4: 'positive', //标识 上传的图片 是 身份正面
       uploadType5: 'back', //标识 上传的图片 是 身份证反面
       uploadType6: 'hold', //标识 上传的图片 是 手持身份图片
-      fileType: 'jpg,jpeg,png',
+      fileType: 'jpg,jpeg,png,bmp',
       fileSize: 2,
       form: {
         companyName: '', // 企业名称

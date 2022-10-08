@@ -98,7 +98,7 @@ export default {
     };
     return {
       props: { multiple: true },
-      fileType: 'jpg,jpeg,png',
+      fileType: 'jpg,jpeg,png,bmp',
       fileSize: 5,
       form: {
         sceneHost: 'C', //宿主

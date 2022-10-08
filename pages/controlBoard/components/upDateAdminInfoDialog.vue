@@ -217,7 +217,7 @@ export default {
       uploadType1: 'positive', //标识 上传的图片 是 身份正面
       uploadType2: 'back', //标识 上传的图片 是 身份证反面
       uploadType3: 'hold', //标识 上传的图片 是 手持身份图片
-      fileType: 'jpg,jpeg,png',
+      fileType: 'jpg,jpeg,png,bmp',
       fileSize: 2,
       form: {
         phoneNumber: '', // 手机号
