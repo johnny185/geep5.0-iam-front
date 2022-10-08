@@ -46,9 +46,10 @@ export default function ({ $axios, redirect }) {
       console.log(error)
       console.log(error.request)
       console.log(error.request.status)
-      if(error.request.status === 500){
+      if(error.request.status === 500 || error.request.status === 0){
         error = '网络不给力'
       }
+      
       // const code = parseInt(error.response && error.response.status)
       Notification({
         title: '提示',
