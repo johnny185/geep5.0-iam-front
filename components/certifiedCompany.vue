@@ -45,7 +45,7 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item class="self-star" label="上传营业执照" v-show="editType === 'reset' || editType === 'license'">
+      <el-form-item class="self-star" label="上传营业执照副本照片" v-show="editType === 'reset' || editType === 'license'">
         <p class="remarksStyle">图片格式JPG、JPEG、PNG，尺寸不大于2M</p>
         <ul class="IDImgWrap">
           <!-- 上传营业执照 -->
@@ -258,13 +258,24 @@ export default {
       }
     };
     // 详细地址 校验
-    var validatepersonCard = (rule, value, callback) => {
+    var validateAddress = (rule, value, callback) => {
       if (!value || !value.trim()) {
         return callback(new Error('详细地址不能为空'));
       }else {
         callback();
       }
     };
+    var validateCompanyName = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('企业名称不能为空'));
+      }else if (!value.trim()) {
+        return callback(new Error('仅支持字母、汉字、空格、括号、数字，不能全部为空格，长度0-100个字符'));
+      }else {
+        callback();
+      }
+    };
+
+    
     return {
       isPublic: true,
       isTmp: true,
@@ -308,7 +319,7 @@ export default {
       parentCode: '0', // 0为省份
       rules: {
         // 企业名称 校验
-        companyName: [{ required: true, message: '企业名称不能为空', trigger: 'change' }],
+        companyName: [{ required: true,validator:validateCompanyName, trigger: 'change' }],
         // 法人姓名 校验
         legalFullName: [{ required: true, message: '法人姓名不能为空', trigger: 'change' }],
         // 统一社会信用代码 校验
@@ -324,7 +335,7 @@ export default {
         // 区
         addressLeve3Id: [{ required: true, message: '区不能为空', trigger: 'change' }],
         // 地址 校验
-        address: [{ required: true, validator: validatepersonCard, trigger: 'blur' }],
+        address: [{ required: true, validator: validateAddress, trigger: 'blur' }],
         //  营业执照 校验
         licensePhotoId: [{ required: true, message: '营业执照不能为空', trigger: 'change' }],
         // 法人姓名 校验

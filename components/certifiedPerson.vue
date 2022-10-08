@@ -251,7 +251,7 @@ export default {
       }
     };
     // 详细地址 校验
-    var validatepersonCard = (rule, value, callback) => {
+    var validateAddress = (rule, value, callback) => {
       if (!value || !value.trim()) {
         return callback(new Error('详细地址不能为空'));
       }else {
@@ -302,7 +302,7 @@ export default {
         // 区
         addressLeve3Id: [{ required: true, message: '区不能为空', trigger: 'change' }],
         // 地址 校验
-        address: [{ required: true, validator: validatepersonCard, trigger: 'change' }],
+        address: [{ required: true, validator: validateAddress, trigger: 'change' }],
         // 身份证正面  校验
         personIdCardPhotoFrontId: [{ required: true, message: '身份证正面不能为空', trigger: 'change' }],
         //  身份证反面 校验
