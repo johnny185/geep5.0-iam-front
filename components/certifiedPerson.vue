@@ -272,7 +272,7 @@ export default {
       uploadType1: 'positive', //标识 上传的图片 是 身份正面
       uploadType2: 'back', //标识 上传的图片 是 身份证反面
       uploadType3: 'hold', //标识 上传的图片 是 手持身份图片
-      fileType: 'jpg,jpeg,png,bmp',
+      fileType: 'JPG、JPEG、BMP、PNG',
       fileSize: 2,
       provinceList: [], // 省数组
       cityList: [], // 市数组

@@ -39,12 +39,8 @@
         </el-col>
         <el-col :span="10">
           <el-form-item prop="licenseEndDate" label-width="0px">
-            <el-date-picker
-              v-model="form.licenseEndDate"
-              type="date"
-              placeholder="选择结束日期"
-              value-format="yyyy-MM-dd HH:mm:ss"
-            >
+            <el-date-picker v-model="form.licenseEndDate" type="date" placeholder="选择结束日期"
+              value-format="yyyy-MM-dd HH:mm:ss" :picker-options="licensePickerOptions">
             </el-date-picker>
           </el-form-item>
         </el-col>
@@ -95,12 +91,8 @@
         </el-col>
         <el-col :span="10">
           <el-form-item prop="personIdCardPeriodEndDate" label-width="0px">
-            <el-date-picker
-              v-model="form.personIdCardPeriodEndDate"
-              type="date"
-              placeholder="选择结束日期"
-              value-format="yyyy-MM-dd HH:mm:ss"
-            >
+            <el-date-picker v-model="form.personIdCardPeriodEndDate" type="date" placeholder="选择结束日期"
+              value-format="yyyy-MM-dd HH:mm:ss" :picker-options="IDCardPickerOptions">
             </el-date-picker>
           </el-form-item>
         </el-col>
@@ -277,7 +269,7 @@ export default {
       uploadType4: 'positive', //标识 上传的图片 是 身份正面
       uploadType5: 'back', //标识 上传的图片 是 身份证反面
       uploadType6: 'hold', //标识 上传的图片 是 手持身份图片
-      fileType: 'jpg,jpeg,png,bmp',
+      fileType: 'JPG、JPEG、BMP、PNG',
       fileSize: 2,
       form: {
         companyName: '', // 企业名称
@@ -347,7 +339,19 @@ export default {
         personIdCardPhotoNegativeId: [{ required: true, message: '身份证反面不能为空', trigger: 'change' }],
         // 手持身份证 校验
         personIdCardPhotoHandId: [{ required: true, message: '手持身份证不能为空', trigger: 'change' }]
-      }
+      },
+      licensePickerOptions: {
+        disabledDate:(time)=> {
+          // 禁止选择日期
+          return time.getTime() <= new Date(this.form.licenseStartDate).getTime() || this.form.licenseStartDate==='';
+        },
+      },
+      IDCardPickerOptions: {
+        disabledDate:(time)=> {
+          // 禁止选择日期
+          return time.getTime() <= new Date(this.form.personIdCardPeriodStartDate).getTime() || this.form.personIdCardPeriodStartDate==='';
+        },
+      },
     };
   },
   mounted() {

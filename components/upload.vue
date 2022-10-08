@@ -74,7 +74,7 @@ export default {
   },
   computed: {
     config() {
-      return { Authorization: this.$store.state.user.userInfo.token, AppID : 8134005370347520 };
+      return { Authorization: this.$store.state.user.userInfo.token, AppID: 8134005370347520 };
     }
   },
   watch: {
@@ -100,7 +100,7 @@ export default {
       if (!this.fileType.includes(fileType[fileType.length - 1].toLowerCase())) {
         this.$notify({
           title: '提示',
-          message: `请上传${this.fileType}的文件`,
+          message: `图片类型要求：${this.fileType}`,
           type: 'error'
         });
         return false;
