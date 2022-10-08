@@ -12,6 +12,7 @@ export default function ({ $axios, redirect }) {
       return config
     })
     $axios.onResponse(response=>{
+      console.log(response)
       const res = response.data
       if(res.status === 200 || res.status === 290){
         return res
@@ -42,7 +43,9 @@ export default function ({ $axios, redirect }) {
     })
     //错误请求返回处理
     $axios.onError(error => {
-      
+      if(error.request.status === 500){
+        error = '网络不给力'
+      }
       // const code = parseInt(error.response && error.response.status)
       Notification({
         title: '提示',
