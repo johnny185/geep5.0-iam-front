@@ -43,6 +43,9 @@ export default function ({ $axios, redirect }) {
     })
     //错误请求返回处理
     $axios.onError(error => {
+      console.log(error)
+      console.log(error.request)
+      console.log(error.request.status)
       if(error.request.status === 500){
         error = '网络不给力'
       }
