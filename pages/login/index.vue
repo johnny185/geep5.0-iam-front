@@ -25,7 +25,7 @@
                     <div v-if="currentIndex === 0">
                         <el-form-item prop="username">
                             <el-input class="inputStyle" style="heigth: 60px" v-model.trim="form.username" clearable
-                                placeholder="手机号/邮箱" maxlength="40"></el-input>
+                                placeholder="请输入手机号/邮箱" maxlength="40"></el-input>
                         </el-form-item>
                         <!-- 密码 -->
                         <el-form-item prop="password">
@@ -91,14 +91,14 @@ export default {
             }
         };
         // 手机号校验
-        var validatePhone = (rule, value, callback) => {
+        var validateName = (rule, value, callback) => {
             if (!value) {
-                return callback(new Error('请输入手机号'));
+                return callback(new Error('请输入手机号/邮箱'));
             }
-            if (!telReg(value)) {
-                callback(new Error('请输入正确的手机号'));
+            if (!telReg(value) && !emailReg(value)) {
+                callback(new Error('请输入正确的手机号/邮箱'));
             } else {
-                callback(this.phoneNumberBlur());
+                callback();
             }
         };
         return {
@@ -119,12 +119,10 @@ export default {
             tabLen: '', // tab数组长度
             loading: false,
             rules: {
-                // 手机号校验
-                userphone: [{ required: true, validator: validatePhone, trigger: 'change' }],
                 // 密码校验
                 password: [{ required: true, validator: validatePass, trigger: 'change' }],
                 // 帐号校验
-                username: [{ required: true, message: '帐号不能为空', trigger: 'blur' }],
+                username: [{ required: true, validator: validateName, trigger: 'blur' }],
                 // 图片验证码校验
                 imgcode: [{ required: true, message: '图片验证码不能为空', trigger: 'change' }],
                 // 动态验证码校验
