@@ -1,21 +1,23 @@
 <template>
   <div>
-    <el-form :model="form" :rules="rules" ref="form" label-width="140px" class="demo-ruleForm" label-position="right">
+    <el-form :model="form" :rules="rules" ref="form" label-width="180px" class="demo-ruleForm" label-position="right">
       <!-- 企业信息 -->
       <el-row v-show="editType === 'reset' || editType === 'license'">
-        <el-col :span="12">
+        <el-col :span="18">
           <el-form-item label="企业名称" prop="companyName">
             <el-input v-model="form.companyName" placeholder="请输入企业名称"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+      </el-row>
+      <el-row v-show="editType === 'reset' || editType === 'license'">
+        <el-col :span="18">
           <el-form-item label="法人姓名" prop="legalFullName">
             <el-input v-model="form.legalFullName" placeholder="请输入法人姓名"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row v-show="editType === 'reset' || editType === 'license'">
-        <el-col :span="12">
+        <el-col :span="18">
           <el-form-item label="统一社会信用代码" prop="creditCode">
             <el-input
               :disabled="editType !== 'reset'"
@@ -38,7 +40,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item prop="licenseEndDate" label-width="0px">
+          <el-form-item prop="licenseEndDate" label-width="20px">
             <el-date-picker v-model="form.licenseEndDate" type="date" placeholder="选择结束日期"
               value-format="yyyy-MM-dd HH:mm:ss" :picker-options="licensePickerOptions">
             </el-date-picker>
@@ -90,7 +92,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item prop="personIdCardPeriodEndDate" label-width="0px">
+          <el-form-item prop="personIdCardPeriodEndDate" label-width="20px">
             <el-date-picker v-model="form.personIdCardPeriodEndDate" type="date" placeholder="选择结束日期"
               value-format="yyyy-MM-dd HH:mm:ss" :picker-options="IDCardPickerOptions">
             </el-date-picker>
@@ -249,10 +251,10 @@ export default {
     // 身份证号 校验
     var validatepersonIdCardNum = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('身份证号不能为空'));
+        return callback(new Error('管理员身份证号不能为空'));
       }
       if (!regId(value)) {
-        callback(new Error('身份证号格式不正确'));
+        callback(new Error('管理员身份证号格式不正确'));
       } else {
         callback();
       }
@@ -325,9 +327,9 @@ export default {
         // 统一社会信用代码 校验
         creditCode: [{ required: true, message: '统一社会信用代码不能为空', trigger: 'change' }],
         // 上传营业执照开始有效期 校验
-        licenseStartDate: [{ required: true, message: '营业执照开始有效期不能为空', trigger: 'change' }],
+        licenseStartDate: [{ required: true, message: '营业执照开始日期不能为空', trigger: 'change' }],
         // 上传营业执照结束有效期 校验
-        licenseEndDate: [{ required: true, message: '营业执照结束有效期不能为空', trigger: 'change' }],
+        licenseEndDate: [{ required: true, message: '营业执照结束日期不能为空', trigger: 'change' }],
         // 省
         addressLeve1Id: [{ required: true, message: '省不能为空', trigger: 'change' }],
         // 市
@@ -337,7 +339,7 @@ export default {
         // 地址 校验
         address: [{ required: true, validator: validateAddress, trigger: 'blur' }],
         //  营业执照 校验
-        licensePhotoId: [{ required: true, message: '营业执照不能为空', trigger: 'change' }],
+        licensePhotoId: [{ required: true, message: '营业执照副本照片不能为空', trigger: 'change' }],
         // 法人姓名 校验
         // companyLegalPersonFullName: [{ required: true, message: '法人姓名不能为空', trigger: 'change' }],
         // 法人 身份证正面 校验
@@ -345,13 +347,13 @@ export default {
         // 法人 身份证反面 校验
         // companyLegalPersonIdCardPhotoNegative: [{ required: true, message: '身份证反面不能为空', trigger: 'change' }],
         // 真实姓名 校验
-        personFullName: [{ required: true, message: '真实姓名不能为空', trigger: 'change' }],
+        personFullName: [{ required: true, message: '管理员真实姓名不能为空', trigger: 'change' }],
         //  身份证号 校验
         personIdCardNum: [{ validator: validatepersonIdCardNum, required: true, trigger: 'change' }],
         //  身份证有效期开始日期 校验
-        personIdCardPeriodStartDate: [{ required: true, message: '身份证有效开始不能为空', trigger: 'change' }],
+        personIdCardPeriodStartDate: [{ required: true, message: '身份证开始日期不能为空', trigger: 'change' }],
         //  身份证有效期结束日期  校验
-        personIdCardPeriodEndDate: [{ required: true, message: '身份证有效结束不能为空', trigger: 'change' }],
+        personIdCardPeriodEndDate: [{ required: true, message: '身份证结束日期不能为空', trigger: 'change' }],
         //  身份证正面  校验
         personIdCardPhotoFrontId: [{ required: true, message: '身份证正面不能为空', trigger: 'change' }],
         //  身份证反面 校验
