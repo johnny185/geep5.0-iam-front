@@ -193,11 +193,11 @@ export default {
         // 手机号校验
         phoneNumber: [{ required: true, trigger: 'blur', validator: validatePhoneNumber }],
         // 邮箱验证码校验
-        emailPicCode: [{ required: true, message: '邮箱验证码不能为空' , trigger: 'change' }],
+        emailPicCode: [{ required: true, message: '邮箱验证码不能为空' , trigger: 'blur' }],
         // 图形验证码校验
-        picCode: [{ required: true, message: '图形验证码不能为空', trigger: 'change' }],
+        picCode: [{ required: true, message: '图形验证码不能为空', trigger: 'blur' }],
         // 短信验证码校验
-        phoneCode: [{ required: true, message: '短信验证码不能为空', trigger: 'change' }],
+        phoneCode: [{ required: true, message: '短信验证码不能为空', trigger: 'blur' }],
         newPassword: [
           {
             required: true,

@@ -261,7 +261,7 @@ export default {
         // 电话号码 校验
         phoneNumber: [{ required: true, validator: validatephoneNumberber, trigger: 'blur' }],
         // 图形验证码 校验
-        picCode: [{ required: true, message: '图形验证码不能为空', trigger: 'change' }],
+        picCode: [{ required: true, message: '图形验证码不能为空', trigger: 'blur' }],
         // 邮箱验证码 校验
         emailPicCode: [{ required: true, validator: validateEmailCode, trigger: 'blur' }],
         // 短信验证码 校验

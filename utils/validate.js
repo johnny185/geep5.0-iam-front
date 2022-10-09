@@ -61,3 +61,6 @@ export function urlReg(value) {
 export function fullName(value) {
   return /^[\u4e00-\u9fa5A-Za-z]+$/.test(value)
 }
+export function creditCodeReg(value){
+  return /^[A-Za-z0-9]{18}$/.test(value)
+}

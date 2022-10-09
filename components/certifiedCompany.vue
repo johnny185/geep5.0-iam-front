@@ -23,6 +23,7 @@
               :disabled="editType !== 'reset'"
               v-model="form.creditCode"
               placeholder="请输入统一社会信用代码"
+              maxLength="18"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -231,7 +232,7 @@
 </template>
 
 <script>
-import { regId } from '../utils/validate';
+import { regId, creditCodeReg } from '../utils/validate';
 import bgImg1 from '../static/img/login/positiveImg.png';
 import bgImg2 from '../static/img/login/backImg.png';
 import bgImg3 from '../static/img/login/holdImg.png';
@@ -276,7 +277,16 @@ export default {
         callback();
       }
     };
-
+    const validateCreditCode = (rule,value,callback) => {
+      this.form.creditCode=this.form.creditCode.toUpperCase()
+      if (!value) {
+        return callback(new Error('统一社会信用代码不能为空'));
+      }else if (!creditCodeReg(value)) {
+        return callback(new Error('统一社会信用代码由十八位的数字或大写英文字母组成'));
+      }else {
+        callback();
+      }
+    }
     
     return {
       isPublic: true,
@@ -325,7 +335,7 @@ export default {
         // 法人姓名 校验
         legalFullName: [{ required: true, message: '法人姓名不能为空', trigger: 'change' }],
         // 统一社会信用代码 校验
-        creditCode: [{ required: true, message: '统一社会信用代码不能为空', trigger: 'change' }],
+        creditCode: [{ required: true, validator:validateCreditCode, trigger: 'change' }],
         // 上传营业执照开始有效期 校验
         licenseStartDate: [{ required: true, message: '营业执照开始日期不能为空', trigger: 'change' }],
         // 上传营业执照结束有效期 校验
