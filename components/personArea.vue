@@ -175,7 +175,7 @@
             <dl style="width: 46%">
               <dt class="dtStyle">
                 <div class="">隐私政策</div>
-                <div class="btnStyle">查看</div>
+                <div class="btnStyle" @click="dutyView">查看</div>
               </dt>
               <!-- <dd class="ddStyle">上次重置密码时间：2022-08-08  10：00：00</dd> -->
             </dl>
@@ -319,6 +319,12 @@ export default {
     if(!!this.$store.state.user.userInfo.token)this.cancelResetSubmit()
   },
   methods: {
+    dutyView(){
+      let routeUrl = this.$router.resolve({
+        path: "/duty",
+      });
+      window.open(routeUrl.href, '_blank');
+    },
     applyPost() {
       const params = {
         "applyId": '1574998286509080577',
