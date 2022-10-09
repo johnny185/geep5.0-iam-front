@@ -28,7 +28,7 @@
                                 placeholder="请输入手机号/邮箱" maxlength="40"></el-input>
                         </el-form-item>
                         <!-- 密码 -->
-                        <el-form-item prop="password">
+                        <el-form-item prop="password" key="password">
                             <el-input :type="passwordType" class="inputStyle" v-model.trim="form.password"
                                 placeholder="请输入密码" maxlength="20" clearable @keyup.enter.native="handleLogin">
                             </el-input>
@@ -44,7 +44,7 @@
                             <el-input class="inputStyle" style="heigth: 60px" v-model.trim="form.username" clearable
                                 placeholder="请输入手机号/邮箱"></el-input>
                         </el-form-item>
-                        <el-form-item prop="imgcode">
+                        <el-form-item prop="imgcode" key="imgcode">
                             <div class="codeContent">
                                 <el-input v-model="form.imgcode" placeholder="请输入图片验证码"
                                     @keyup.enter.native="handleLogin" clearable></el-input>
@@ -126,13 +126,13 @@ export default {
             loading: false,
             rules: {
                 // 密码校验
-                password: [{ required: true, validator: validatePass, trigger: 'change' }],
+                password: [{ required: true, validator: validatePass, trigger: 'blur' }],
                 // 帐号校验
                 username: [{ required: true, validator: validateName, trigger: 'blur' }],
                 // 图片验证码校验
-                imgcode: [{ required: true, message: '图片验证码不能为空', trigger: 'change' }],
+                imgcode: [{ required: true, message: '图片验证码不能为空', trigger: 'blur' }],
                 // 动态验证码校验
-                dynamicCode: [{ required: true, message: '验证码不能为空', trigger: 'change' }]
+                dynamicCode: [{ required: true, message: '验证码不能为空', trigger: 'blur' }]
             },
             phoneCodeLogin: false, //如果是手机号登录
             countdown: 60, //倒计时60
