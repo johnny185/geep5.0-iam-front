@@ -5,7 +5,7 @@
       <el-row v-show="editType === 'reset' || editType === 'license'">
         <el-col :span="18">
           <el-form-item label="企业名称" prop="companyName">
-            <el-input v-model="form.companyName" placeholder="请输入企业名称"></el-input>
+            <el-input v-model="form.companyName" placeholder="请输入企业名称" maxlength="100"></el-input>
           </el-form-item>
         </el-col>
       </el-row>

@@ -189,7 +189,7 @@ export default {
         },
         // 输入手机号或者邮箱校验是否存在
         userNameBlur(value) {
-            let userName = this.form.userName;
+            let userName = this.form.username;
             let message = '';
            
             this.$axios
