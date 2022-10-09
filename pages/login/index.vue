@@ -98,7 +98,13 @@ export default {
             if (!telReg(value) && !emailReg(value)) {
                 callback(new Error('请输入正确的手机号/邮箱'));
             } else {
-                callback();
+                if(telReg(value)){
+                    callback(this.userNameBlur(1));
+                }else if(emailReg(value)){
+                    callback(this.userNameBlur(3));
+                }else{
+                    callback()
+                }
             }
         };
         return {
@@ -181,15 +187,20 @@ export default {
                 }
             }, 1000);
         },
-        // 输入手机号校验手机号是否存在
-        phoneNumberBlur() {
+        // 输入手机号或者邮箱校验是否存在
+        userNameBlur(value) {
+            let userName = this.form.userName;
+            let message = '';
+           
             this.$axios
-                .get(`/api/iam/v1/open/user/find?ak=${this.form.userphone}&akType=${1}&appId=8134005370347520`)
+                .get(`/api/iam/v1/open/user/find?ak=${userName}&akType=${value}&appId=8134005370347520`)
                 .then((res) => {
                     if (!res.body) {
+
+                        message = value === 1?'手机号未注册，请先注册':'邮箱未注册，请先注册';
                         this.$notify({
                             title: '提示',
-                            message: '手机号未注册',
+                            message: message,
                             type: 'error'
                         });
                     }
@@ -198,7 +209,6 @@ export default {
         // 获取公共应用配置
         getConfig() {
             this.$axios.get('/api/iam/v1/open/application/config').then((res) => {
-                // console.log(res, 'res')
                 // this.$store.commit('user/addUserInfo', res.body);
                 // this.$router.push({
                 //   path: '/'
@@ -209,6 +219,7 @@ export default {
         getCode() {
             let verifyTypeNub = 0;
             const { username, imgcode } = this.form;
+            
             if (username && imgcode) {
                 if (telReg(this.form.username)) {
                     verifyTypeNub = 1;
@@ -233,7 +244,7 @@ export default {
                     }
                 });
             } else {
-                this.$refs['form'].validateField(['username', 'imgcode']);
+               !username ? this.$refs['form'].validateField(['username', 'imgcode']):this.$refs['form'].validateField([ 'imgcode']);
             }
         },
         // 登录
@@ -348,7 +359,6 @@ export default {
         },
         // 新用户注册
         newUserBtn() {
-            console.log('chufa');
             this.$router.push({
                 path: '/login/register',
                 query: {
@@ -495,29 +505,33 @@ export default {
 }
 
 .nav {
-  display: flex;
-  height: 88px;
-  background: #000e24;
+    display: flex;
+    height: 88px;
+    background: #000e24;
 }
+
 .navLogo {
-  width: 196px;
-  background-size: 100%;
-  background: url('/img/nav/logo.png');
-  background-size: 100%;
-  background-position-y: -4px;
+    width: 196px;
+    background-size: 100%;
+    background: url('/img/nav/logo.png');
+    background-size: 100%;
+    background-position-y: -4px;
 }
+
 .navContent {
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
+
 .navleft {
-  display: flex;
-  cursor: pointer;
-  height: 88px;
+    display: flex;
+    cursor: pointer;
+    height: 88px;
 }
+
 .navleft div:hover {
-  color: #2f74ff;
+    color: #2f74ff;
 }
 </style>
