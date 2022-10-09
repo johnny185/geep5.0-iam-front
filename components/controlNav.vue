@@ -30,7 +30,7 @@
                 @click="toCertified('1', '2')"
               >未认证</span>
             </el-dropdown-item> -->
-            <el-dropdown-item @click.native="toPersonalCentre">个人信息({{$store.state.user.userInfo.registerType === 1 ? '认证中' :$store.state.user.userInfo.registerType === 2 ? '已认证' : '未认证'}})</el-dropdown-item>
+            <el-dropdown-item @click.native="toPersonalCentre">个人信息({{$store.state.user.userInfo.authenticationStatus === 1 ? '认证中' :$store.state.user.userInfo.authenticationStatus === 2 ? '已认证' : '未认证'}})</el-dropdown-item>
             <el-dropdown-item @click.native="logOut">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
