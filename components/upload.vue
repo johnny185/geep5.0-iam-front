@@ -96,8 +96,10 @@ export default {
         });
         return false;
       }
+      // debugger
       const fileType = file.name.split('.');
-      if (!this.fileType.includes(fileType[fileType.length - 1].toLowerCase())) {
+
+      if (!this.fileType.includes(fileType[fileType.length - 1].toUpperCase())) {
         this.$notify({
           title: '提示',
           message: `图片类型要求：${this.fileType}`,
