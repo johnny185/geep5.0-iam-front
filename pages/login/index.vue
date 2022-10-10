@@ -214,12 +214,13 @@ export default {
         },
         // 输入手机号或者邮箱校验是否存在
         userNameBlur(value) {
-            let userName = this.form.username;
             let message = '';
-           
-            this.$axios
-                .get(`/api/iam/v1/open/user/find?ak=${userName}&akType=${value}&appId=8134005370347520`)
-                .then((res) => {
+            let params = {
+              ak:this.form.username,
+              akType:value,
+              appId:8134005370347520
+            }
+            this.$axios.post('/api/iam/v1/open/user/find',params).then((res) => {
                     if (!res.body) {
 
                         message = value === 1?'手机号未注册，请先注册':'邮箱未注册，请先注册';
