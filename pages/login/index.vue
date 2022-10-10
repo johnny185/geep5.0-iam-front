@@ -222,7 +222,6 @@ export default {
             }
             this.$axios.post('/api/iam/v1/open/user/find',params).then((res) => {
                     if (!res.body) {
-
                         message = value === 1?'手机号未注册，请先注册':'邮箱未注册，请先注册';
                         this.$notify({
                             title: '提示',
