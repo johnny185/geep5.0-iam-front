@@ -366,6 +366,7 @@ export default {
       }, 1000);
     },
     selectMode(e) {
+      this.captcha();
       this.$refs['form'].resetFields();
       this.$refs['form'].clearValidate();
     },
