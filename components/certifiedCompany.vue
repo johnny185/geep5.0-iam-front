@@ -49,7 +49,7 @@
         </el-col>
       </el-row>
       <el-form-item class="self-star" label="上传营业执照副本照片" v-show="editType === 'reset' || editType === 'license'">
-        <p class="remarksStyle">图片格式JPG、JPEG、PNG，尺寸不大于2M</p>
+        <p class="remarksStyle">图片格式JPG、JPEG、PNG、BMP，尺寸不大于2M</p>
         <ul class="IDImgWrap">
           <!-- 上传营业执照 -->
           <li class="IDImgItem">
@@ -109,7 +109,7 @@
       </el-row>
       <el-form-item class="self-star" label="上传手持身份证照片" v-show="editType === 'reset' || editType === 'name'">
         <div>
-          <p class="remarksStyle">图片格式JPG、JPEG、PNG，尺寸不大于2M</p>
+          <p class="remarksStyle">图片格式JPG、JPEG、PNG、BMP，尺寸不大于2M</p>
           <ul class="IDImgWrap">
             <li class="IDImgItem marginRight20">
               <el-form-item prop="personIdCardPhotoFrontId">
