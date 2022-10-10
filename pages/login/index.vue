@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- 导航 daohang -->
+        <!-- 导航  -->
         <div class="nav">
             <ul class="navContent">
                 <li class="navleft">
@@ -39,7 +39,7 @@
                         <!-- <el-link>密码规则说明</el-link> -->
                     </div>
                     <!-- 手机号登录，短信验证 -->
-                    <div v-if="currentIndex === 1">
+                    <div v-if="currentIndex === 1"> 
                         <el-form-item prop="username">
                             <el-input class="inputStyle" style="heigth: 60px" v-model.trim="form.username" clearable
                                 placeholder="请输入手机号/邮箱"></el-input>
@@ -285,8 +285,8 @@ export default {
                         };
                         this.$axios.post('/api/iam/v1/open/login/account', params).then((res) => {
                             if (res.status === 200) {
-                                setToken(res.body.access_token);
-                                this.$store.commit('user/addToken', res.body.access_token);
+                                setToken(res.body.accessToken);
+                                this.$store.commit('user/addToken', res.body.accessToken);
                                 this.getUserInfo();
                                 this.certificationInfo();
                             }
@@ -310,11 +310,11 @@ export default {
                                 appId: 8134005370347520
                             };
                             this.$axios
-                                .post('/api/iam/v1/open/login/phone-code', params)
+                                .post('/api/iam/v1/open/login/phoneCode', params)
                                 .then((res) => {
                                     if (res.status === 200) {
-                                        setToken(res.body.access_token);
-                                        this.$store.commit('user/addToken', res.body.access_token);
+                                        setToken(res.body.accessToken);
+                                        this.$store.commit('user/addToken', res.body.accessToken);
                                         this.getUserInfo();
                                     }
                                 })
@@ -334,11 +334,11 @@ export default {
                                 appId: 8134005370347520
                             };
                             this.$axios
-                                .post('/api/iam/v1/open/login/email-code', params)
+                                .post('/api/iam/v1/open/login/emailCode', params)
                                 .then((res) => {
                                     if (res.status === 200) {
-                                        setToken(res.body.access_token);
-                                        this.$store.commit('user/addToken', res.body.access_token);
+                                        setToken(res.body.accessToken);
+                                        this.$store.commit('user/addToken', res.body.accessToken);
                                         this.getUserInfo();
                                     }
                                 })
