@@ -107,6 +107,19 @@ export default {
                 }
             }
         };
+        const validateCode = (rule, value, callback) => {
+            if (!value) {
+                callback(new Error('验证码不能为空'));
+            } else {
+                if(telReg(this.form.username)){
+                    callback(this.codeNumberBlur(2));
+                }else if(emailReg(this.form.username)){
+                    callback(this.codeNumberBlur(1));
+                }else{
+                    callback()
+                }
+            }
+        };
         return {
             passwordType: 'password', //区别 显示隐藏密码
             uuid: '', //后台需要验证的
@@ -132,11 +145,12 @@ export default {
                 // 图片验证码校验
                 imgcode: [{ required: true, message: '图片验证码不能为空', trigger: 'blur' }],
                 // 动态验证码校验
-                dynamicCode: [{ required: true, message: '验证码不能为空', trigger: 'blur' }]
+                dynamicCode: [{ required: true, validator: validateCode, trigger: 'blur' }]
             },
             phoneCodeLogin: false, //如果是手机号登录
             countdown: 60, //倒计时60
-            isShowGetCode: true //显示获取短信验证码
+            isShowGetCode: true, //显示获取短信验证码
+            isCode:false
         };
     },
     mounted() {
@@ -145,6 +159,17 @@ export default {
         this.slideLineLeft();
     },
     methods: {
+        // 输入验证码
+        codeNumberBlur(type) {
+            const code =this.form.imgcode;
+            const target = this.form.username;
+            const params = {
+                code,
+                target,
+                uuid: this.form.uuid
+            };
+            this.$axios.post('/api/message/openapi/common/sms/verificationCode/valid', params).then((res) => {});
+        },
         // 切换tab
         changeName(index) {
             this.currentIndex = index;

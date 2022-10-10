@@ -232,6 +232,17 @@ export default {
     sessionStorage.setItem('userInfo',JSON.stringify(userInfo))
   },
   methods: {
+    // 输入验证码
+    codeNumberBlur(type) {
+      const code = type === 1 ? this.form.emailPicCode : this.form.phoneCode;
+      const target = type === 1 ? this.form.emailNumber : this.form.phoneNumber;
+      const params = {
+        code,
+        target,
+        uuid: this.form.uuid
+      };
+      this.$axios.post('/api/message/openapi/common/sms/verificationCode/valid', params).then((res) => {});
+    },
     // 切换tab
     changeName(index) {
       this.$refs['form'].resetFields();

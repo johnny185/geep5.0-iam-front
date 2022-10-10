@@ -12,7 +12,7 @@
       <el-row v-show="editType === 'reset' || editType === 'license'">
         <el-col :span="18">
           <el-form-item label="法人姓名" prop="legalFullName">
-            <el-input v-model="form.legalFullName" placeholder="请输入法人姓名"></el-input>
+            <el-input v-model="form.legalFullName" placeholder="请输入法人姓名" maxlength="60"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -282,7 +282,7 @@ export default {
       if (!value) {
         return callback(new Error('统一社会信用代码不能为空'));
       }else if (!creditCodeReg(value)) {
-        return callback(new Error('统一社会信用代码由十八位的数字或大写英文字母组成'));
+        return callback(new Error('统一社会信用代码由18位的数字或大写英文字母组成'));
       }else {
         callback();
       }

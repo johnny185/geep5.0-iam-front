@@ -459,7 +459,6 @@ export default {
     },
     // 注册信息 提交
     submitBtn() {
-      console.log(this.registerMode, 'registerMode');
       if (!this.form.checked) {
         this.$notify({
           title: '提示',
