@@ -166,6 +166,20 @@ export default {
         callback();
       }
     };
+    const validateEmailCode = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('邮箱验证码不能为空'));
+      } else {
+        callback(this.codeNumberBlur(1));
+      }
+    };
+    const validatePhoneCode = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('短信验证码不能为空'));
+      } else {
+        callback(this.codeNumberBlur(2));
+      }
+    };
     return {
       isShowGetCode: true, //区别 获取短信验证码/倒计时 默认true 获取短信验证码
       isShowGeteEmailCode: true, // 区别 获取邮箱验证码/倒计时 默认true 获取邮箱验证码
@@ -195,11 +209,11 @@ export default {
         // 手机号校验
         phoneNumber: [{ required: true, trigger: 'blur', validator: validatePhoneNumber }],
         // 邮箱验证码校验
-        emailPicCode: [{ required: true, message: '邮箱验证码不能为空' , trigger: 'blur' }],
+        emailPicCode: [{ required: true,validator: validateEmailCode, trigger: 'blur' }],
         // 图形验证码校验
         picCode: [{ required: true, message: '图形验证码不能为空', trigger: 'blur' }],
         // 短信验证码校验
-        phoneCode: [{ required: true, message: '短信验证码不能为空', trigger: 'blur' }],
+        phoneCode: [{ required: true, validator: validatePhoneCode, trigger: 'blur' }],
         newPassword: [
           {
             required: true,
