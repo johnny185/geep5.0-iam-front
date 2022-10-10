@@ -30,8 +30,6 @@
               <div class="smsContent">
                 <el-input v-model="form.emailPicCode" placeholder="请输入邮箱验证码" maxlength="6" clearable></el-input>
                 <!-- <el-button type="primary" style="margin-left:20px" @click="sendOutEmail">发送邮箱验证码</el-button> -->
-                {{isShowGeteEmailCode}}
-                {{isShowGetCode}}
                 <div v-if="isShowGeteEmailCode" class="sendSms hoverStyle fontCenter" @click="sendOutEmail">发送邮箱验证码</div>
                 <div v-else class="smsBtn fontCenter">{{ countdown }}s后可重试</div>
               </div>
