@@ -257,6 +257,7 @@ export default {
     },
     // 切换tab
     changeName(index) {
+      this.captcha()
       this.$refs['form'].resetFields();
       this.$refs['form'].clearValidate()
       this.form.phoneNumber=this.type==1?this.$store.state.user.userInfo.username:''
