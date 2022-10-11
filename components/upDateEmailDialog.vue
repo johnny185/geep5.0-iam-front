@@ -90,7 +90,12 @@ export default {
   methods: {
     // 输入邮箱校验是否存在
     userNameBlur() {
-      this.$axios.get(`/api/iam/v1/open/user/find?ak=${this.form.email}&akType=3&appId=${Number(this.appId)}`).then((res) => {
+      let params = {
+            ak:this.form.email,
+            akType:3,
+            appId:Number(this.appId)
+          }
+      this.$axios.post('/api/iam/v1/open/user/find',params).then((res) => {
         if (res.body) {
           this.$notify({
             title: '提示',
