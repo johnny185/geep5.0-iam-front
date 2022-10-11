@@ -320,20 +320,27 @@ export default {
       } else if (value === 3) { // 邮箱校验
         userName = this.form.emailNumber;
       }
-      this.$axios.get(`/api/iam/v1/open/user/find?ak=${userName}&akType=${value}&appId=${this.form.appId}`).then((res) => {
-        if (!res.body) {
-          if (value === 1) {
-            message = '手机号不存在';
-          } else if (value === 3) {
-            message = '邮箱不存在';
+        let params = {
+              ak:userName,
+              akType:value,
+              appId:this.form.appId
+            }
+      this.$axios
+        .post('/api/iam/v1/open/user/find',params)
+        .then((res) => {
+          if (!res.body) {
+            if (value === 1) {
+              message = '手机号不存在';
+            } else if (value === 3) {
+              message = '邮箱不存在';
+            }
+            this.$notify({
+              title: '提示',
+              message: message,
+              type: 'error'
+            });
           }
-          this.$notify({
-            title: '提示',
-            message: message,
-            type: 'error'
-          });
-        }
-      });
+        });
     },
     // 获取邮箱验证码
     sendOutEmail() {

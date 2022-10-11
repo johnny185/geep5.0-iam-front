@@ -43,7 +43,7 @@
       <!-- 认证信息  -->
       <el-tab-pane label="认证信息" name="2">
         <div class="padding20">
-          <div v-if="$store.state.user.userInfo.registerType !== 0">
+          <div v-if="$store.state.user.userInfo.authenticationStatus  !== 0">
             <el-form label-width="100px">
               <el-form-item label="认证类型" label-width="150px">
                 <span>{{authenticationInfo.applyType === 1 ? '个人' : '企业'}}</span>
@@ -380,7 +380,7 @@ export default {
       // 当为 认证信息
       if (data === '2') {
         this.registerType = 1;
-        if (this.$store.state.user.userInfo.registerType !== 0 || type === 'sumitExamine') {
+        if (this.$store.state.user.userInfo.authenticationStatus  !== 0 || type === 'sumitExamine') {
           this.$axios.get('api/iam/v1/auth/certification/apply/info').then((res) => {
             this.authenticationInfo = res.body;
             this.addressDetails = `${res.body.addressLeve1}${res.body.addressLeve2}${res.body.addressLeve3}${res.body.address}`
