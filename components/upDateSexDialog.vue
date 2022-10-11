@@ -57,7 +57,7 @@ export default {
     // 提交修改 昵称
     submitBtn() {
       this.$refs['form'].validate((valid) => {
-        if (valid) {
+        if (valid && this.form.sex) {
           let params = this.form;
           this.$axios.post('/api/iam/v1/auth/user/editInfo', params).then((res) => {
             this.$emit('upDataSuccess');

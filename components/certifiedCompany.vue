@@ -81,7 +81,7 @@
         </el-col>
       </el-row>
       <el-row v-show="editType === 'reset' || editType === 'name'">
-        <el-col :span="11">
+        <el-col :span="12">
           <el-form-item label="身份证有效期" prop="personIdCardPeriodStartDate">
             <el-date-picker
               v-model="form.personIdCardPeriodStartDate"
@@ -92,11 +92,18 @@
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
-          <el-form-item prop="personIdCardPeriodEndDate" label-width="20px">
+        <el-col :span="7">
+          <el-form-item prop="personIdCardPeriodEndDate" label-width="0px"  v-if="form.personIdCardIsLongEffective === false">
             <el-date-picker v-model="form.personIdCardPeriodEndDate" type="date" placeholder="选择结束日期"
               value-format="yyyy-MM-dd HH:mm:ss" :picker-options="IDCardPickerOptions">
             </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="2">
+          <el-form-item label-width="0px">
+            <el-radio-group v-model="form.personIdCardIsLongEffective" style="display: contents">
+              <el-radio :label="true" @click.native.prevent="radioClisk(false)">长期</el-radio>
+            </el-radio-group>
           </el-form-item>
         </el-col>
       </el-row>
@@ -287,7 +294,13 @@ export default {
         callback();
       }
     }
-
+    const validatePersonFullName = (rule, value,callback)=>{
+      if(!value || !value.trim()){
+        callback(new Error('管理员真实姓名不能为空'))
+      }else{
+        callback();
+      }
+    }
     return {
       isPublic: true,
       isTmp: true,
@@ -343,9 +356,9 @@ export default {
         // 省
         addressLeve1Id: [{ required: true, message: '省不能为空', trigger: 'change' }],
         // 市
-        addressLeve2Id: [{ required: true, message: '市不能为空', trigger: 'change' }],
+        addressLeve2Id: [{ required: true, message: '市不能为空', trigger: 'blur' }],
         // 区
-        addressLeve3Id: [{ required: true, message: '区不能为空', trigger: 'change' }],
+        addressLeve3Id: [{ required: true, message: '区不能为空', trigger: 'blur' }],
         // 地址 校验
         address: [{ required: true, validator: validateAddress, trigger: 'blur' }],
         //  营业执照 校验
@@ -357,7 +370,7 @@ export default {
         // 法人 身份证反面 校验
         // companyLegalPersonIdCardPhotoNegative: [{ required: true, message: '身份证反面不能为空', trigger: 'change' }],
         // 真实姓名 校验
-        personFullName: [{ required: true, message: '管理员真实姓名不能为空', trigger: 'change' }],
+        personFullName: [{ required: true,validator:validatePersonFullName, trigger: 'change' }],
         //  身份证号 校验
         personIdCardNum: [{ validator: validatepersonIdCardNum, required: true, trigger: 'change' }],
         //  身份证有效期开始日期 校验
@@ -410,9 +423,11 @@ export default {
     }
   },
   methods: {
+    radioClisk(e) {
+      this.form.personIdCardIsLongEffective = e === this.form.personIdCardIsLongEffective ? true : e;
+    },
     // 省份选择
     provinceSelect(value) {
-      console.log(11);
       let parentCode = '';
       let addressLeve1Id = this.form.addressLeve1Id;
       let addressLeve2Id = this.form.addressLeve2Id;
@@ -458,11 +473,14 @@ export default {
       if (this.form.addressLeve1Id) {
         this.parentCode = this.form.addressLeve1Id;
       }
+      this.form.addressLeve2Id=null;
+      this.form.addressLeve3Id=null;
     },
     cityChange() {
       if (this.form.addressLeve2Id) {
         this.parentCode = this.form.addressLeve2Id;
       }
+      this.form.addressLeve3Id=null;
     },
     // 图片上传成功
     handleSuccess(data) {

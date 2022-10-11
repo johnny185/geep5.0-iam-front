@@ -36,13 +36,20 @@ export default {
     }
   },
   data() {
+    const validateNickName = (rule, value,callback)=>{
+      if(!value || !value.trim()){
+        callback(new Error('昵称不能为空'))
+      }else{
+        callback()
+      }
+    }
     return {
       form: {
         nickName: ''
       },
       dialogVisible: false,
       rules: {
-        nickName: [{ required: true, message: '昵称不能为空', trigger: 'change' }]
+        nickName: [{ required: true,validator:validateNickName, trigger: 'change' }]
       }
     };
   },

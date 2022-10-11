@@ -36,7 +36,7 @@
             type="file"
             id="uploads"
             style="position: absolute; clip: rect(0 0 0 0)"
-            accept="image/png, image/jpeg, image/gif, image/jpg"
+            accept="image/png, image/jpeg, image/bmp, image/jpg"
             @change="selectImg($event)"
           />
           <el-button size="mini" type="danger" plain icon="el-icon-zoom-in" @click="changeScale(1)">放大</el-button>
@@ -122,10 +122,10 @@ export default {
       let file = e.target.files[0];
       const imageSize = this.imageSize * 1024 * 1024; // 转换为 字节
       // console.log(file, imageSize,  'file')
-      if (!/\.(jif|jpeg|png|BMP|PNG)$/.test(e.target.value)) {
+      if (!/\.(jpg|jpeg|png|bmp|BMP|PNG)$/.test(e.target.value)) {
         this.$notify({
           title: '提示',
-          message: '图片类型要求：jpeg、bmp、png、gif',
+          message: '图片类型要求：jpeg、bmp、png、jpg',
           type: 'warning'
         });
         return false;

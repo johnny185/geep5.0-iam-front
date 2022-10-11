@@ -43,7 +43,7 @@
       <!-- 认证信息  -->
       <el-tab-pane label="认证信息" name="2">
         <div class="padding20">
-          <div v-if="$store.state.user.userInfo.authenticationStatus  !== 0">
+          <div v-if="$store.state.user.userInfo.registerType  !== 0">
             <el-form label-width="100px">
               <el-form-item label="认证类型" label-width="150px">
                 <span>{{authenticationInfo.applyType === 1 ? '个人' : '企业'}}</span>
@@ -327,7 +327,7 @@ export default {
     },
     applyPost() {
       const params = {
-        "applyId": '1574998286509080577',
+        "applyId": '1579757376095420417',
         "applyType": 2,
         "auditOpinion": "测试通过",
         "auditPassed": 1
@@ -347,7 +347,14 @@ export default {
       this.$store.commit('user/addRegisterType', 1);
       this.resetCertified = false
       this.editType = 'reset';
-      this.registerType = this.tableData.length > 0 ? this.tableData[this.tableData.length - 1].applyType:1;
+      if(this.tableData.length > 0){
+        const type = this.tableData[this.tableData.length - 1].applyType;
+        if(type === 2 || type === 4){
+          this.registerType =2;
+        }else{
+          this.registerType =1;
+        }
+      }
     },
     alterAdmin() {
       this.$refs.upDateAdminInfoDialog.captcha();
@@ -390,7 +397,13 @@ export default {
 
             if (this.tableData.length > 0) {
               this.auditPassed = this.tableData[this.tableData.length - 1].auditPassed;
-              this.registerType = this.tableData[this.tableData.length - 1].applyType;
+              
+              const type = this.tableData[this.tableData.length - 1].applyType;
+              if(type === 2 || type === 4){
+                this.registerType =2;
+              }else{
+                this.registerType =1;
+              }
             }
           });
         }
