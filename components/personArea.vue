@@ -53,7 +53,7 @@
                   <span>{{ authenticationInfo.personFullName }}</span>
                 </el-form-item>
                 <el-form-item label="身份证有效期" label-width="150px" v-show="auditPassed===1">
-                  <span>{{authenticationInfo.personIdCardPeriodStartDate? authenticationInfo.personIdCardPeriodStartDate.substring(0,10):'' }} 至 
+                  <span>{{authenticationInfo.personIdCardPeriodStartDate? authenticationInfo.personIdCardPeriodStartDate.substring(0,10):'' }} 至
                   {{authenticationInfo.personIdCardPeriodEndDate? authenticationInfo.personIdCardPeriodEndDate.substring(0,10):'' }}</span>
                   <span v-if="authenticationInfo.personIdCardIsLongEffective">长期</span>
                   <el-button type="primary" class="marginLeft10" size="mini"
@@ -262,6 +262,14 @@ export default {
         callback();
       }
     };
+
+    var validateCode = (rule, value, callback) => {
+      if (!value || !value.trim()) {
+        callback(new Error('图形验证码不能为空'));
+      }else {
+        callback();
+      }
+    };
     return {
       appId: this.$route.query.appId,
       isExceedHeight: false, //判断高度是否超过 默认高度，
@@ -285,13 +293,13 @@ export default {
       resetTime: '', // 重置时间
       rules: {
         // 电话号码 校验
-        phoneNumber: [{ required: true, validator: validatePhoneNumber, trigger: 'change' }],
+        phoneNumber: [{ required: true, validator: validatePhoneNumber, trigger: ['change','blur'] }],
         // 电话号码 校验
-        oldPhoneNumber: [{ required: true, validator: validatePhoneNumber, trigger: 'change' }],
+        oldPhoneNumber: [{ required: true, validator: validatePhoneNumber, trigger: ['change','blur'] }],
         // 图形验证码 校验
-        code: [{ required: true, message: '图形验证码不能为空', trigger: 'change' }],
+        code: [{ required: true, validator:validateCode, trigger:  ['change','blur'] }],
         // 短信验证码 校验
-        phoneCode: [{ required: true, message: '短信验证码不能为空', trigger: 'change' }]
+        phoneCode: [{ required: true, message: '短信验证码不能为空', trigger:  ['change','blur'] }]
       },
       accountVisible: false,
       // 认证信息
