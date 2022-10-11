@@ -381,8 +381,13 @@ export default {
         // 邮箱校验
         userName = this.form.emailNumber;
       }
+        let params = {
+              ak:userName,
+              akType:value,
+              appId:this.form.appId
+            }
       this.$axios
-        .get(`/api/iam/v1/open/user/find?ak=${userName}&akType=${value}&appId=${this.form.appId}`)
+        .post('/api/iam/v1/open/user/find',params)
         .then((res) => {
           if (res.body) {
             if (value === 1) {
