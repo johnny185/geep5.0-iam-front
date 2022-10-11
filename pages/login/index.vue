@@ -161,7 +161,7 @@ export default {
     methods: {
         // 输入验证码
         codeNumberBlur(type) {
-            const code =this.form.imgcode;
+            const code =this.form.dynamicCode;
             const target = this.form.username;
             const params = {
                 code,
