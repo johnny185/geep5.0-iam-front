@@ -287,7 +287,7 @@ export default {
         callback();
       }
     }
-    
+
     return {
       isPublic: true,
       isTmp: true,
@@ -412,6 +412,7 @@ export default {
   methods: {
     // 省份选择
     provinceSelect(value) {
+      console.log(11);
       let parentCode = '';
       let addressLeve1Id = this.form.addressLeve1Id;
       let addressLeve2Id = this.form.addressLeve2Id;
