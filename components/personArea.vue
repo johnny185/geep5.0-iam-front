@@ -43,7 +43,7 @@
       <!-- 认证信息  -->
       <el-tab-pane label="认证信息" name="2">
         <div class="padding20">
-          <div v-if="$store.state.user.userInfo.registerType  !== 0">
+          <div v-if="userInfo.authenticationStatus!==0 || $store.state.user.userInfo.registerType!== 0">
             <el-form label-width="100px">
               <el-form-item label="认证类型" label-width="150px">
                 <span>{{authenticationInfo.applyType === 1 ? '个人' : '企业'}}</span>
@@ -392,6 +392,7 @@ export default {
       if (data == '1') {
          this.$axios.get('/api/iam/v1/auth/user/get').then((res) => {
           this.$store.commit('user/addUserInfo', res.body);
+          this.$store.commit('user/addRegisterType', res.body.authenticationStatus==0?0:1);
           this.userInfo = res.body
         });
         this.isExceedHeight = false;
