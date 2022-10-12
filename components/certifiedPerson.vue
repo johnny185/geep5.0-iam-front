@@ -245,10 +245,14 @@ export default {
         return callback(new Error('身份证号不能为空'));
       }
       if (!regId(value)) {
-        callback(new Error('身份证号格式不正确'));
-      } else {
-        callback();
+        return callback(new Error('身份证号格式不正确'));
       }
+
+      this.$axios.post('/api/iam/v1/auth/certification/company/apply/verify',{type:1,value}).then(res => {
+        if(res.status === 200){
+          callback()
+        }
+      })
     };
     // 详细地址 校验
     var validateAddress = (rule, value, callback) => {
@@ -290,7 +294,7 @@ export default {
         // 真实姓名 校验
         personFullName: [{ validator: validateFullName, required: true, trigger: 'change' }],
         // 身份证号 校验
-        personIdCardNum: [{ validator: validatepersonIdCardNum, required: true, trigger: 'change' }],
+        personIdCardNum: [{ validator: validatepersonIdCardNum, required: true, trigger: 'blur' }],
         // 身份证有效开始日期 校验
         personIdCardPeriodStartDate: [{ required: true, message: '身份证有效开始不能为空', trigger: 'change' }],
         // 身份证有效截止日期 校验

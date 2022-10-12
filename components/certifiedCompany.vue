@@ -262,10 +262,15 @@ export default {
         return callback(new Error('管理员身份证号不能为空'));
       }
       if (!regId(value)) {
-        callback(new Error('管理员身份证号格式不正确'));
-      } else {
-        callback();
+        return callback(new Error('管理员身份证号格式不正确'));
       }
+
+      this.$axios.post('/api/iam/v1/auth/certification/company/apply/verify',{type:1,value}).then(res => {
+        if(res.status === 200){
+          callback()
+        }
+      })
+
     };
     // 详细地址 校验
     var validateAddress = (rule, value, callback) => {
@@ -280,9 +285,13 @@ export default {
         return callback(new Error('企业名称不能为空'));
       }else if (!value.trim()) {
         return callback(new Error('仅支持字母、汉字、空格、括号、数字，不能全部为空格，长度0-100个字符'));
-      }else {
-        callback();
       }
+
+      this.$axios.post('/api/iam/v1/auth/certification/company/apply/verify',{type:2,value}).then(res => {
+        if(res.status === 200){
+          callback()
+        }
+      })
     };
     const validateCreditCode = (rule,value,callback) => {
       this.form.creditCode=this.form.creditCode.toUpperCase()
@@ -290,9 +299,13 @@ export default {
         return callback(new Error('统一社会信用代码不能为空'));
       }else if (!creditCodeReg(value)) {
         return callback(new Error('统一社会信用代码由18位的数字或大写英文字母组成'));
-      }else {
-        callback();
       }
+
+      this.$axios.post('/api/iam/v1/auth/certification/company/apply/verify',{type:3,value}).then(res => {
+        if(res.status === 200){
+          callback()
+        }
+      })
     }
     const validatePersonFullName = (rule, value,callback)=>{
       if(!value || !value.trim()){
@@ -344,11 +357,11 @@ export default {
       parentCode: '0', // 0为省份
       rules: {
         // 企业名称 校验
-        companyName: [{ required: true,validator:validateCompanyName, trigger: 'change' }],
+        companyName: [{ required: true,validator:validateCompanyName, trigger: 'blur' }],
         // 法人姓名 校验
         legalFullName: [{ required: true, message: '法人姓名不能为空', trigger: 'change' }],
         // 统一社会信用代码 校验
-        creditCode: [{ required: true, validator:validateCreditCode, trigger: 'change' }],
+        creditCode: [{ required: true, validator:validateCreditCode, trigger: 'blur' }],
         // 上传营业执照开始有效期 校验
         licenseStartDate: [{ required: true, message: '营业执照开始日期不能为空', trigger: 'change' }],
         // 上传营业执照结束有效期 校验
@@ -372,7 +385,7 @@ export default {
         // 真实姓名 校验
         personFullName: [{ required: true,validator:validatePersonFullName, trigger: 'change' }],
         //  身份证号 校验
-        personIdCardNum: [{ validator: validatepersonIdCardNum, required: true, trigger: 'change' }],
+        personIdCardNum: [{ validator: validatepersonIdCardNum, required: true, trigger: 'blur' }],
         //  身份证有效期开始日期 校验
         personIdCardPeriodStartDate: [{ required: true, message: '身份证开始日期不能为空', trigger: 'change' }],
         //  身份证有效期结束日期  校验
