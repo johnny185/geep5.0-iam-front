@@ -244,30 +244,49 @@ export default {
         getCode() {
             let verifyTypeNub = 0;
             const { username, imgcode } = this.form;
-            
             if (username && imgcode) {
-                if (telReg(this.form.username)) {
-                    verifyTypeNub = 1;
-                } else if (emailReg(this.form.username)) {
-                    verifyTypeNub = 6;
-                }
-                let params = {
-                    target: this.form.username,
-                    uuid: this.uuid,
-                    code: this.form.imgcode,
-                    verifyType: verifyTypeNub //verifyType 验证类型 1:注册时手机验证码 2:重置密码验证码
-                };
-                this.$axios.post('/api/message/openapi/common/sms/verificationCode/send', params).then((res) => {
-                    if (res.status === 200) {
-                        this.form.uuid = res.body.uuid;
-                        this.getPhoneCode();
+              if (telReg(this.form.username)) {
+                verifyTypeNub = 1;
+              } else if (emailReg(this.form.username)) {
+                verifyTypeNub = 6;
+              }
+              // 1.获取验证码前 又校验一次输入的手机号和邮箱是否存在 
+              let params = {
+                ak:this.form.username,
+                akType:verifyTypeNub === 1?1:3,
+                appId:8134005370347520
+              }
+              this.$axios.post('/api/iam/v1/open/user/find',params).then((res) => {
+                    if (res.body) {
+                      // 当手机号 邮箱账号存在情况下 再去发送验证码
+                      let params = {
+                        target: this.form.username,
+                        uuid: this.uuid,
+                        code: this.form.imgcode,
+                        verifyType: verifyTypeNub //verifyType 验证类型 1:注册时手机验证码 2:重置密码验证码
+                      };
+                      this.$axios.post('/api/message/openapi/common/sms/verificationCode/send', params).then((res) => {
+                        if (res.status === 200) {
+                            this.form.uuid = res.body.uuid;
+                            this.getPhoneCode();
+                            this.$notify({
+                                title: '提示',
+                                message: '发送短信验证码操作成功',
+                                type: 'success'
+                            });
+                          }
+                      });
+                    }else{
+                      // 手机号邮箱号不存在情况下 抛出错误
+                      let message = '';
+                       message = verifyTypeNub === 1?'手机号未注册，请先注册':'邮箱未注册，请先注册';
                         this.$notify({
                             title: '提示',
-                            message: '发送短信验证码操作成功',
-                            type: 'success'
+                            message: message,
+                            type: 'error'
                         });
                     }
-                });
+              });
             } else {
                !username ? this.$refs['form'].validateField(['username', 'imgcode']):this.$refs['form'].validateField([ 'imgcode']);
             }
