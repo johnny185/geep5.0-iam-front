@@ -56,14 +56,14 @@
                   <span>{{authenticationInfo.personIdCardPeriodStartDate? authenticationInfo.personIdCardPeriodStartDate.substring(0,10):'' }} 至
                   {{authenticationInfo.personIdCardPeriodEndDate? authenticationInfo.personIdCardPeriodEndDate.substring(0,10):'' }}</span>
                   <span v-if="authenticationInfo.personIdCardIsLongEffective">长期</span>
-                  <el-button type="primary" class="marginLeft10" size="mini"
+                  <el-button type="primary" class="marginLeft10" size="mini" v-show="auditPassed===1||(auditPassed===2&&applyType===3)"
                     @click="resetSubmit('idCard')">更换身份证</el-button>
                 </el-form-item>
               </div>
               <div v-else>
                 <el-form-item label="认证主体" label-width="150px">
                   <span>{{ authenticationInfo.companyName }}</span>
-                  <el-button v-show="auditPassed===1" type="primary" class="marginLeft10" size="mini"
+                  <el-button v-show="auditPassed===1||(auditPassed===2&&applyType===4)" type="primary" class="marginLeft10" size="mini"
                     @click="resetSubmit('license')">变更营业执照</el-button>
                 </el-form-item>
                 <el-form-item label="营业执照有效期" label-width="150px" v-show="auditPassed===1">
@@ -106,7 +106,7 @@
               </el-table-column>
               <el-table-column prop="auditPassed">
                 <template slot-scope="scope" v-if="scope.$index==tableData.length-1">
-                  <el-button size="small" v-if="scope.row.auditPassed === 2" @click="resetSubmit('reset')">重新提交
+                  <el-button size="small" v-if="scope.row.auditPassed === 2 && (scope.row.applyType===1||scope.row.applyType===2)" @click="resetSubmit('reset')">重新提交
                   </el-button>
                   <!-- <el-button size="small" @click="applyPost">审核</el-button> -->
                   <!-- {{ scope.row.auditPassed === 2 ? '审核中' : scope.row.auditPassed === 1 ? '审核通过' : '审核不通过' }} -->
@@ -122,11 +122,11 @@
             </el-radio-group>
             <div v-if="registerType === 1" style="width: 760px; margin: 0 auto;">
               <certifiedPerson @queryInfo="queryInfo" @cancel="cancelResetSubmit" :resetCertified="resetCertified"
-                :formParams="authenticationInfo" :editType="editType"></certifiedPerson>
+                :formParams="authenticationInfoPerson" :editType="editType"></certifiedPerson>
             </div>
             <div v-if="registerType === 2" style="width:90%">
               <certifiedCompany @queryInfo="queryInfo" @cancel="cancelResetSubmit" :resetCertified="resetCertified"
-                :formParams="authenticationInfo" :editType="editType"></certifiedCompany>
+                :formParams="authenticationInfoCompany" :editType="editType"></certifiedCompany>
             </div>
           </div>
         </div>
@@ -308,11 +308,14 @@ export default {
       emailStatus: '', // 邮箱绑定状态
       upDateSexs: null, // 性别更新
       authenticationInfo: {}, // 认证详情
+      authenticationInfoPerson:{},
+      authenticationInfoCompany:{},
       addressDetails: '', // 认证详情地址
       // registerHeight: false
       resetCertified: false,// 重新认证显示取消按钮
       editType: 'reset',//修改字段类型
       auditPassed: 0,//审核状态
+      applyType:0, //审核类型
     };
   },
   watch: {
@@ -398,6 +401,8 @@ export default {
         if (this.$store.state.user.userInfo.authenticationStatus  !== 0 || type === 'sumitExamine') {
           this.$axios.get('api/iam/v1/auth/certification/apply/info').then((res) => {
             this.authenticationInfo = res.body;
+            if(this.authenticationInfo.applyType===1)this.authenticationInfoPerson=this.authenticationInfo;
+            if(this.authenticationInfo.applyType===2)this.authenticationInfoCompany=this.authenticationInfo;
             this.addressDetails = `${res.body.addressLeve1}${res.body.addressLeve2}${res.body.addressLeve3}${res.body.address}`
           })
           this.$axios.post('api/iam/v1/auth/certification/list/log', params).then((res) => {
@@ -407,6 +412,7 @@ export default {
               this.auditPassed = this.tableData[this.tableData.length - 1].auditPassed;
               
               const type = this.tableData[this.tableData.length - 1].applyType;
+              this.applyType = type;
               if(type === 2 || type === 4){
                 this.registerType =2;
               }else{
