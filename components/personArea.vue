@@ -10,7 +10,7 @@
               type="primary">修改昵称</el-button>
           </el-form-item>
           <el-form-item label="性别">
-            <span>{{ sexFilter($store.state.user.userInfo.sex) }}</span>
+            <span>{{ sexFilter(userInfo.sex || $store.state.user.userInfo.sex) }}</span>
             <!-- <span v-if="$store.state.user.userInfo.sex === 0">未知</span>
             <span v-else-if="$store.state.user.userInfo.sex === 1">男</span>
             <span v-else-if="$store.state.user.userInfo.sex === 2">女</span>
@@ -23,20 +23,20 @@
             <span>{{ '暂未开通' }}</span>
           </el-form-item>
           <el-form-item label="电子邮箱">
-            <span>{{ $store.state.user.userInfo.email === null ? '无': $store.state.user.userInfo.email }}</span>
+            <span>{{ userInfo.email|| $store.state.user.userInfo.email  }}</span>
             <el-button size="small" @click="upDateEmail" type="primary"
               style="display: inline-block; margin-left: 10px">{{ $store.state.user.userInfo.email === null ? '绑定' :
               '修改' }}电子邮箱</el-button>
           </el-form-item>
           <el-form-item label="手机号">
             <span v-if="$store.state.user.userInfo.phoneNum === null">无</span>
-            <span v-else>{{ $store.state.user.userInfo.phoneNum | replacestar }}</span>
+            <span v-else>{{userInfo.phoneNum  || $store.state.user.userInfo.phoneNum || replacestar}}</span>
             <el-button size="small" @click="upDatePhoneNum" type="primary"
               style="display: inline-block; margin-left: 10px">{{ $store.state.user.userInfo.phoneNum === null ? '绑定' :
               '修改' }}手机号</el-button>
           </el-form-item>
           <el-form-item label="注册时间">
-            <p>{{ $store.state.user.userInfo.createTime }}</p>
+            <p>{{ $store.state.user.userInfo.createTime || userInfo.createTime }}</p>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -316,6 +316,7 @@ export default {
       editType: 'reset',//修改字段类型
       auditPassed: 0,//审核状态
       applyType:0, //审核类型
+      userInfo:{}
     };
   },
   watch: {
@@ -385,12 +386,13 @@ export default {
       this.$refs.upDateNickNameDialog.dialogVisible = true;
     },
     // 点击 个人信息 认证信息 登录信息 模块
-    queryInfo(data, type) {
+     queryInfo(data, type) {
       let params = {};
       // 当为 个人信息、管理员信息
-      if (data === '1') {
-        this.$axios.get('/api/iam/v1/auth/user/get').then((res) => {
+      if (data == '1') {
+         this.$axios.get('/api/iam/v1/auth/user/get').then((res) => {
           this.$store.commit('user/addUserInfo', res.body);
+          this.userInfo = res.body
         });
         this.isExceedHeight = false;
         return false;
@@ -410,7 +412,7 @@ export default {
 
             if (this.tableData.length > 0) {
               this.auditPassed = this.tableData[this.tableData.length - 1].auditPassed;
-              
+
               const type = this.tableData[this.tableData.length - 1].applyType;
               this.applyType = type;
               if(type === 2 || type === 4){
@@ -536,13 +538,8 @@ export default {
           }
           this.$axios.post('/api/iam/v1/auth/user/info/change/phone', params).then((res) => {
             if (res.status === 200) {
-              this.$notify({
-                title: '提示',
-                message: '操作成功,请重新登录。',
-                type: 'success'
-              });
+              this.queryInfo(this.activeName);
               this.phoneNumhandleClose();
-              this.logOut();
             }
           });
         } else {
@@ -556,6 +553,8 @@ export default {
       clearInterval(this.timer);
       this.countdown = 60;
       this.isShowGetCode = true;
+
+
     },
     upDatePhoneNum() {
       this.titleStatus = this.$store.state.user.userInfo.phoneNum === null ? '绑定' : '修改';
@@ -588,6 +587,7 @@ export default {
     upDateEmail() {
       this.emailStatus = this.$store.state.user.userInfo.email === null ? '绑定' : '修改'
       this.$refs.upDateEmailDialog.dialogVisible = true;
+
     },
     // 修改性别
     upDateSex() {
