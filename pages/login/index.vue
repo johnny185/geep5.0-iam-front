@@ -372,7 +372,7 @@ export default {
         },
         // 认证详情
         certificationInfo() {
-            let isCertification = null;
+            let isCertification = 0;
             this.$axios.get('/api/iam/v1/auth/certification/apply/info').then((res) => {
                 if (res.body === null) {
                     isCertification = 0;

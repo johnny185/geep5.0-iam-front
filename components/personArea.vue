@@ -30,7 +30,7 @@
           </el-form-item>
           <el-form-item label="手机号">
             <span v-if="$store.state.user.userInfo.phoneNum === null">无</span>
-            <span v-else>{{userInfo.phoneNum  || $store.state.user.userInfo.phoneNum || replacestar}}</span>
+            <span v-else>{{userInfo.phoneNum  || $store.state.user.userInfo.phoneNum}}</span>
             <el-button size="small" @click="upDatePhoneNum" type="primary"
               style="display: inline-block; margin-left: 10px">{{ $store.state.user.userInfo.phoneNum === null ? '绑定' :
               '修改' }}手机号</el-button>
@@ -43,7 +43,7 @@
       <!-- 认证信息  -->
       <el-tab-pane label="认证信息" name="2">
         <div class="padding20">
-          <div v-if="userInfo.authenticationStatus!==0 || $store.state.user.userInfo.registerType!== 0">
+          <div v-if="$store.state.user.userInfo.registerType!== 0">
             <el-form label-width="100px">
               <el-form-item label="认证类型" label-width="150px">
                 <span>{{authenticationInfo.applyType === 1 ? '个人' : '企业'}}</span>
@@ -106,7 +106,7 @@
               </el-table-column>
               <el-table-column prop="auditPassed">
                 <template slot-scope="scope" v-if="scope.$index==tableData.length-1">
-                  <el-button size="small" v-if="scope.row.auditPassed === 2 && (scope.row.applyType===1||scope.row.applyType===2)" @click="resetSubmit('reset')">重新提交
+                  <el-button size="small" @click="resetSubmit('reset')" v-show="$store.state.user.userInfo.registerType!== 0&&(editType==='reset'||!editType)">重新提交
                   </el-button>
                   <!-- <el-button size="small" @click="applyPost">审核</el-button> -->
                   <!-- {{ scope.row.auditPassed === 2 ? '审核中' : scope.row.auditPassed === 1 ? '审核通过' : '审核不通过' }} -->
