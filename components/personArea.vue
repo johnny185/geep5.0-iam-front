@@ -106,7 +106,7 @@
               </el-table-column>
               <el-table-column prop="auditPassed">
                 <template slot-scope="scope" v-if="scope.$index==tableData.length-1">
-                  <el-button size="small" @click="resetSubmit('reset')" v-show="$store.state.user.userInfo.registerType!== 0&&(editType==='reset'||!editType)">重新提交
+                  <el-button size="small" @click="resetSubmit('reset')" v-show="($store.state.user.userInfo.authenticationStatus=== 2||$store.state.user.userInfo.authenticationStatus=== 3)&&(editType==='reset'||!editType)">重新提交
                   </el-button>
                   <!-- <el-button size="small" @click="applyPost">审核</el-button> -->
                   <!-- {{ scope.row.auditPassed === 2 ? '审核中' : scope.row.auditPassed === 1 ? '审核通过' : '审核不通过' }} -->
