@@ -52,7 +52,7 @@
                 <el-form-item label="认证主体" label-width="150px">
                   <span>{{ authenticationInfo.personFullName }}</span>
                 </el-form-item>
-                <el-form-item label="身份证有效期" label-width="150px" v-show="auditPassed===1">
+                <el-form-item label="身份证有效期" label-width="150px" v-show="auditPassed===1||(auditPassed===0&&applyType===3)">
                   <span>{{authenticationInfo.personIdCardPeriodStartDate? authenticationInfo.personIdCardPeriodStartDate.substring(0,10):'' }} 至
                   {{authenticationInfo.personIdCardPeriodEndDate? authenticationInfo.personIdCardPeriodEndDate.substring(0,10):'' }}</span>
                   <span v-if="authenticationInfo.personIdCardIsLongEffective">长期</span>
@@ -116,7 +116,7 @@
           </div>
           <div v-else>
             <el-radio-group v-model="registerType" @change="replaceRegisterType"
-              style="display:block; text-align:center" v-show="editType==='reset'||!editType">
+              style="display:block; text-align:center" v-show="$store.state.user.userInfo.registerType!== 0&&(editType==='reset'||!editType)">
               <el-radio :label="1">个人</el-radio>
               <el-radio :label="2">企业</el-radio>
             </el-radio-group>
@@ -339,10 +339,10 @@ export default {
     },
     applyPost() {
       const params = {
-        "applyId": '1579757376095420417',
+        "applyId": '1580088468740591618',
         "applyType": 2,
         "auditOpinion": "测试通过",
-        "auditPassed": 1
+        "auditPassed": 2
       }
       this.$axios.post('/api/iam/v1/auth/manage/certification/apply/audit', params).then((res) => {
         this.$store.commit('user/addRegisterType', 1);

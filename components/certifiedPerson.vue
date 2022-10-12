@@ -296,15 +296,15 @@ export default {
         // 身份证号 校验
         personIdCardNum: [{ validator: validatepersonIdCardNum, required: true, trigger: 'blur' }],
         // 身份证有效开始日期 校验
-        personIdCardPeriodStartDate: [{ required: true, message: '身份证有效开始不能为空', trigger: 'change' }],
+        personIdCardPeriodStartDate: [{ required: true, message: '身份证开始日期不能为空', trigger: 'change' }],
         // 身份证有效截止日期 校验
-        personIdCardPeriodEndDate: [{ required: true, message: '身份证有效截止不能为空', trigger: 'change' }],
+        personIdCardPeriodEndDate: [{ required: true, message: '身份证截止日期不能为空', trigger: 'change' }],
         // 省
-        addressLeve1Id: [{ required: true, message: '省不能为空', trigger: 'change' }],
+        addressLeve1Id: [{ required: true, message: '省不能为空', trigger: 'blur' }],
         // 市
-        addressLeve2Id: [{ required: true, message: '市不能为空', trigger: 'change' }],
+        addressLeve2Id: [{ required: true, message: '市不能为空', trigger: 'blur' }],
         // 区
-        addressLeve3Id: [{ required: true, message: '区不能为空', trigger: 'change' }],
+        addressLeve3Id: [{ required: true, message: '区不能为空', trigger: 'blur' }],
         // 地址 校验
         address: [{ required: true, validator: validateAddress, trigger: 'change' }],
         // 身份证正面  校验
@@ -374,11 +374,14 @@ export default {
       if (this.form.addressLeve1Id) {
         this.parentCode = this.form.addressLeve1Id;
       }
+      this.form.addressLeve2Id=null;
+      this.form.addressLeve3Id=null;
     },
     cityChange() {
       if (this.form.addressLeve2Id) {
         this.parentCode = this.form.addressLeve2Id;
       }
+      this.form.addressLeve3Id=null;
     },
     radioClisk(e) {
       this.form.personIdCardIsLongEffective = e === this.form.personIdCardIsLongEffective ? true : e;
