@@ -51,8 +51,9 @@
               <div v-if="authenticationInfo.applyType === 1">
                 <el-form-item label="认证主体" label-width="150px">
                   <span>{{ authenticationInfo.personFullName }}</span>
+                 
                 </el-form-item>
-                <el-form-item label="身份证有效期" label-width="150px" v-show="auditPassed===1||(auditPassed===0&&applyType===3)">
+                <el-form-item label="身份证有效期" label-width="150px" v-show="auditPassed===1||(auditPassed===2&&applyType===3)">
                   <span>{{authenticationInfo.personIdCardPeriodStartDate? authenticationInfo.personIdCardPeriodStartDate.substring(0,10):'' }} 至
                   {{authenticationInfo.personIdCardPeriodEndDate? authenticationInfo.personIdCardPeriodEndDate.substring(0,10):'' }}</span>
                   <span v-if="authenticationInfo.personIdCardIsLongEffective">长期</span>
@@ -66,7 +67,7 @@
                   <el-button v-show="auditPassed===1||(auditPassed===2&&applyType===4)" type="primary" class="marginLeft10" size="mini"
                     @click="resetSubmit('license')">变更营业执照</el-button>
                 </el-form-item>
-                <el-form-item label="营业执照有效期" label-width="150px" v-show="auditPassed===1">
+                <el-form-item label="营业执照有效期" label-width="150px" v-show="auditPassed===1||(auditPassed===2&&applyType===4)">
                   <!-- <span v-if="authenticationInfo.personIdCardIsLongEffective">长期</span> -->
                   <span>{{ authenticationInfo.licenseStartDate?authenticationInfo.licenseStartDate.substring(0,10):'' }} 至 {{ authenticationInfo.licenseEndDate?authenticationInfo.licenseEndDate.substring(0,10):'' }}</span>
                 </el-form-item>
@@ -106,9 +107,9 @@
               </el-table-column>
               <el-table-column prop="auditPassed">
                 <template slot-scope="scope" v-if="scope.$index==tableData.length-1">
-                  <el-button size="small" @click="resetSubmit('reset')" v-show="($store.state.user.userInfo.authenticationStatus=== 2||$store.state.user.userInfo.authenticationStatus=== 3)&&(editType==='reset'||!editType)">重新提交
+                  <el-button size="small" @click="resetSubmit('reset')" v-show="(scope.row.applyType === 1||scope.row.applyType === 2)&&scope.row.auditPassed === 2&&(editType==='reset'||!editType)">重新提交
                   </el-button>
-                  <!-- <el-button size="small" @click="applyPost">审核</el-button> -->
+                  <el-button size="small" @click="applyPost">审核</el-button>
                   <!-- {{ scope.row.auditPassed === 2 ? '审核中' : scope.row.auditPassed === 1 ? '审核通过' : '审核不通过' }} -->
                 </template>
               </el-table-column>
@@ -339,8 +340,8 @@ export default {
     },
     applyPost() {
       const params = {
-        "applyId": '1580088468740591618',
-        "applyType": 2,
+        "applyId": '1580388950134575106',
+        "applyType": 1,
         "auditOpinion": "测试通过",
         "auditPassed": 2
       }
